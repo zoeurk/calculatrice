@@ -413,10 +413,10 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					cont = 0;
 				}
 				init = 1;
-				if((buffer[0] == '+' && argv[i] == '-') || (buffer[0] == '-' && argv[i] == '+')){
+				/*if((buffer[0] == '+' && argv[i] == '-') || (buffer[0] == '-' && argv[i] == '+')){
 					buffer[0] = '-';
 					continue;
-				}
+				}*/
 				goto next;
 			case '*':
 			case '/':
@@ -820,4 +820,3 @@ int main(int argc, char **argv){
 	printf("\n");
 	return 0;
 }
-

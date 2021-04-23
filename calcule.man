@@ -41,7 +41,7 @@ Le resultat des fonction trigonometrique sont exprimé en radian.
 \fIexample:\fR calcule -p 3.14 -O 2 "cos(PI)*2+4.5"
 \fIexample:\fR calcule "\-1-1"
 .SH BUGS
-Je sais pas
+-1+(-1)
 .SH AUTHORS
 ZoeurK (zoeurk@gmail.com)
 .SH SEE ALSO
