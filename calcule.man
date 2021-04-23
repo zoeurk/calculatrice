@@ -40,7 +40,7 @@ Le resultat des fonction trigonometrique sont exprimé en radian.
 .BR
 \fIexample:\fR calcule -p 3.14 -O 2 "cos(PI)*2+4.5"
 .SH BUGS
-Erreur de calcule sur les calcules tel que: "1+(-(+1))"
+Je sais pas
 .SH AUTHORS
 ZoeurK (zoeurk@gmail.com)
 .SH SEE ALSO

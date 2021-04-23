@@ -413,6 +413,10 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					cont = 0;
 				}
 				init = 1;
+				if((buffer[0] == '+' && argv[i] == '-') || (buffer[0] == '-' && argv[i] == '+')){
+					buffer[0] = '-';
+					continue;
+				}
 				goto next;
 			case '*':
 			case '/':
@@ -441,8 +445,9 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				init = 0;
 				if(parenthese == 0 && ((argv[i] > 47 && argv[i] < 58) || argv[i] == '.' || 
 					(
-							(argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0)
-					) && len == 0
+							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0) ||
+							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 1)
+					)) && len == 0
 				){
 					strncat(buffer,&argv[i],1);
 					num = 1;
