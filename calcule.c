@@ -451,7 +451,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 							(argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0)||
 							(buffer[0] == '-' || buffer[0] == '+')
 					) && len == 0
-				){	if(buffer[0] == '-' && argv[i] == '-'){
+				){	/*if(buffer[0] == '-' && argv[i] == '-'){
 						buffer[0] = '+';
 						break;
 					}else{
@@ -462,7 +462,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 							cont = 0;
 							break;
 						}
-					}
+					}*/
 					strncat(buffer,&argv[i],1);
 					num = 1;
 					wait = 1;
