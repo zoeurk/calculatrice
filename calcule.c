@@ -253,7 +253,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 	char buffer[BUFFER], *end,
 		/*Ajouter entree*/
 		*trigo[ENTRY] = {"PI", "cos", "acos", "sin", "asin", "tan", "atan", "sqrt", "exp", "ceil", "log", "log10", "fabs", "floor", "mod", "pow"};
-	int i, j = 0, point = 0, wait = 0,
+	int i, j = 0, point = 0, wait = 0, signe = 0,
 		parenthese = 0, o_parentheses = 0, c_parentheses = 0,
 		bufset = 0, count = 0, len = 0, virgule = 0, num = 0, init = 0, cont = 0;
 	memset(buffer, 0, BUFFER);
@@ -413,6 +413,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					cont = 0;
 				}
 				init = 1;
+				if(buffer[0] == '-' || buffer[0] == '+')
+					goto number;
 				goto next;
 			case '*':
 			case '/':
@@ -430,7 +432,12 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				wait = 0;
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 				BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
-				pv->type = argv[i];
+				if(signe == 0)
+					pv->type = argv[i];
+				else{
+					pv->type = '*';
+					signe = 0;
+				}
 				break;
 			case '.':
 				if(point == 1){
@@ -441,9 +448,21 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				init = 0;
 				if(parenthese == 0 && ((argv[i] > 47 && argv[i] < 58) || argv[i] == '.' || 
 					(
-							(argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0)
+							(argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0)||
+							(buffer[0] == '-' || buffer[0] == '+')
 					) && len == 0
-				){
+				){	if(buffer[0] == '-' && argv[i] == '-'){
+						buffer[0] = '+';
+						break;
+					}else{
+						if((buffer[0] == '-' && argv[i] == '+') ||  (buffer[0] == '+' && argv[i] == '-')){
+							buffer[0] = '-';
+							num = 1;
+							wait = 1;
+							cont = 0;
+							break;
+						}
+					}
 					strncat(buffer,&argv[i],1);
 					num = 1;
 					wait = 1;
