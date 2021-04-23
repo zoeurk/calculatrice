@@ -1,0 +1,47 @@
+.\Manpage pour sniffer.
+.\Contact zoeurk.gmail.com
+.TH man 0 "22 avril 2021" "1.0" "calcule man page"
+.SH NAME
+calcule
+.SH SYNOPSIS
+calcule [options] ["calcule"]
+.SH DESCRIPTION
+Outil pour sniffer le reseau
+.SH OPTIONS
+.TP
+.BR \-f , " \-\-float
+Utiliser le type \fIfloat\fR.
+.TP
+.BR \-l , " \-\-double"
+Utiliser le type \fIdouble\fR.
+.TP
+.BR \-L , " \-\-ldouble"
+Utiliser le type \fIlong double\fR.
+.TP
+.BR \-O , " \-\-format " \fIFORMAT\fR
+Afficher nombre de chiffre apres la virgule
+.TP
+.BR \-F , " \-\-file " \fIFILE\fR
+Utiliser le fichier qui contient le calcule
+.TP
+.BR \-p , " \-\-set-pi " \fIPI\fR
+Initialiser PI à la valeur \fIPI\fR
+.TP
+.BR \-P , " \-\-view-pi"
+Afficher la valeur de PI par default et quitter
+.TP
+Liste des fonctions connues:
+.BR
+cos, acos(x), sin(x), asin(x), tan(x), atan(x), sqrt(x), exp(x), ceil(x), log(x), log10(x), fabs(x), floor(x), mod(x,y), pow(x, y)
+.BR
+.TP
+Le resultat des fonction trigonometrique sont exprimé en radian.
+.TP
+.BR
+\fIexample:\fR calcule -p 3.14 -O 2 "cos(PI)*2+4.5"
+.SH BUGS
+Je sais pas
+.SH AUTHORS
+ZoeurK (zoeurk@gmail.com)
+.SH SEE ALSO
+RAS
