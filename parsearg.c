@@ -7,7 +7,7 @@
 #define EXPLAIN_COLONNE 58
 #define SHORT_USAGE 58
 
-#define ERRORMESSAGE(stream, msg, arguments)\
+#define ___ERRORMESSAGE___(stream, msg, arguments)\
 fprintf(stream, msg, arguments);\
 exit(EXIT_FAILURE);
 
@@ -320,7 +320,7 @@ void parser_parse(struct parser *parser, int argc, char **argv, /*unsigned int f
 								if(state.arg_num+1 < (unsigned int)state.argc && *state.argv[state.arg_num+1] != '-'){
 									parser->parse_opt(options[j].shortoption,state.argv[state.arg_num+1], &state);
 									state.arg_num++;
-								}else{	ERRORMESSAGE(state.err_stream,
+								}else{	___ERRORMESSAGE___(state.err_stream,
 										"Argument required for \'%s\'\nTry --help or --usage for more information.\n",
 										state.argv[state.arg_num]);
 								}
@@ -343,7 +343,7 @@ void parser_parse(struct parser *parser, int argc, char **argv, /*unsigned int f
 					parser_version(state.parser);
 					exit(EXIT_SUCCESS);
 				}
-				ERRORMESSAGE(state.err_stream, "Unknow argument:\'%s\'\nTry --help or --usage for more information.\n", state.argv[state.arg_num]);
+				___ERRORMESSAGE___(state.err_stream, "Unknow argument:\'%s\'\nTry --help or --usage for more information.\n", state.argv[state.arg_num]);
 			}
 		}else{	if(end == 1){
 				ok = 1;
@@ -375,7 +375,7 @@ void parser_parse(struct parser *parser, int argc, char **argv, /*unsigned int f
 											state.arg_num++;
 											j += strlen(&state.argv[state.arg_num][j+1]);
 										}else{
-											ERRORMESSAGE(state.err_stream,
+											___ERRORMESSAGE___(state.err_stream,
 												"Missing argument for :\'-%c\'\nTry --help or --usage for more inforamtion.\n",
 												state.argv[state.arg_num][j]);
 										}
@@ -394,7 +394,7 @@ void parser_parse(struct parser *parser, int argc, char **argv, /*unsigned int f
 							parser_version(state.parser);
 							exit(EXIT_SUCCESS);
 						}
-						ERRORMESSAGE(state.err_stream, "Unknow argument:\'-%c\'\nTry --help or --usage for mor information.\n",
+						___ERRORMESSAGE___(state.err_stream, "Unknow argument:\'-%c\'\nTry --help or --usage for mor information.\n",
 							state.argv[state.arg_num][j]);
 					}
 				}
