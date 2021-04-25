@@ -1,0 +1,29 @@
+#                                               -*- Autoconf -*-
+# Process this file with autoconf to produce a configure script.
+
+AC_PREREQ([2.69])
+AC_INIT([calcule], [1.0], [zoeurk@gmail.com])
+AC_CONFIG_SRCDIR([calcule.c])
+AC_CONFIG_HEADERS([config.h])
+
+# Checks for programs.
+AC_PROG_CC
+AM_INIT_AUTOMAKE
+# Checks for libraries.
+# FIXME: Replace `main' with a function in `-lm':
+AC_CHECK_LIB([m], [main])
+# FIXME: Replace `main' with a function in `-lparsearg':
+AC_CHECK_LIB([parsearg], [main])
+
+# Checks for header files.
+AC_CHECK_HEADERS([fcntl.h stdlib.h string.h unistd.h])
+
+# Checks for typedefs, structures, and compiler characteristics.
+
+# Checks for library functions.
+AC_FUNC_MMAP
+AC_FUNC_STRTOD
+AC_CHECK_FUNCS([floor memset sqrt])
+
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
