@@ -1,4 +1,4 @@
-.\Manpage pour sniffer.
+.\Manpage pour calcule.
 .\Contact zoeurk.gmail.com
 .TH man 0 "22 avril 2021" "1.0" "calcule man page"
 .SH NAME
@@ -6,7 +6,7 @@ calcule
 .SH SYNOPSIS
 calcule [options] ["calcule"]
 .SH DESCRIPTION
-Outil pour sniffer le reseau
+Petite calculatrice en ligne de commande
 .SH OPTIONS
 .TP
 .BR \-f , " \-\-float
@@ -39,7 +39,9 @@ Le resultat des fonction trigonometrique sont exprimé en radian.
 .TP
 .BR
 \fIexample:\fR calcule -p 3.14 -O 2 "cos(PI)*2+4.5"
-\fIexample:\fR calcule "\-1-1"
+.TP
+.BR
+\fIexample:\fR calcule "\\-1-1"
 .SH BUGS
 Je sais pas
 .SH AUTHORS
