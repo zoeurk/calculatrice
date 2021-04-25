@@ -1,8 +1,8 @@
 .\Manpage pour calcule.
 .\Contact zoeurk.gmail.com
-.TH man 0 "22 avril 2021" "1.0" "calcule man page"
+.TH man 8 "22 avril 2021" "1.0" "calcule man page"
 .SH NAME
-calcule
+calcule \- Petite calculatrice en ligne de commande
 .SH SYNOPSIS
 calcule [options] ["calcule"]
 .SH DESCRIPTION
