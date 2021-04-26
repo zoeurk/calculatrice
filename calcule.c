@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "parsearg.h"
+#include <parsearg.h>
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -382,6 +382,20 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				}
 				if(o_parentheses < c_parentheses +1){
 					_ERROR_("Trop de parentheses fermees\n");
+				}
+				for(i = i;argv[i+1] == ' ' || argv[i] == '\n' || argv[i] == '\t'; i++);;
+				if(i > 0 &&
+					argv[i+1] != '+' && 
+					argv[i+1] != '/' && 
+					argv[i+1] != '*' && 
+					argv[i+1] != '+' && 
+					argv[i+1] != '-' && 
+					argv[i+1] != ')' &&
+					argv[i+1] != ',' &&
+					len != -1)
+				{
+					
+					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 				wait = 0;
