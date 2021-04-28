@@ -1,6 +1,0 @@
-Pour ne pas installer le programme:
-	Utiliser la commande patch:
-		patch calcule.c calcule.patch
-	compiler le projet parsearg et copiez le fichier libparsearg.so et le fichier parsearg.h dans le repertoire calcule
-	et exporter le repertoire ou est stockee la librairie pour utiliser calcule:
-		export LD_LIBRARY_PATH=/path/to/parsearg/so/:$LD_LIBRARY_PATH

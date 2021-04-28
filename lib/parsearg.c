@@ -19,14 +19,6 @@ state.err_stream = stderr;\
 memcpy(&state, parser->state, sizeof(struct parser_state));\
 }
 
-int printable(int i){
-	if(
-		(i >47 && i < 58) || 
-		(i > 64 && i < 91) ||
-		(i > 96 && i < 124)
-	)return 1;
-	return 0;
-}
 void upper(int *len, int inc,int max){
 	if(*len + inc > max){
 		printf("\n\t");
@@ -98,7 +90,9 @@ void parser_usage(struct parser *parser){
 	c++;*/
 	/*n = 0;*/
 	for(i = 0;z = 0, options[i].longoption != 0; i++){
-		if(printable(options[i].shortoption) 
+		if((options[i].shortoption >47 && options[i].shortoption < 58) || 
+			(options[i].shortoption >64 && options[i].shortoption < 91) ||
+			(options[i].shortoption >96 && options[i].shortoption < 124)
 		)	fprintf(state.out_stream," -%c, --", options[i].shortoption);
 		else	fprintf(state.out_stream,"     --");
 		for(j = 0, k = 7,z = 0; j < strlen(options[i].longoption);j++, k++){
@@ -193,16 +187,14 @@ void parser_short_usage(struct parser *parser){
 	for(i = 0, j = 0; options[i].longoption != 0; i++){
 		if(options[i].flags&OPTION_ARG_OPTIONAL){
 			upper(&k, 8+strlen(options[i].args), l);
-			if(printable(options[i].shortoption))
-				fprintf(state.out_stream,"[-%c [%s]] ",options[i].shortoption, options[i].args);
+			fprintf(state.out_stream,"[-%c [%s]] ",options[i].shortoption, options[i].args);
 			k += 8+strlen(options[i].args);
 		}
 	}
 	for(i = 0, j = 0; options[i].longoption != 0; i++){
 		if((options[i].flags&OPTION_ARG_OPTIONAL) == 0 && options[i].args && options[i].shortoption){
 			upper(&k, 6+strlen(options[i].args),l);
-			if(printable(options[i].shortoption))
-				fprintf(state.out_stream,"[-%c %s] ",options[i].shortoption, options[i].args);
+			fprintf(state.out_stream,"[-%c %s] ",options[i].shortoption, options[i].args);
 			k += 6+strlen(options[i].args);
 		}
 	}
