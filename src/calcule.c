@@ -292,9 +292,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					argv[(cont == 0)?i-1:i-cont] != '-' && 
 					argv[(cont == 0)?i-1:i-cont] != '(' &&
 					argv[(cont == 0)?i-1:i-cont] != ',' &&
-					argv[(cont == 0)?i-1:i-cont] != ' ' &&
-					argv[(cont == 0)?i-1:i-cont] != '\n' &&
-					argv[(cont == 0)?i-1:i-cont] != '\t' &&
 					len != -1)
 				{
 					ERROR("=>Erreur de syntaxe vers l'offset %i\n", i);
@@ -395,6 +392,18 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					argv[i+1] != ')' &&
 					argv[i+1] != ',' && 
 					argv[i+1] != 0
+				)
+				{
+					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
+				}
+				if(
+					argv[i-1] == '/' || 
+					argv[i-1] == '*' || 
+					argv[i-1] == '+' || 
+					argv[i-1] == '-' || 
+					argv[i-1] == '(' ||
+					argv[i-1] == ',' || 
+					argv[i-1] == 0
 				)
 				{
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
