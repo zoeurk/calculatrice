@@ -383,7 +383,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				if(o_parentheses < c_parentheses +1){
 					_ERROR_("Trop de parentheses fermees\n");
 				}
-				for(i = i;argv[i+1] == ' ' || argv[i] == '\n' || argv[i] == '\t'; i++);;
+				/*for(i = i;argv[i+1] == ' ' || argv[i] == '\n' || argv[i] == '\t'; i++);;*/
 				if(
 					argv[i+1] != '/' && 
 					argv[i+1] != '*' && 
