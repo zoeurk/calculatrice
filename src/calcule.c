@@ -292,6 +292,9 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					argv[(cont == 0)?i-1:i-cont] != '-' && 
 					argv[(cont == 0)?i-1:i-cont] != '(' &&
 					argv[(cont == 0)?i-1:i-cont] != ',' &&
+					argv[(cont == 0)?i-1:i-cont] != ' ' &&
+					argv[(cont == 0)?i-1:i-cont] != '\n' &&
+					argv[(cont == 0)?i-1:i-cont] != '\t' &&
 					len != -1)
 				{
 					ERROR("=>Erreur de syntaxe vers l'offset %i\n", i);
