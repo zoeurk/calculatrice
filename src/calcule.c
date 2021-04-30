@@ -399,7 +399,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				{
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}
-				for(j = i-1; j > 0 && argv[j] == ' ';j--);;
+				for(j = i-1; j > 0 && argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n';j--);;
 				if(i > 0 &&	
 					(
 						argv[j] == '/' || 
