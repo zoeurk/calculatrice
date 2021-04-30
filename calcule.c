@@ -386,7 +386,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				if(o_parentheses < c_parentheses +1){
 					_ERROR_("Trop de parentheses fermees\n");
 				}
-				for(i = i;argv[i+1] == ' ' || argv[i] == '\n' || argv[i] == '\t'; i++);;
+				//for(i = i;argv[i+1] == ' ' || argv[i] == '\n' || argv[i] == '\t'; i++);;
 				if(
 					argv[i+1] != '/' && 
 					argv[i+1] != '*' && 
@@ -399,7 +399,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				{
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}
-				for(j = i; j > 0 && argv[j-1] == ' ' && j > 0;j--);;
+				/*for(j = i; j-1 > 0 && argv[j-1] == ' ';j--);;
 				if(j > 0 &&	
 					(
 						argv[j-1] == '/' || 
@@ -413,7 +413,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				)
 				{
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
-				}
+				}*/
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 				wait = 0;
 				if(bufset){
