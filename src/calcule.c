@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -379,7 +379,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				init = 0;
 				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
 				if((num == 0 && argv[j] != ')')){
-					ERROR("Un argument est manquant a l'offset %i\n", i);
+					ERROR("Un argument est manquant vers l'offset %i\n", i);
 				}
 				num--;
 				if((i == 0) || ((i > 1 && (argv[i-1] < 48 || argv[i-1] >57)) && argv[i] != ')')){
@@ -543,7 +543,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 			_ERROR_("Trop de parentheses ouvertes\n");
 		}
 		if(virgule){
-			ERROR("Un argument est manquant a l'offset %i\n", i - (int)strlen(buffer));
+			ERROR("Un argument est manquant vers l'offset %i\n", i - (int)strlen(buffer));
 		}
 		if(init == 1){
 			ERROR("Erreur de syntax vers l'offset %i\n", i - (int)strlen(buffer));
@@ -559,7 +559,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 		}
 	}else{
 		if(virgule){
-			ERROR("Un argument est manquant a l'offset %i\n", i - (int)strlen(buffer));
+			ERROR("Un argument est manquant vers l'offset %i\n", i - (int)strlen(buffer));
 		}
 		if(init == 1){
 			ERROR("Erreur de syntax vers l'offset %i\n", i - (int)strlen(buffer));
