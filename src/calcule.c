@@ -448,7 +448,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				init = 1;
 				if((buffer[0] == '+' && argv[i] == '-') || (buffer[0] == '-' && argv[i] == '+'))
 					buffer[0] = '-';
-				else	if(buffer == '-' && argv[i] == '-')buffer[0] = '+';
+				else	if(buffer[0] == '-' && argv[i] == '-')buffer[0] = '+';
 				//printf("%c;%c\n", buffer[0],argv[i]);
 				goto next;
 			case '*':
