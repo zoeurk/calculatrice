@@ -448,6 +448,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				init = 1;
 				if((buffer[0] == '+' && argv[i] == '-') || (buffer[0] == '-' && argv[i] == '+'))
 					buffer[0] = '-';
+				else	if(buffer == '-' && argv[i] == '-')buffer[0] = '+';
+				//printf("%c;%c\n", buffer[0],argv[i]);
 				goto next;
 			case '*':
 			case '/':
@@ -465,13 +467,13 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
 				}
 				next:
+				//printf("%s\n", buffer);
 				wait = 0;
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 				BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
 				pv->type = argv[i];
 				num = 0;
 				cont = 0;
-				//printf("%s\n", buffer);
 				break;
 			case '.':
 				if(point == 1){
