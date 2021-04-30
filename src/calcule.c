@@ -471,6 +471,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				pv->type = argv[i];
 				num = 0;
 				cont = 0;
+				//printf("%s\n", buffer);
 				break;
 			case '.':
 				if(point == 1){
