@@ -375,7 +375,9 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				o_parentheses++;
 				break;
 			case ')':
+				cont = 0;
 				init = 0;
+				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
 				if((num == 0 && argv[j] != ')')){
 					ERROR("Un argument est manquant a l'offset %i\n", i);
 				}
@@ -453,11 +455,14 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				if(i == 0){
 					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
 				}
-				if((strcmp(buffer,trigo[0]) != 0) && (i > 1 && (argv[i-1] < 48 || argv[i-1] >57) && argv[i-1] != ')'))
-				{	if(argv[i-1] == ' ' || argv[i-1] == '\t' || argv[i-1] == '\n'){
+				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
+				fprintf(stderr,"%c\n",argv[j]);
+				//for(i = i;argv[i+1] == ' ' || argv[i+1] == '\n' || argv[i+1] == '\t'; i++);;
+				if((strcmp(buffer,trigo[0]) != 0) && (i > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
+				{	if(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n'){
 						goto next;
 					}
-					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
+					ERROR("=>Erreur de syntaxe vers l'offset %i\n",i);
 				}
 				next:
 				wait = 0;
@@ -465,6 +470,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
 				pv->type = argv[i];
 				num = 0;
+				cont = 0;
 				break;
 			case '.':
 				if(point == 1){
@@ -502,7 +508,9 @@ struct value *initialisation(char *argv, struct arguments *arg){
 							((j = 15) && argv[i] == trigo[j-1][len]) ||
 							((j = 16) && argv[i] == trigo[j-1][len])
 						) && wait == 0
-					){
+					){	if(cont && len > 0){
+							ERROR("Erreur de syntaxe vers l'offset %i\n", i+1);
+						}
 						parenthese = 1;
 						buffer[len] = trigo[j-1][len];
 						len++;
@@ -515,6 +523,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 							}
 							len = -1;
 						}
+						cont = 0;
 					}else{
 						ERROR("Erreur de syntaxe vers l'offset %i\n", i+1);
 					}
