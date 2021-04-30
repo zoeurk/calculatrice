@@ -399,22 +399,21 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				{
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}
-				/*for(j = i; j-2 > 0 && argv[j-2] == ' ';j--);;
+				for(j = i-1; j > 0 && argv[j] == ' ';j--);;
 				if(i > 0 &&	
 					(
-						argv[i-2] == '/' || 
-						argv[i-2] == '*' || 
-						argv[i-2] == '+' || 
-						argv[i-2] == '-' || 
-						argv[i-2] == '(' ||
-						argv[i-2] == ',' || 
-						argv[i-2] == 0
+						argv[j] == '/' || 
+						argv[j] == '*' || 
+						argv[j] == '+' || 
+						argv[j] == '-' || 
+						argv[j] == '(' ||
+						argv[j] == ',' || 
+						argv[j] == 0
 					)
 				)
 				{
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}
-				fprintf(stderr,"<%c>;<%c>", argv[i-2], argv[j]);*/
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 				wait = 0;
 				if(bufset){
