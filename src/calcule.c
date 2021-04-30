@@ -269,7 +269,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}
 				if(num == 0 && argv[i-1] != ')'){
-					ERROR("Un argument est manquant a l'offset %i\n", i);
+					ERROR("Un argument est manquant vers l'offset %i\n", i);
 				}
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 				num = 0;
