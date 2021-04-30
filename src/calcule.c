@@ -297,7 +297,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					argv[(cont == 0)?i-1:i-cont] != ' ' &&
 					len != -1)
 				{
-					ERROR("=>Erreur de syntaxe vers l'offset %i\n", i);
+					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}
 				cont = 0;
 				if(parenthese == 1)
@@ -399,21 +399,21 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				{
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}
-				/*for(j = i; j-1 > 0 && argv[j-1] == ' ';j--);;
-				if(j > 0 &&	
+				for(j = i-2; j > 0 && argv[j] == ' ';j--);;
+				if(i > 0 &&	
 					(
-						argv[j-1] == '/' || 
-						argv[j-1] == '*' || 
-						argv[j-1] == '+' || 
-						argv[j-1] == '-' || 
-						argv[j-1] == '(' ||
-						argv[j-1] == ',' || 
-						argv[j-1] == 0
+						argv[j] == '/' || 
+						argv[j] == '*' || 
+						argv[j] == '+' || 
+						argv[j] == '-' || 
+						argv[j] == '(' ||
+						argv[j] == ',' || 
+						argv[j] == 0
 					)
 				)
 				{
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
-				}*/
+				}
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 				wait = 0;
 				if(bufset){
