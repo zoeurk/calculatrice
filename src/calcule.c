@@ -376,8 +376,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				break;
 			case ')':
 				init = 0;
-				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n');j--);;
-				if(num == 0 && argv[j] != ')'){
+				if((num == 0 && argv[j] != ')')){
 					ERROR("Un argument est manquant a l'offset %i\n", i);
 				}
 				num--;
@@ -465,6 +464,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 				BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
 				pv->type = argv[i];
+				num = 0;
 				break;
 			case '.':
 				if(point == 1){
@@ -524,12 +524,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 		}
 	}
 	if(v){
-		if(bufset == 1){
-			MAILLON(pv,sizeof(struct value) + arg->valsize);
-			PI_INTEGRATION(trigo[0],buffer,i-1, arg->pi);
-			INIT_BUFSET(pv,buffer,end, arg->type);
-			pv->type = VALUE;
-		}
 		if(c_parentheses > o_parentheses){
 			_ERROR_("Trop de parentheses fermees\n");
 		}
@@ -545,11 +539,13 @@ struct value *initialisation(char *argv, struct arguments *arg){
 		if(parenthese){
 			_ERROR_("Erreur de syntax\n");
 		}
+		if(bufset == 1){
+			MAILLON(pv,sizeof(struct value) + arg->valsize);
+			PI_INTEGRATION(trigo[0],buffer,i-1, arg->pi);
+			INIT_BUFSET(pv,buffer,end, arg->type);
+			pv->type = VALUE;
+		}
 	}else{
-		v = pv = ___calloc___((void **)&v,sizeof(struct value)+arg->valsize);
-		PI_INTEGRATION(trigo[0],buffer,i-1, arg->pi);
-		INIT_BUFSET(pv,buffer,end, arg->type);
-		pv->type = VALUE;
 		if(virgule){
 			ERROR("Un argument est manquant a l'offset %i\n", i - (int)strlen(buffer));
 		}
@@ -559,6 +555,10 @@ struct value *initialisation(char *argv, struct arguments *arg){
 		if(parenthese){
 			_ERROR_("Erreur de syntax\n");
 		}
+		v = pv = ___calloc___((void **)&v,sizeof(struct value)+arg->valsize);
+		PI_INTEGRATION(trigo[0],buffer,i-1, arg->pi);
+		INIT_BUFSET(pv,buffer,end, arg->type);
+		pv->type = VALUE;
 	}
 	return v;
 }
