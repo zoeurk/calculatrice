@@ -376,7 +376,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				break;
 			case ')':
 				init = 0;
-				if(num == 0 && argv[i-1] != ')'){
+				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n');j--);;
+				if(num == 0 && argv[j] != ')'){
 					ERROR("Un argument est manquant a l'offset %i\n", i);
 				}
 				num--;
@@ -386,7 +387,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				if(o_parentheses < c_parentheses +1){
 					_ERROR_("Trop de parentheses fermees\n");
 				}
-				for(i = i;argv[i+1] == ' ' || argv[i] == '\n' || argv[i] == '\t'; i++);;
+				for(i = i;argv[i+1] == ' ' || argv[i+1] == '\n' || argv[i+1] == '\t'; i++);;
 				if(
 					argv[i+1] != '/' && 
 					argv[i+1] != '*' && 
@@ -399,7 +400,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				{
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}
-				for(j = i-1; j > 0 && argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n';j--);;
+				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
 				if(i > 0 &&	
 					(
 						argv[j] == '/' || 
