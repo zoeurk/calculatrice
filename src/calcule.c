@@ -459,8 +459,15 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				}
 				init = 1;
 				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
-				if(argv[j] == '(' && argv[j-1] == '-'){
-					strcpy(buffer,"-1");
+				if(argv[j] == '(' && (argv[j-1] == '-' || argv[j-1] == '+')){
+					switch(argv[j-1]){
+						case '-':
+							strcpy(buffer,"-1");
+							break;
+						case '+':
+							strcpy(buffer,"+1");
+							break;
+					}
 					PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 					BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
 					pv->type = '*';
