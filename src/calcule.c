@@ -471,7 +471,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
 				}
 				next:
-				printf("<%s>\n", buffer);
+				/*printf("<%s>\n", buffer);*/
 				wait = 0;
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 				BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
@@ -485,7 +485,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				}else	point = 1;
 			default:
 				number:
-				printf("==>%s\n", buffer);
+				/*printf("==>%s\n", buffer);*/
 				init = 0;
 				if(split == 0 && parenthese == 0 && ((argv[i] > 47 && argv[i] < 58) || argv[i] == '.' || 
 					(
