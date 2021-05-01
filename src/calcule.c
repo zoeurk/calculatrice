@@ -253,7 +253,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 	char buffer[BUFFER], *end,
 		/*Ajouter entree*/
 		*trigo[ENTRY] = {"PI", "cos", "acos", "sin", "asin", "tan", "atan", "sqrt", "exp", "ceil", "log", "log10", "fabs", "floor", "mod", "pow"};
-	int i, j = 0, point = 0, wait = 0,
+	int i, j = 0, k, point = 0, wait = 0,
 		parenthese = 0, o_parentheses = 0, c_parentheses = 0, split = 0, signe = 0,
 		bufset = 0, count = 0, len = 0, virgule = 0, num = 0, init = 0, cont = 0;
 	memset(buffer, 0, BUFFER);
@@ -445,6 +445,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				split = 0;
 				if((!v || pv->type == 4 || pv->type == '+' || pv->type == '-' || pv->type == '*' || pv->type == '/')
 					&& strlen(buffer) == 0){
+					//printf("***\n");
 					goto number;
 				}
 				if(cont){
@@ -454,9 +455,20 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					cont = 0;
 				}
 				init = 1;
-				/*if((buffer[0] == '+' && argv[i] == '-') || (buffer[0] == '-' && argv[i] == '+'))
-					buffer[0] = '-';
-				else	if(buffer[0] == '-' && argv[i] == '-')buffer[0] = '+';*/
+				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
+				if(argv[j] == '(' && argv[j-1] == '-'){
+					strcpy(buffer,"-1");
+					/*PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
+					BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
+					pv->type = argv[i];*/
+					printf("ok\n");
+				}
+				if((strcmp(buffer,trigo[0]) != 0) && (i > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
+				{	if(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n'){
+						goto next;
+					}
+					ERROR("+>Erreur de syntaxe vers l'offset %i\n",i);
+				}
 				goto next;
 			case '*':
 			case '/':
@@ -465,17 +477,15 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				if(i == 0){
 					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
 				}
+				//next:
 				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
-				//fprintf(stderr,"%c\n",argv[j]);
-				//for(i = i;argv[i+1] == ' ' || argv[i+1] == '\n' || argv[i+1] == '\t'; i++);;
 				if((strcmp(buffer,trigo[0]) != 0) && (i > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
 				{	if(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n'){
 						goto next;
 					}
-					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
+					ERROR("=>Erreur de syntaxe vers l'offset %i\n",i);
 				}
 				next:
-				/*printf("<%s>\n", buffer);*/
 				wait = 0;
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 				BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
@@ -489,12 +499,10 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				}else	point = 1;
 			default:
 				number:
-				/*printf("==>%s\n", buffer);*/
 				init = 0;
 				if(split == 0 && parenthese == 0 && ((argv[i] > 47 && argv[i] < 58) || argv[i] == '.' || 
 					(
-							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0) /*||
-							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 1)*/
+							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0)
 					)) && len == 0
 				){	strncat(buffer,&argv[i],1);
 					if(argv[i+1] == '\n' || argv[i+1] == '\t' || argv[i+1] == ' ')
@@ -503,9 +511,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					wait = 1;
 					cont = 0;
 				}else{
-					signe = (buffer[0] == '-') ? 1 : 0;
+					signe = (buffer[0] == '-' || buffer[0] == '+') ? 1 : 0;
 					if(signe == 1){
-						signe = (buffer[1] == '+') ? 0 : 1;
 						strncat (buffer, "1", 2);
 						BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
 						pv->type = '*';
