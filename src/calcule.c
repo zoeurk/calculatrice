@@ -283,6 +283,9 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				virgule--;
 				break;
 			case '(':
+				/*if(v && v->type)
+					printf("%i\n",v->type);
+				else	printf("NULL\n");*/
 				split = 0;
 				init = 0;
 				count++;
@@ -301,6 +304,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				{
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}
+				printf("==>%i\n", i);
 				cont = 0;
 				if(parenthese == 1)
 					parenthese = 0;
@@ -489,8 +493,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				init = 0;
 				if(split == 0 && parenthese == 0 && ((argv[i] > 47 && argv[i] < 58) || argv[i] == '.' || 
 					(
-							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0) ||
-							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 1)
+							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0) /*||
+							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 1)*/
 					)) && len == 0
 				){	strncat(buffer,&argv[i],1);
 					if(argv[i+1] == '\n' || argv[i+1] == '\t' || argv[i+1] == ' ')
