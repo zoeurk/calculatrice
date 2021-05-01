@@ -448,6 +448,9 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					//printf("***\n");
 					goto number;
 				}
+				/*if(argv[i+1] == '('){
+					printf("signe:%c:%c::%i\n", argv[i],argv[i+1], i);
+				}*/
 				if(cont){
 					BUFSET(v, pv,arg->valsize, buffer, end, arg->type);
 					pv->type = argv[i];
@@ -458,11 +461,22 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
 				if(argv[j] == '(' && argv[j-1] == '-'){
 					strcpy(buffer,"-1");
-					/*PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
+					PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 					BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
-					pv->type = argv[i];*/
-					//printf("ok\n");
+					pv->type = '*';
+					continue;
+					//goto next;
+					//printf("ok:%i:%s\n", i, buffer);
 				}
+				/*pv = v;
+				while(pv){
+					if(pv->type == VALUE)
+						printf("%f\n",*((float *)pv->val));
+					else
+						printf("%i:%c\n",pv->type, pv->type);
+					pv = pv->next;
+				}
+				exit(0);*/
 				if((strcmp(buffer,trigo[0]) != 0) && (i > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
 				{	if(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n'){
 						goto next;
