@@ -253,7 +253,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 	char buffer[BUFFER], *end,
 		/*Ajouter entree*/
 		*trigo[ENTRY] = {"PI", "cos", "acos", "sin", "asin", "tan", "atan", "sqrt", "exp", "ceil", "log", "log10", "fabs", "floor", "mod", "pow"};
-	int i, j = 0, k, point = 0, wait = 0,
+	int i, j = 0, point = 0, wait = 0,
 		parenthese = 0, o_parentheses = 0, c_parentheses = 0, split = 0, signe = 0,
 		bufset = 0, count = 0, len = 0, virgule = 0, num = 0, init = 0, cont = 0;
 	memset(buffer, 0, BUFFER);
