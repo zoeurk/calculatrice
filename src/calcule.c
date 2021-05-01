@@ -304,7 +304,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				{
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}
-				printf("==>%i\n", i);
+				/*printf("==>%i\n", i);*/
 				cont = 0;
 				if(parenthese == 1)
 					parenthese = 0;
