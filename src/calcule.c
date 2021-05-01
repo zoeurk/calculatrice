@@ -528,7 +528,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0)
 					)) && len == 0)
 				){	split = 0;
-					if((buffer[0] == '-' || buffer[0] == '+') && (argv[i+1] == '\n' || argv[i+1] == '\t' || argv[i+1] == ' '))
+					if(/*(buffer[0] == '-' || buffer[0] == '+') &&*/ (argv[i+1] == '\n' || argv[i+1] == '\t' || argv[i+1] == ' '))
 						split = 1;
 					strncat(buffer,&argv[i],1);
 					num = 1;
