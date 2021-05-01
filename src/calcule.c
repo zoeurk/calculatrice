@@ -461,13 +461,13 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					/*PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 					BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
 					pv->type = argv[i];*/
-					printf("ok\n");
+					//printf("ok\n");
 				}
 				if((strcmp(buffer,trigo[0]) != 0) && (i > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
 				{	if(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n'){
 						goto next;
 					}
-					ERROR("+>Erreur de syntaxe vers l'offset %i\n",i);
+					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
 				}
 				goto next;
 			case '*':
