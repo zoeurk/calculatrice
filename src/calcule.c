@@ -444,10 +444,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 			case '-':
 				split = 0;
 				if((!v || pv->type == 4 || pv->type == '+' || pv->type == '-' || pv->type == '*' || pv->type == '/')
-					&& strlen(buffer) == 0){
-					//printf("***\n");
+					&& strlen(buffer) == 0)
 					goto number;
-				}
 				/*if(argv[i+1] == '('){
 					printf("signe:%c:%c::%i\n", argv[i],argv[i+1], i);
 				}*/
@@ -473,6 +471,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 					BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
 					pv->type = '*';
+					//i--;
 					continue;
 					//goto next;
 					//printf("ok:%i:%s\n", i, buffer);
@@ -527,8 +526,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					(
 							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0)
 					)) && len == 0)
-				){	
-					if((argv[i+1] == '\n' || argv[i+1] == '\t' || argv[i+1] == ' '))
+				){
+					if((argv[i+1] == '\n' || argv[i+1] == '\t' || argv[i+1] == ' ') && argv[i] != '-' && argv[i] != '+')
 						split = 1;
 					strncat(buffer,&argv[i],1);
 					num = 1;
