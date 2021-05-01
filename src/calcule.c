@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -283,9 +283,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				virgule--;
 				break;
 			case '(':
-				/*if(v && v->type)
-					printf("%i\n",v->type);
-				else	printf("NULL\n");*/
 				split = 0;
 				init = 0;
 				count++;
@@ -304,7 +301,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				{
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}
-				/*printf("==>%i\n", i);*/
 				cont = 0;
 				if(parenthese == 1)
 					parenthese = 0;
@@ -446,9 +442,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				if((!v || pv->type == 4 || pv->type == '+' || pv->type == '-' || pv->type == '*' || pv->type == '/')
 					&& strlen(buffer) == 0)
 					goto number;
-				/*if(argv[i+1] == '('){
-					printf("signe:%c:%c::%i\n", argv[i],argv[i+1], i);
-				}*/
 				if(cont){
 					BUFSET(v, pv,arg->valsize, buffer, end, arg->type);
 					pv->type = argv[i];
@@ -457,8 +450,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				}
 				init = 1;
 				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
-				//for(k = 0; k > 0 && argv[k] != '+'; k++);;
-				//printf("==>%c",argv[k]);
 				if(argv[j] == '(' && (argv[j-1] == '-' || argv[j-1] == '+')){
 					switch(argv[j-1]){
 						case '-':
@@ -471,20 +462,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 					BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
 					pv->type = '*';
-					//i--;
 					continue;
-					//goto next;
-					//printf("ok:%i:%s\n", i, buffer);
 				}
-				/*pv = v;
-				while(pv){
-					if(pv->type == VALUE)
-						printf("%f\n",*((float *)pv->val));
-					else
-						printf("%i:%c\n",pv->type, pv->type);
-					pv = pv->next;
-				}
-				exit(0);*/
 				if((strcmp(buffer,trigo[0]) != 0) && (i > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
 				{	if(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n'){
 						goto next;
@@ -499,7 +478,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				if(i == 0){
 					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
 				}
-				//next:
 				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
 				if((strcmp(buffer,trigo[0]) != 0) && (i > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
 				{	if(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n'){
@@ -580,7 +558,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 						signe = 0;
 						cont = 0;
 					}else{
-						ERROR("++>>Erreur de syntaxe vers l'offset %i\n", i+1);
+						ERROR("Erreur de syntaxe vers l'offset %i\n", i+1);
 					}
 				}
 				bufset = 1;
