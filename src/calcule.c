@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -526,7 +526,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				if((split == 0 && parenthese == 0 && ((argv[i] > 47 && argv[i] < 58) || argv[i] == '.' || 
 					(
 							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0)
-					)) && len == 0) || ((buffer[0] == '-' || buffer[0] == '-') && strlen(buffer) == 1 && split == 1)
+					)) && len == 0) /*|| ((buffer[0] == '-' || buffer[0] == '-') && strlen(buffer) == 1 && split == 1)*/
 				){	split = 0;
 					if(argv[i+1] == '\n' || argv[i+1] == '\t' || argv[i+1] == ' ')
 						split = 1;
