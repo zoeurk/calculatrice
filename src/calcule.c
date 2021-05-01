@@ -459,6 +459,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				}
 				init = 1;
 				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
+				//for(k = 0; k > 0 && argv[k] != '+'; k++);;
+				//printf("==>%c",argv[k]);
 				if(argv[j] == '(' && (argv[j-1] == '-' || argv[j-1] == '+')){
 					switch(argv[j-1]){
 						case '-':
@@ -504,7 +506,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				{	if(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n'){
 						goto next;
 					}
-					ERROR("=>Erreur de syntaxe vers l'offset %i\n",i);
+					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
 				}
 				next:
 				wait = 0;
@@ -521,13 +523,14 @@ struct value *initialisation(char *argv, struct arguments *arg){
 			default:
 				number:
 				init = 0;
-				if(split == 0 && parenthese == 0 && ((argv[i] > 47 && argv[i] < 58) || argv[i] == '.' || 
+				if((split == 0 && parenthese == 0 && ((argv[i] > 47 && argv[i] < 58) || argv[i] == '.' || 
 					(
 							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0)
-					)) && len == 0
-				){	strncat(buffer,&argv[i],1);
+					)) && len == 0) || ((buffer[0] == '-' || buffer[0] == '-') && strlen(buffer) == 1 && split == 1)
+				){	split = 0;
 					if(argv[i+1] == '\n' || argv[i+1] == '\t' || argv[i+1] == ' ')
 						split = 1;
+					strncat(buffer,&argv[i],1);
 					num = 1;
 					wait = 1;
 					cont = 0;
@@ -578,7 +581,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 						signe = 0;
 						cont = 0;
 					}else{
-						ERROR("Erreur de syntaxe vers l'offset %i\n", i+1);
+						ERROR("++>>Erreur de syntaxe vers l'offset %i\n", i+1);
 					}
 				}
 				bufset = 1;
