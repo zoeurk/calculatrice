@@ -498,6 +498,27 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}else	point = 1;
 			default:
+				if((argv[i] < 49 || argv[i] > 57) && argv[i] != '.' && argv[i] != ' ' && argv[i] != '\n' && argv[i] != '\t' && (
+							((j = 1) && argv[i] == trigo[j-1][len])	&&
+							((j = 2) && argv[i] == trigo[j-1][len]) &&
+							((j = 3) && argv[i] == trigo[j-1][len]) &&
+							((j = 4) && argv[i] == trigo[j-1][len]) &&
+							((j = 5) && argv[i] == trigo[j-1][len]) &&
+							((j = 6) && argv[i] == trigo[j-1][len]) &&
+							((j = 7) && argv[i] == trigo[j-1][len]) &&
+							((j = 8) && argv[i] == trigo[j-1][len]) &&
+							((j = 9) && argv[i] == trigo[j-1][len]) &&
+							((j = 10) && argv[i] == trigo[j-1][len]) &&
+							((j = 11) && argv[i] == trigo[j-1][len]) &&
+							((j = 12) && argv[i] == trigo[j-1][len]) &&
+							((j = 13) && argv[i] == trigo[j-1][len]) &&
+							((j = 14) && argv[i] == trigo[j-1][len]) &&
+							((j = 15) && argv[i] == trigo[j-1][len]) &&
+							((j = 16) && argv[i] == trigo[j-1][len])
+					)
+				) {
+					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
+				}
 				number:
 				init = 0;
 				if((split == 0 && parenthese == 0 && ((argv[i] > 47 && argv[i] < 58) || argv[i] == '.' || 
