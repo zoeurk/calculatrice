@@ -464,7 +464,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					pv->type = '*';
 					continue;
 				}
-				if((strcmp(buffer,trigo[0]) != 0) && (i > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
+				if((strcmp(buffer,trigo[0]) != 0) && (j > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
 				{	if(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n'){
 						goto next;
 					}
@@ -479,7 +479,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
 				}
 				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
-				if((strcmp(buffer,trigo[0]) != 0) && (i > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
+				if((strcmp(buffer,trigo[0]) != 0) && (j > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
 				{	if(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n'){
 						goto next;
 					}
