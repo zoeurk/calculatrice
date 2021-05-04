@@ -222,7 +222,11 @@ void arguments(int key, char *arg, struct parser_state *state){
 			a->mmap.mmap = mmap(NULL, stat.st_size , PROT_EXEC, MAP_SHARED, a->file.file, 0);
 			break;
 		default:
-			a->argv = arg;
+			if(a->argv == NULL)
+				a->argv = arg;
+			else{	fprintf(stderr, "trop d'arguments fournies\n");
+				exit(EXIT_FAILURE);
+			}
 			break;
 	}
 }
