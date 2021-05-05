@@ -244,7 +244,7 @@ void parser_short_usage(struct parser *parser){
 		k += 10;
 	}
 	if(parser->args_doc)
-		fprintf(state.out_stream, "\n\t%s\n", parser->args_doc);
+		fprintf(state.out_stream, "%s\n", parser->args_doc);
 	else
 		fprintf(state.out_stream, "\n");
 }
