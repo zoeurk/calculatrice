@@ -275,8 +275,12 @@ void parser_parse(struct parser *parser, int argc, char **argv, /*unsigned int f
 		state.argc = argc;
 		state.name = argv[0];
 		state.input = parser->state->input;
-		state.err_stream = parser->state->err_stream;
-		state.out_stream = parser->state->out_stream;
+		if(parser->state->err_stream)
+			state.err_stream = parser->state->err_stream;
+		else	state.err_stream = stderr;
+		if(parser->state->err_stream)
+			state.out_stream = parser->state->out_stream;
+		else	state.out_stream = stdout;
 		state.arg_colonne = parser->state->arg_colonne;
 		state.explain_colonne = parser->state->explain_colonne;
 		state.short_usage = parser->state->short_usage;
