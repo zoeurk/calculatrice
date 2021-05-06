@@ -49,7 +49,7 @@ void defaults(FILE *out, unsigned int *colonne, char shortoption, char *longopti
 		}
 	}
 	l = k-2;
-	for(j = 0, k = 0; j < colonne[0]-l; j++, k++){
+	*for(j = 0, k = 0; j < colonne[0]-l; j++, k++){
 		fprintf(out," ");
 	}
 	for(j = 0, k = 0; j < strlen(explain);j++, k++){
@@ -281,9 +281,15 @@ void parser_parse(struct parser *parser, int argc, char **argv, /*unsigned int f
 		if(parser->state->err_stream)
 			state.out_stream = parser->state->out_stream;
 		else	state.out_stream = stdout;
-		state.arg_colonne = parser->state->arg_colonne;
-		state.explain_colonne = parser->state->explain_colonne;
-		state.short_usage = parser->state->short_usage;
+		if(parser->state->arg_colonne)
+			state.arg_colonne = parser->state->arg_colonne;
+		else	state.arg_colonne = ARG_COLONNE;
+		if(parser->state->explain_colonne)
+			state.explain_colonne = parser->state->explain_colonne;
+		else	state.explain_colonne = EXPLAIN_COLONNE;
+		if(parser->state->short_usage)
+			state.short_usage = parser->astate->short_usage;
+		else	state.short_usage = SHORT_USAGE;
 		/*memcpy(&state, parser->state, sizeof(struct parser_state));
 		if(parser->state->err_stream == NULL)
 			parser->state->err_stream = stderr;
