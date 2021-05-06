@@ -271,13 +271,16 @@ void parser_parse(struct parser *parser, int argc, char **argv, /*unsigned int f
 		state.parser = parser;
 		parser->state = &state;
 	}else{
-		/*state.argv = parser->state->argv;
-		state.argc = parser->state->argc;
-		state.name = parser->state->name;
+		state.argv = argv;
+		state.argc = argc;
+		state.name = argv[0];
 		state.input = parser->state->input;
 		state.err_stream = parser->state->err_stream;
-		state.out_stream = parser->state->out_stream;*/
-		memcpy(&state, parser->state, sizeof(struct parser_state));
+		state.out_stream = parser->state->out_stream;
+		state.arg_colonne = parser->state->arg_colonne;
+		state.explain_colonne = parser->state->explain_colonne;
+		state.short_usage = parser->state->short_usage;
+		/*memcpy(&state, parser->state, sizeof(struct parser_state));
 		if(parser->state->err_stream == NULL)
 			parser->state->err_stream = stderr;
 		if(parser->state->out_stream == NULL)
@@ -287,7 +290,7 @@ void parser_parse(struct parser *parser, int argc, char **argv, /*unsigned int f
 		if(parser->state->argc == 0)
 			parser->state->argc = argc;
 		if(parser->state->name == NULL)
-			parser->state->name = argv[0];
+			parser->state->name = argv[0];*/
 		state.parser = parser;
 	}
 	/*memcpy(&p,parser, sizeof(struct parser));
