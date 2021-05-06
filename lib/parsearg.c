@@ -284,7 +284,6 @@ void parser_parse(struct parser *parser, int argc, char **argv, /*unsigned int f
 		state.parser = parser;
 		parser->state = &state;
 	}else{
-		//printf("******\n");
 		state.argv = argv;
 		state.argc = argc;
 		state.name = argv[0];
@@ -306,58 +305,7 @@ void parser_parse(struct parser *parser, int argc, char **argv, /*unsigned int f
 		else	state.explain_colonne = EXPLAIN_COLONNE;
 		state.parser = parser;
 		parser->state = &state;
-		/*state.argv = parser->state->argv;
-		state.argc = parser->state->argc;
-		state.name = parser->state->name;
-		state.input = parser->state->input;*/
-		/*if(parser->state->err_stream)
-			state.err_stream = parser->state->err_stream;
-		else	state.err_stream = stderr;
-		if(parser->state->err_stream)
-			state.out_stream = parser->state->out_stream;
-		else	state.out_stream = stdout;
-		if(parser->state->arg_colonne)
-			state.explain_colonne = parser->state->arg_colonne;
-		else	state.explain_colonne = ARG_COLONNE;
-		if(parser->state->short_usage)
-			state.short_usage = parser->state->short_usage;
-		else	parser->state->short_usage = SHORT_USAGE;
-		if(parser->state->explain_colonne)
-			state.explain_colonne = parser->state->explain_colonne;
-		else	state.explain_colonne = EXPLAIN_COLONNE;*/
-		//free(parser->state);
-		//parser->state = &state;
-		//exit(EXIT_FAILURE);
-		/*state.argv = parser->state->argv;
-		state.argc = parser->state->argc;
-		state.name = parser->state->name;
-		state.input = parser->state->input;
-		if(parser->state->err_stream)
-			state.err_stream = parser->state->err_stream;
-		else	state.err_stream = stderr;
-		if(parser->state->err_stream)
-			state.out_stream = parser->state->out_stream;
-		else	state.out_stream = stdout;
-		state.arg_colonne = parser->state->arg_colonne;
-		state.explain_colonne = parser->state->explain_colonne;
-		state.short_usage = parser->state->short_usage;*/
-		//state.parser = parser;
-		//parser->state = &state;
-		/*memcpy(&state, parser->state, sizeof(struct parser_state));
-		if(parser->state->err_stream == NULL)
-			parser->state->err_stream = stderr;
-		if(parser->state->out_stream == NULL)
-			parser->state->out_stream = stdout;
-		if(parser->state->argv == NULL)
-			parser->state->argv = argv;
-		if(parser->state->argc == 0)
-			parser->state->argc = argc;
-		if(parser->state->name == NULL)
-			parser->state->name = argv[0];
-		state.parser = parser;*/
 	}
-	/*memcpy(&p,parser, sizeof(struct parser));
-	p.state = &state;*/
 	for(state.arg_num = 1, len = 0, temporary = NULL; ok = 0, state.arg_num < (unsigned int)state.argc; state.arg_num++){
 		if(state.arg_num < (unsigned int)argc)
 			state.next = state.arg_num+1;
