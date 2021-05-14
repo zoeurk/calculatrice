@@ -539,6 +539,10 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				}else{
 					signe = (buffer[0] == '-' || buffer[0] == '+') ? 1 : 0;
 					if(signe == 1){
+						if(strlen(buffer) +2 > BUFFER){
+							fprintf(stderr,"Donnees trop long (>4096 octets).\n");
+							exit(EXIT_FAILURE);
+						}
 						strncat (buffer, "1", 2);
 						BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
 						pv->type = '*';
