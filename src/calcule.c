@@ -219,7 +219,7 @@ void arguments(int key, char *arg, struct parser_state *state){
 				exit(EXIT_FAILURE);
 			}
 			a->mmap.size = stat.st_size;
-			a->mmap.mmap = mmap(NULL, stat.st_size , PROT_EXEC, MAP_SHARED, a->file.file, 0);
+			a->mmap.mmap = mmap(NULL, stat.st_size , PROT_READ, MAP_SHARED, a->file.file, 0);
 			break;
 		default:
 			if(a->argv == NULL)
