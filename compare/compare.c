@@ -698,10 +698,9 @@ void arguments(int key, char *arg, struct parser_state *state){
 				perror("fstat()");
 				exit(EXIT_FAILURE);
 			}
-
+			srand(time(NULL));
 			do{
 				start:
-				srand(time(NULL));
 				random = rand();
 				memset(file, 0, 28);
 				sprintf(file , ".compare-%u.tmp", random);
