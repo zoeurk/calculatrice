@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -301,7 +301,7 @@ struct retour *ret = NULL;
 	}\
 	if(str && *str){\
 		pret->ret = ret1;\
-	}else	pret->ret = ret2;
+	}else	pret->ret = ret2; \
 
 #define NUMERIQUE(ret1, ret2)\
 	switch(pret->ret){\
@@ -449,21 +449,30 @@ struct retour *reader(char *string, unsigned long int type){
 				READ_STRING(f.strings_diff);
 				break;
 			case STR:
+				//f.strings(o.var1);
 				STRING_EXIST(1, 0);
+				pret->ret = f.strings(o.var1);
 				o.var1 = NULL;
 				break;
 			case NOT_STR:/*la chaine de caractere N'exist PAS*/
+				//f.strings(o.var1);
 				STRING_EXIST(0, 1);
+				pret->ret = !f.strings(o.var1);
 				o.var1 = NULL;
 				break;
 			case NUM:/*-n: est nombre*/
 				STRING_EXIST(1, 0);
-				NUMERIQUE(1, 0)
+				//if(f.strings(o.var1)){
+					NUMERIQUE(1, 0)
+				//}
 				o.var1 = NULL;
 				break;
 			case NOT_NUM:/*-N: N'est PAS nombre*/
 				STRING_EXIST(0, 1);
-				NUMERIQUE(0, 1);
+				//if(f.strings(o.var1)){
+					NUMERIQUE(0, 1);
+				//}
+				o.var1 = NULL;
 				break;
 			case 12:/*INVERT*/
 				str = r;
@@ -495,7 +504,7 @@ struct retour *reader(char *string, unsigned long int type){
 				break;
 			case 13:/*AND*/
 				if(ret == NULL){
-					ERROR("Erreur de syntaxe vers l'offset %lu.\n", offset);
+					ERROR("+>Erreur de syntaxe vers l'offset %lu.\n", offset);
 				}else{
 					pret->next = ___calloc___((void **)&pret->next,sizeof(struct retour));
 					pret->next->prev = pret;
@@ -510,7 +519,7 @@ struct retour *reader(char *string, unsigned long int type){
 				break;
 			case 14: /*OR*/
 				if(ret == NULL){
-					ERROR("Erreur de syntaxe vers l'offset %lu.\n", offset);
+					ERROR("->Erreur de syntaxe vers l'offset %lu.\n", offset);
 				}else{
 					pret->next = ___calloc___((void **)&pret->next,sizeof(struct retour));
 					pret->next->prev = pret;
@@ -719,7 +728,7 @@ void bye(void){
 		ret = r;
 	}
 }
-struct parser args = {options, arguments, "[OPTIONS]", "[test]", "Petit outil de test", &program, NULL};
+struct parser args = {options, arguments, "[OPTIONS]", NULL, "Petit outil de test", &program, NULL};
 
 int main(int argc, char **argv){
 	struct arguments arg = {FLOAT, NULL, NULL, 0, 0};
@@ -831,9 +840,8 @@ int ld_greater(void *num1, void *num2){
 	return 0;
 }
 static int strings(void *str){
-        if(str && strlen(str) > 0){
+        if(str && strlen(str) > 0)
                 return 1;
-        }
         return 0;
 }
 
