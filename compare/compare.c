@@ -9,6 +9,8 @@
 
 #include <unistd.h>
 
+#include <time.h>
+
 #include <sys/mman.h>
 
 enum TYPE{
@@ -116,7 +118,7 @@ void *___calloc___(void **ptr, unsigned long int size){
 
 void *var1 = NULL;
 struct retour *ret = NULL;
-
+char file[28];
 #define ERROR(msg, offset)\
 	fprintf(stderr, msg, offset);\
 	exit(EXIT_FAILURE);\
@@ -674,7 +676,7 @@ void comput(struct retour **r){
 void arguments(int key, char *arg, struct parser_state *state){
 	struct arguments *a = state->input;
 	unsigned long int w;
-	int fd;
+	int fd, random;
 	struct stat s;
 	char buffer[1024];
 	switch(key){
@@ -696,7 +698,10 @@ void arguments(int key, char *arg, struct parser_state *state){
 				perror("fstat()");
 				exit(EXIT_FAILURE);
 			}
-			if((a->fd = open(".compare.tmp", O_RDWR | O_CREAT, 0644)) < 0){
+			srand(time(NULL));
+			random = rand();
+			sprintf(file , ".compare-%u.tmp", random);
+			if((a->fd = open(file, O_RDWR | O_CREAT, 0644)) < 0){
 				perror("open()");
 				exit(EXIT_FAILURE);
 			}
@@ -740,7 +745,7 @@ int main(int argc, char **argv){
 	else	ret = reader(arg.mmap, arg.nbrtype);
 	if(arg.fd){
 		close(arg.fd);
-		remove(".compare.tmp");
+		remove(file);
 	}
 	comput(&ret);
 	i_ret = !ret->ret;
