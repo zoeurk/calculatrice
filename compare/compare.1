@@ -1,0 +1,70 @@
+.\Manpage pour compare.
+.\Contact zoeurk.gmail.com
+.TH man 1 "22 avril 2021" "1.0" "calcule man page"
+.SH NAME
+compare \- Petite outil de comparaison
+.SH SYNOPSIS
+calcule [options] ["test"]
+.SH DESCRIPTION
+Outil de comparaison
+.SH OPTIONS
+.TP
+.BR \-f , " \-\-float
+Utiliser le type \fIfloat\fR.
+.TP
+.BR \-l , " \-\-double"
+Utiliser le type \fIdouble\fR.
+.TP
+.BR \-L , " \-\-ldouble"
+Utiliser le type \fIlong double\fR.
+.TP
+.BR \-F , " \-\-file " \fIFILE\fR
+Utiliser le fichier qui contient le calcule
+.TP
+Liste des operateur connues:
+.TP
+.BR
+\fI NUM1 == NUM2\fR
+NUM1 egale à NUM2
+.TP
+.BR
+\fI NUM1 != NUM2\fR
+NUM1 different de NUM2
+.TP
+.BR
+\fI NUM1 >= NUM2\fR
+NUM1 superieur ou egale à NUM2
+.TP
+.BR
+\fI NUM1 > NUM2\fR
+NUM1 superieur à NUM2
+.TP
+.BR
+\fI NUM1 <= NUM2\fR
+NUM1 inferieur ou egale à NUM2
+.TP
+.BR
+\fI NUM1 < NUM2\fR
+NUM1 inferieur à NUM2
+.TP
+.BR
+\fI'STR1' ~= 'STR2'\fR
+STR1 est egale à STR2
+.TP
+.BR
+\fI'STR1' !~ 'STR2'\fR
+STR1 et STR2 sont différentes
+.TP
+.BR
+\fI( expression )\fR
+grouper les testes
+.TP
+.BR
+\fI! ( expression )\fR
+inverser le resultat
+.TP
+.SH BUGS
+Je sais pas
+.SH AUTHORS
+ZoeurK (zoeurk@gmail.com)
+.SH SEE ALSO
