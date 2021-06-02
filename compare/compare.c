@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -298,9 +298,6 @@ struct retour *ret = NULL;
 			*str = 0;\
 			str--;\
 		}\
-	}\
-	if(o.var1){\
-		printf("=>%s\n",o.var1);\
 	}\
 	if(str && *str){\
 		pret->ret = ret1;\
