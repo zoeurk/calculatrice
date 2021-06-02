@@ -299,6 +299,9 @@ struct retour *ret = NULL;
 			str--;\
 		}\
 	}\
+	if(o.var1){\
+		printf("=>%s\n",o.var1);\
+	}\
 	if(str && *str){\
 		pret->ret = ret1;\
 	}else	pret->ret = ret2; \
@@ -451,13 +454,13 @@ struct retour *reader(char *string, unsigned long int type){
 			case STR:
 				//f.strings(o.var1);
 				STRING_EXIST(1, 0);
-				pret->ret = f.strings(o.var1);
+				pret->ret = f.strings(str);
 				o.var1 = NULL;
 				break;
 			case NOT_STR:/*la chaine de caractere N'exist PAS*/
 				//f.strings(o.var1);
 				STRING_EXIST(0, 1);
-				pret->ret = !f.strings(o.var1);
+				pret->ret = !f.strings(str);
 				o.var1 = NULL;
 				break;
 			case NUM:/*-n: est nombre*/
