@@ -495,7 +495,7 @@ struct retour *reader(char *string, unsigned long int type){
 				break;
 			case 13:/*AND*/
 				if(ret == NULL){
-					ERROR("+>Erreur de syntaxe vers l'offset %lu.\n", offset);
+					ERROR("Erreur de syntaxe vers l'offset %lu.\n", offset);
 				}else{
 					pret->next = ___calloc___((void **)&pret->next,sizeof(struct retour));
 					pret->next->prev = pret;
@@ -510,7 +510,7 @@ struct retour *reader(char *string, unsigned long int type){
 				break;
 			case 14: /*OR*/
 				if(ret == NULL){
-					ERROR("->Erreur de syntaxe vers l'offset %lu.\n", offset);
+					ERROR("Erreur de syntaxe vers l'offset %lu.\n", offset);
 				}else{
 					pret->next = ___calloc___((void **)&pret->next,sizeof(struct retour));
 					pret->next->prev = pret;
@@ -719,7 +719,7 @@ void bye(void){
 		ret = r;
 	}
 }
-struct parser args = {options, arguments, "[OPTIONS]", NULL, "Petit outil de test", &program, NULL};
+struct parser args = {options, arguments, "[OPTIONS]", "test", "Petit outil de test", &program, NULL};
 
 int main(int argc, char **argv){
 	struct arguments arg = {FLOAT, NULL, NULL, 0, 0};
