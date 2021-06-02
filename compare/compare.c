@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -702,9 +702,9 @@ void arguments(int key, char *arg, struct parser_state *state){
 			do{
 				start:
 				random = rand();
-				memset(file, 0, 28);
 				sprintf(file , ".compare-%u.tmp", random);
 				if((fd_ = open(file, O_RDONLY)) > -1){
+					memset(file, 0, 28);
 					close(fd_);
 					goto start;
 				}
