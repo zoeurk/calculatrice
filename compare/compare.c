@@ -676,7 +676,7 @@ void comput(struct retour **r){
 void arguments(int key, char *arg, struct parser_state *state){
 	struct arguments *a = state->input;
 	unsigned long int w;
-	int fd, random;
+	int fd, fd_, random;
 	struct stat s;
 	char buffer[1024];
 	switch(key){
@@ -698,13 +698,23 @@ void arguments(int key, char *arg, struct parser_state *state){
 				perror("fstat()");
 				exit(EXIT_FAILURE);
 			}
-			srand(time(NULL));
-			random = rand();
-			sprintf(file , ".compare-%u.tmp", random);
-			if((a->fd = open(file, O_RDWR | O_CREAT, 0644)) < 0){
-				perror("open()");
-				exit(EXIT_FAILURE);
-			}
+
+			do{
+				start:
+				srand(time(NULL));
+				random = rand();
+				memset(file, 0, 28);
+				sprintf(file , ".compare-%u.tmp", random);
+				if((fd_ = open(file, O_RDONLY)) > -1){
+					close(fd_);
+					goto start;
+				}
+				if((a->fd = open(file, O_RDWR | O_CREAT, 0644)) < 0){
+					perror("open()");
+					exit(EXIT_FAILURE);
+				}
+				break;
+			}while(1);
 			while((w = read(fd,buffer,1024))){
 				write(a->fd,buffer,w);
 			}
