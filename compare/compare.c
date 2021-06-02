@@ -741,21 +741,22 @@ void bye(void){
 		free(ret);
 		ret = r;
 	}
+	if(strlen(file))
+		remove(file);
 }
 struct parser args = {options, arguments, "[OPTIONS]", NULL, "Petit outil de test", &program, NULL};
 
 int main(int argc, char **argv){
 	struct arguments arg = {FLOAT, NULL, NULL, 0, 0};
 	int i_ret;
+	memset(file, 0, 28);
 	atexit(bye);
 	parser_parse(&args, argc, argv, &arg);
 	if(arg.mmap == NULL)
 		ret = reader(arg.string, arg.nbrtype);
 	else	ret = reader(arg.mmap, arg.nbrtype);
-	if(arg.fd){
+	if(arg.fd)
 		close(arg.fd);
-		remove(file);
-	}
 	comput(&ret);
 	i_ret = !ret->ret;
 	return i_ret;
