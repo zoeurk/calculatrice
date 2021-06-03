@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "parsearg.h"
+#include "../lib/parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -506,7 +506,7 @@ struct retour *reader(char *string, unsigned long int type){
 				break;
 			case 13:/*AND*/
 				if(ret == NULL){
-					ERROR("+>Erreur de syntaxe vers l'offset %lu.\n", offset);
+					ERROR("Erreur de syntaxe vers l'offset %lu.\n", offset);
 				}else{
 					pret->next = ___calloc___((void **)&pret->next,sizeof(struct retour));
 					pret->next->prev = pret;
@@ -521,7 +521,7 @@ struct retour *reader(char *string, unsigned long int type){
 				break;
 			case 14: /*OR*/
 				if(ret == NULL){
-					ERROR("->Erreur de syntaxe vers l'offset %lu.\n", offset);
+					ERROR("Erreur de syntaxe vers l'offset %lu.\n", offset);
 				}else{
 					pret->next = ___calloc___((void **)&pret->next,sizeof(struct retour));
 					pret->next->prev = pret;
@@ -596,6 +596,7 @@ struct retour *reader(char *string, unsigned long int type){
 	}
 	if(pret && (pret->operator == AND || pret->operator == OR)){
 		fprintf(stderr,"Erreur de syntaxe.\n");
+		exit(EXIT_FAILURE);
 	}
 	if(parentheses){
 		fprintf(stderr,"Erreur: parenthese manquante.\n");
