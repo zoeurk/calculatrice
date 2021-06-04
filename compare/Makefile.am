@@ -1,5 +1,5 @@
 AUTOMAKE_OPTIONS = foreign
-bin_PROGRAMS = compare
+bin_PROGRAMS = mcompare
 LDADD = -lm -L../lib -lparsearg
 man1_MANS = compare.1
-compare_SOURCES = compare.c
+mcompare_SOURCES = compare.c
