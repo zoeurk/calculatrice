@@ -11,7 +11,7 @@ TO_BIN)
 			printf "virgule detectee\n"
 			exit
 		fi
-		if compare "\-N $VAR"
+		if mcompare "\-N $VAR"
 		then
 			printf "Caractere invalid dans: $VAR\n"
 			exit
