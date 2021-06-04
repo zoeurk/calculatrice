@@ -117,7 +117,7 @@ hexadecimal(){
 case $1
 in
 TO_HEX)
-	while [ "$VAR" != "0" ]
+	while compare "( $VAR != 0 )"
 	do
 		if printf $VAR | grep '\(\.\|,\)'>/dev/null
 		then

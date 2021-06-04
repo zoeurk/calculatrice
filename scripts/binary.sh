@@ -4,7 +4,7 @@ VAR=$VAL
 case $1
 in
 TO_BIN)
-	while [ "$VAR" != "0" ]
+	while compare "( $VAR != 0 )"
 	do
 		if printf $VAR | grep '\(\.\|,\)'>/dev/null
 		then
