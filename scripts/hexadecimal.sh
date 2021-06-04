@@ -124,12 +124,12 @@ TO_HEX)
 			printf "virgule detectee\n"
 			exit
 		fi
-		if ./compare "\-N $VAR"
+		if compare "\-N $VAR"
 		then
 			printf "Caractere invalid dans: $VAR\n"
 			exit
 		fi
-		VAL=`./calcule -O 0 "mod($VAR,16)"`
+		VAL=`calcule -O 0 "mod($VAR,16)"`
 		VAL=`hexadecimal $VAL`
 		#VAR=$(($VAR-$VAL))
 		VAR=$(($VAR/16))
