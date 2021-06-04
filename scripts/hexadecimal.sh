@@ -119,14 +119,19 @@ in
 TO_HEX)
 	while [ "$VAR" != "0" ]
 	do
-		if compare "\-N $VAR"
+		if printf $VAR | grep '\(\.\|,\)'>/dev/null
+		then
+			printf "virgule detectee\n"
+			exit
+		fi
+		if ./compare "\-N $VAR"
 		then
 			printf "Caractere invalid dans: $VAR\n"
 			exit
 		fi
-		VAL=`calcule -O 0 "mod($VAR,16)"`
+		VAL=`./calcule -O 0 "mod($VAR,16)"`
 		VAL=`hexadecimal $VAL`
-		VAR=$(($VAR-$VAL))
+		#VAR=$(($VAR-$VAL))
 		VAR=$(($VAR/16))
 		RESULT=${VAL}${RESULT}
 	done
@@ -149,7 +154,7 @@ TO_DEC)
 			printf "Caractere invalide: $V\n"
 			exit
 		fi
-		RESULT=`calcule -O 0 "$VAL * pow(16,$I) + $RESULT"`
+		RESULT=`./calcule -O 0 "$VAL * pow(16,$I) + $RESULT"`
 	done
 	echo $RESULT
 ;;
