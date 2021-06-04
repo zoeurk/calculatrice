@@ -471,6 +471,7 @@ struct retour *reader(char *string, unsigned long int type){
 				break;
 			case NOT_NUM:/*-N: N'est PAS nombre*/
 				STRING_EXIST(0, 1);
+				pret->ret = f.strings(str);
 				//if(f.strings(o.var1)){
 					NUMERIQUE(0, 1);
 				//}
