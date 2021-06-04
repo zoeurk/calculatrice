@@ -442,6 +442,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				break;
 			case '+':
 			case '-':
+				/*BUG*/
 				split = 0;
 				if((!v || pv->type == 4 || pv->type == '+' || pv->type == '-' || pv->type == '*' || pv->type == '/')
 					&& strlen(buffer) == 0)
@@ -454,7 +455,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				}
 				init = 1;
 				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
-				if(argv[j] == '(' && (argv[j-1] == '-' || argv[j-1] == '+')){
+				if((argv[j] == '(' && (argv[j-1] == '-' || argv[j-1] == '+'))){
 					switch(argv[j-1]){
 						case '-':
 							strcpy(buffer,"-1");
@@ -468,11 +469,20 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					pv->type = '*';
 					continue;
 				}
-				if((strcmp(buffer,trigo[0]) != 0) && (j > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
+				if(argv[j] != ',' && (strcmp(buffer,trigo[0]) != 0) && (j > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
 				{	if(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n'){
 						goto next;
 					}
+					/*BUG*/
 					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
+				}
+				if(argv[j] == ','){
+					j++;
+					while(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n')
+						j++;
+					if(argv[j] == '-')
+						buffer[0] = '-';
+					break;
 				}
 				goto next;
 			case '*':
@@ -532,6 +542,10 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				){
 					if((argv[i+1] == '\n' || argv[i+1] == '\t' || argv[i+1] == ' ') && argv[i] != '-' && argv[i] != '+')
 						split = 1;
+					if(strlen(buffer)+2 > BUFFER){
+						fprintf(stderr, "buffer trop court: >4096 octets.\n");
+						exit(EXIT_FAILURE);
+					}
 					strncat(buffer,&argv[i],1);
 					num = 1;
 					wait = 1;
@@ -539,10 +553,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				}else{
 					signe = (buffer[0] == '-' || buffer[0] == '+') ? 1 : 0;
 					if(signe == 1){
-						if(strlen(buffer) +2 > BUFFER){
-							fprintf(stderr,"Donnees trop long (>4096 octets).\n");
-							exit(EXIT_FAILURE);
-						}
 						strncat (buffer, "1", 2);
 						BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
 						pv->type = '*';
