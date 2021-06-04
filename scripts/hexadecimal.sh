@@ -133,7 +133,6 @@ TO_HEX)
 		VAL=`calcule -O 0 "mod($VAR,16)"`
 		VALUE=`calcule "( $VAR-$VAL )"`
 		VAL=`hexadecimal $VAL`
-		echo $(calcule "( $VALUE/16 )")
 		VAR=`calcule -O 0 "( $VALUE/16 )"`
 		RESULT=${VAL}${RESULT}
 	done
