@@ -443,6 +443,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 			case '+':
 			case '-':
 				/*BUG*/
+				point = 0;
 				split = 0;
 				if((!v || pv->type == 4 || pv->type == '+' || pv->type == '-' || pv->type == '*' || pv->type == '/')
 					&& strlen(buffer) == 0)
@@ -487,6 +488,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				goto next;
 			case '*':
 			case '/':
+				point = 0;
 				split = 0;
 				init = 1;
 				if(i == 0){
