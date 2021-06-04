@@ -11,14 +11,14 @@ TO_BIN)
 			printf "virgule detectee\n"
 			exit
 		fi
-		if ./compare "\-N $VAR"
+		if compare "\-N $VAR"
 		then
 			printf "Caractere invalid dans: $VAR\n"
 			exit
 		fi
-		VAL=`./calcule -O 0 "mod($VAR,2)"`
-		VAR=`./calcule -O 0 "($VAR - $VAL)"`
-		VAR=$(($VAR/2))
+		VAL=`calcule -O 0 "mod($VAR,2)"`
+		VAR=`calcule -O 0 "($VAR - $VAL)"`
+		VAR=`calcule -O 0 "( $VAR/2 )"`
 		RESULT=${VAL}${RESULT}
 	done
 	printf "$RESULT\n"
@@ -39,7 +39,7 @@ TO_DEC)
 			exit
 		fi
 		I=$(($I-1))
-		RESULT=`./calcule -O 0 "$V * pow(2,$I) + $RESULT"`
+		RESULT=`calcule -O 0 "$V * pow(2,$I) + $RESULT"`
 	done
 	echo $RESULT
 ;;

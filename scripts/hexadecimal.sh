@@ -125,16 +125,16 @@ TO_HEX)
 			exit
 		fi
 		VALUE=$VAR
-		if ./compare "\-N $VAR"
+		if compare "\-N $VAR"
 		then
 			printf "Caractere invalid dans: $VAR\n"
 			exit
 		fi
-		VAL=`./calcule -O 0 "mod($VAR,16)"`
-		VALUE=`./calcule "( $VAR-$VAL )"`
+		VAL=`calcule -O 0 "mod($VAR,16)"`
+		VALUE=`calcule "( $VAR-$VAL )"`
 		VAL=`hexadecimal $VAL`
-		echo $(./calcule "( $VALUE/16 )")
-		VAR=`./calcule -O 0 "( $VALUE/16 )"`
+		echo $(calcule "( $VALUE/16 )")
+		VAR=`calcule -O 0 "( $VALUE/16 )"`
 		RESULT=${VAL}${RESULT}
 	done
 	printf "$RESULT\n"
@@ -156,7 +156,7 @@ TO_DEC)
 			printf "Caractere invalide: $V\n"
 			exit
 		fi
-		RESULT=`./calcule -O 0 "$VAL * pow(16,$I) + $RESULT"`
+		RESULT=`calcule -O 0 "$VAL * pow(16,$I) + $RESULT"`
 	done
 	echo $RESULT
 ;;
