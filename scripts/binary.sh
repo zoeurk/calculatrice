@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 VAL=$2;
 VAR=$VAL
 case $1

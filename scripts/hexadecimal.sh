@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 VAL=$2;
 VAR=$VAL
-
+VIRGULE=0
 decimal(){
 	case $1
 	in
@@ -113,28 +113,57 @@ hexadecimal(){
 		printf "none"
 	esac
 }
-
 case $1
 in
 TO_HEX)
-	while mcompare "( $VAR != 0 )"
+	ENTIER=`calcule -O 0 "floor($VAL)"`
+	SUB=`calcule -O 6 "( $VAR - $ENTIER )"`
+	dot(){
+		export I=0
+		printf "$VAL\n" | sed -e 's/\(.\)/\1\n/g' -e 's/\n$//' | \
+		while read entry
+		do
+			if test $entry = "." -o $I -ne 0
+			then
+				echo $I
+				I=$(($I+1))
+			fi
+		done
+	}
+	DOT=`dot | tail -n 1`
+	for V in $ENTIER $SUB
 	do
-		if printf $VAR | grep '\(\.\|,\)'>/dev/null
+		VAR=$V
+		while mcompare "( $VAR != 0)"
+		do
+			VALUE=$V
+			if mcompare "\-N $VAR"
+			then
+				printf "Caractere invalid dans: $VAR\n"
+				exit
+			fi
+			if test $VIRGULE -eq 0
+			then
+				VAL=`calcule -O 0 "mod($VAR,16)"`
+				VALUE=`calcule "( $VAR-$VAL )"`
+				VAL=`hexadecimal $VAL`
+				VAR=`calcule -O 0 "( $VALUE/16 )"`
+				RESULT=${VAL}${RESULT}
+			else
+				VIRGULE=$(($VIRGULE+1))
+				VALUE=`calcule -O 2 "$VAR*16"`
+				ENTIER=`calcule -O 0 "floor($VALUE)"`
+				VAR=`calcule -O 2 "( $VALUE - $ENTIER )"`
+				RESULT=${RESULT}`hexadecimal $ENTIER`
+				DOT=$(($DOT-1))
+				test $DOT -eq 0 && break
+			fi
+		done
+		if test $VIRGULE -eq 0
 		then
-			printf "virgule detectee\n"
-			exit
+			VIRGULE=1
+			RESULT="${RESULT}."
 		fi
-		VALUE=$VAR
-		if mcompare "\-N $VAR"
-		then
-			printf "Caractere invalid dans: $VAR\n"
-			exit
-		fi
-		VAL=`calcule -O 0 "mod($VAR,16)"`
-		VALUE=`calcule "( $VAR-$VAL )"`
-		VAL=`hexadecimal $VAL`
-		VAR=`calcule -O 0 "( $VALUE/16 )"`
-		RESULT=${VAL}${RESULT}
 	done
 	printf "$RESULT\n"
 ;;
@@ -143,11 +172,21 @@ TO_DEC)
 	VAR=`echo $2 | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
 	for V in $VAR;
 	do
-		I=$(($I+1))
+		if test "$V" = "."
+		then	VIRGULE=1
+			MAX=$I
+			I=0
+		fi
+		if test $VIRGULE -eq 0
+		then
+			I=$(($I+1))
+		fi
 	done
 	RESULT=0
+	test $VIRGULE -eq 1 && I=$MAX
 	for V in $VAR
-	do	
+	do	if test "$V" != "."
+		then
 		I=$(($I-1))
 		VAL=`decimal $V`
 		if test $VAL = none
@@ -155,7 +194,8 @@ TO_DEC)
 			printf "Caractere invalide: $V\n"
 			exit
 		fi
-		RESULT=`calcule -O 0 "$VAL * pow(16,$I) + $RESULT"`
+		RESULT=`calcule "$VAL * pow(16,$I) + $RESULT"`
+		fi
 	done
 	echo $RESULT
 ;;
