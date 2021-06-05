@@ -1,7 +1,9 @@
 #!/bin/sh
+
 VAL=$2;
 VAR=$VAL
 VIRGULE=0
+
 decimal(){
 	case $1
 	in
@@ -151,9 +153,9 @@ TO_HEX)
 				RESULT=${VAL}${RESULT}
 			else
 				VIRGULE=$(($VIRGULE+1))
-				VALUE=`calcule -O 2 "$VAR*16"`
+				VALUE=`calcule "$VAR*16"`
 				ENTIER=`calcule -O 0 "floor($VALUE)"`
-				VAR=`calcule -O 2 "( $VALUE - $ENTIER )"`
+				VAR=`calcule "( $VALUE - $ENTIER )"`
 				RESULT=${RESULT}`hexadecimal $ENTIER`
 				DOT=$(($DOT-1))
 				test $DOT -eq 0 && break
