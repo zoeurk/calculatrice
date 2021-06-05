@@ -4,21 +4,21 @@ VAR=$VAL
 case $1
 in
 TO_BIN)
-	while compare "( $VAR != 0 )"
+	while [ "$VAR" != "0" ]
 	do
 		if printf $VAR | grep '\(\.\|,\)'>/dev/null
 		then
 			printf "virgule detectee\n"
 			exit
 		fi
-		if mcompare "\-N $VAR"
+		if ./mcompare "\-N $VAR"
 		then
 			printf "Caractere invalid dans: $VAR\n"
 			exit
 		fi
-		VAL=`calcule -O 0 "mod($VAR,2)"`
-		VAR=`calcule -O 0 "($VAR - $VAL)"`
-		VAR=`calcule -O 0 "( $VAR/2 )"`
+		VAL=`./calcule -O 0 "mod($VAR,2)"`
+		VAR=`./calcule -O 0 "($VAR - $VAL)"`
+		VAR=$(($VAR/2))
 		RESULT=${VAL}${RESULT}
 	done
 	printf "$RESULT\n"
@@ -33,13 +33,13 @@ TO_DEC)
 	RESULT=0
 	for V in $VAR
 	do
-		if ! test $V = 1 -a $V = 0
+		if test "$V" != "1" -a "$V" != "0"
 		then
 			printf "Caractere invalid: $V\n"
 			exit
 		fi
 		I=$(($I-1))
-		RESULT=`calcule -O 0 "$V * pow(2,$I) + $RESULT"`
+		RESULT=`./calcule -O 0 "$V * pow(2,$I) + $RESULT"`
 	done
 	echo $RESULT
 ;;
