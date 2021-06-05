@@ -125,7 +125,7 @@ TO_HEX)
 			exit
 		fi
 		VALUE=$VAR
-		if compare "\-N $VAR"
+		if mcompare "\-N $VAR"
 		then
 			printf "Caractere invalid dans: $VAR\n"
 			exit
