@@ -127,7 +127,7 @@ TO_HEX)
 		do
 			if test $entry = "." -o $I -ne 0
 			then
-				echo $I
+				printf "$I\n"
 				I=$(($I+1))
 			fi
 		done
@@ -171,7 +171,7 @@ TO_HEX)
 ;;
 TO_DEC)
 	I=0
-	VAR=`echo $2 | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
+	VAR=`printf "$2\n" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
 	for V in $VAR;
 	do
 		if test "$V" = "."
@@ -199,7 +199,7 @@ TO_DEC)
 		RESULT=`calcule "$VAL * pow(16,$I) + $RESULT"`
 		fi
 	done
-	echo $RESULT
+	printf "$RESULT\n"
 ;;
 *)
 	printf "USAGE:\n"
