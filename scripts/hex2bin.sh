@@ -113,7 +113,7 @@ case $1
 in
 HEX2BIN)
 	VAL=$2
-	VAL=`printf "$2\n" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
+	VAL=`printf "$2" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
 	for I in $VAL
 	do
 		test $I != "." && RESULT=${RESULT}`tobin $I` || RESULT="${RESULT}."
@@ -125,14 +125,14 @@ BIN2HEX)
 	VAL1=$2
 	VAL1=${VAL1%.*}
 	LEN1=${#VAL1}
-	LEN1=`calcule -O 0 "mod($LEN1,4)"`
+	LEN1=`./calcule -O 0 "mod($LEN1,4)"`
 	LEN1=$((4-$LEN1))
 	VAL2=$2
-	if printf "$VAL2" | grep "\.";
+	if printf "$VAL2" | grep "\." >/dev/null;
 	then
 		VAL2=${VAL2#$VAL1.}
 		LEN2=${#VAL2}
-		LEN2=`calcule -O 0 "mod($LEN2,4)"`
+		LEN2=`./calcule -O 0 "mod($LEN2,4)"`
 		LEN2=$((4-LEN2))
 	else
 		VAL2=""
@@ -141,7 +141,7 @@ BIN2HEX)
 	for I in $(seq 1 1 $LEN1)
 	do	VAL1="0${VAL1}"
 	done
-	VAL1=`printf "$VAL1\n" | sed -e 's/\(\(.\)\{4\}\)/\1 /g'`
+	VAL1=`printf "$VAL1" | sed -e 's/\(\(.\)\{4\}\)/\1 /g'`
 	for I in $VAL1
 	do
 		RESULT=${RESULT}`tohex $I`
@@ -153,7 +153,7 @@ BIN2HEX)
 		do
 			VAL2=${VAL2}0
 		done
-		VAL2=`printf "$VAL2\n" | sed -e 's/\(\(.\)\{4\}\)/\1 /g'`
+		VAL2=`printf "$VAL2" | sed -e 's/\(\(.\)\{4\}\)/\1 /g'`
 		for I in $VAL2
 		do
 			RESULT=${RESULT}`tohex $I`
