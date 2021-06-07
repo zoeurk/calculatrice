@@ -61,7 +61,7 @@ TO_BIN)
 				test $LAST = $R && break;
 			fi
 		done
-		if mcompare "( $SUB != 0 && && $VIRGULE == 0 )"
+		if mcompare "( $SUB != 0 && $VIRGULE == 0 )"
 		then
 			test -z "$RESULT" && RESULT=0
 			VIRGULE=1
