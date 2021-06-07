@@ -578,8 +578,11 @@ struct retour *reader(char *string, unsigned long int type){
 						}
 						break;
 					case '-':
-						fprintf(stderr, "\'-%c\': Option unknown.\n", *(r+1));
-						exit(EXIT_FAILURE);
+						if(quote != 0 || dquote != 0){
+							fprintf(stderr, "\'-%c\': Option unknown.\n", *(r+1));
+							exit(EXIT_FAILURE);
+						}
+						break;
 					default:
 						if(o.var1 == NULL){
 							o.var1 = r;

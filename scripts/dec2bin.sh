@@ -10,12 +10,12 @@ TO_BIN)
 	SUB=`calcule -O 6 "( $VAR - $ENTIER )"`
 	dot(){
 		I=0
-		printf "$VAL\n" | sed -e 's/\(.\)/\1\n/g' -e 's/\n$//' | \
+		printf "$VAL" | sed -e 's/\(.\)/\1\n/g' -e 's/\n$//' | \
 		while read entry
 		do
 			if test $entry = "." -o $I -ne 0
 			then
-				printf "$I\n"
+				printf "$I"
 				I=$(($I+1))
 			fi
 		done
@@ -60,7 +60,7 @@ TO_BIN)
 TO_DEC)
 	I=0
 	VIRGULE=0
-	VAR=`printf $2 | sed -e 's/\(.\)/\1 /g' -e 's/\( \+\)/ /g' -e 's/ *$//g'`
+	VAR=`printf "$2" | sed -e 's/\(.\)/\1 /g' -e 's/\( \+\)/ /g' -e 's/ *$//g'`
 	RESULT=0
 	for V in $VAR;
 	do

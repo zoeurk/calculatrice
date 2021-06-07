@@ -122,12 +122,12 @@ TO_HEX)
 	SUB=`calcule -O 6 "( $VAR - $ENTIER )"`
 	dot(){
 		export I=0
-		printf "$VAL\n" | sed -e 's/\(.\)/\1\n/g' -e 's/\n$//' | \
+		printf "$VAL" | sed -e 's/\(.\)/\1\n/g' -e 's/\n$//' | \
 		while read entry
 		do
 			if test $entry = "." -o $I -ne 0
 			then
-				printf "$I\n"
+				printf "$I"
 				I=$(($I+1))
 			fi
 		done
@@ -171,7 +171,7 @@ TO_HEX)
 ;;
 TO_DEC)
 	I=0
-	VAR=`printf "$2\n" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
+	VAR=`printf "$2" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
 	for V in $VAR;
 	do
 		if test "$V" = "."
