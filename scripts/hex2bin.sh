@@ -128,7 +128,7 @@ BIN2HEX)
 	LEN1=`calcule -O 0 "mod($LEN1,4)"`
 	LEN1=$((4-$LEN1))
 	VAL2=$2
-	if printf $VAL2 | grep "\.";
+	if printf "$VAL2" | grep "\.";
 	then
 		VAL2=${VAL2#$VAL1.}
 		LEN2=${#VAL2}
