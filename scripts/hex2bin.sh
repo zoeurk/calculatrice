@@ -167,6 +167,7 @@ BIN2HEX)
 			RESULT=${RESULT}`tohex $I`
 		done
 	fi
+	RESULT=`printf "$RESULT" | sed s/^0*//`
 	test -n "$NEG" && printf "-"
 	printf "$RESULT\n"
 ;;
