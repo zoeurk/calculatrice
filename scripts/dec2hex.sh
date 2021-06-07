@@ -123,8 +123,8 @@ hexadecimal(){
 case $1
 in
 TO_HEX)
-	ENTIER=`./calcule -O 0 "floor($VAL)"`
-	SUB=`./calcule -O 6 "( $VAR - $ENTIER )"`
+	ENTIER=`calcule -O 0 "floor($VAL)"`
+	SUB=`calcule -O 6 "( $VAR - $ENTIER )"`
 	dot(){
 		I=0
 		printf " $VAL" | sed -e 's/\(.\)/\1\n/g' -e 's/\n$//' | \
@@ -140,26 +140,26 @@ TO_HEX)
 	for V in $ENTIER $SUB
 	do
 		VAR=$V
-		while ./mcompare "( $VAR != 0)"
+		while mcompare "( $VAR != 0)"
 		do
 			VALUE=$V
-			if ./mcompare "\-N $VAR"
+			if mcompare "\-N $VAR"
 			then
 				printf "Caractere invalid dans: $VAR\n"
 				exit
 			fi
 			if test $VIRGULE -eq 0
 			then
-				VAL=`./calcule -O 0 "mod($VAR,16)"`
-				VALUE=`./calcule "( $VAR-$VAL )"`
+				VAL=`calcule -O 0 "mod($VAR,16)"`
+				VALUE=`calcule "( $VAR-$VAL )"`
 				VAL=`hexadecimal $VAL`
-				VAR=`./calcule -O 0 "( $VALUE/16 )"`
+				VAR=`calcule -O 0 "( $VALUE/16 )"`
 				RESULT=${VAL}${RESULT}
 			else
 				VIRGULE=$(($VIRGULE+1))
-				VALUE=`./calcule "$VAR*16"`
-				ENTIER=`./calcule -O 0 "floor($VALUE)"`
-				VAR=`./calcule "( $VALUE - $ENTIER )"`
+				VALUE=`calcule "$VAR*16"`
+				ENTIER=`calcule -O 0 "floor($VALUE)"`
+				VAR=`calcule "( $VALUE - $ENTIER )"`
 				RESULT=${RESULT}`hexadecimal $ENTIER`
 				LAST=$RESULT
 				DOT=$(($DOT-1))
@@ -167,11 +167,11 @@ TO_HEX)
 				if test -n "$3"
 				then
 					test $DOT -lt -$(($2-1)) && break
-				else 	test $DOT -lt -1 && break
+				else 	test $DOT -lt -6 && break
 				fi
 			fi
 		done
-		if ./mcompare "$VIRGULE == 0 && 0 < $SUB"
+		if mcompare "$VIRGULE == 0 && 0 < $SUB"
 		then
 			VIRGULE=1
 			RESULT="${RESULT}."
@@ -200,14 +200,17 @@ TO_DEC)
 	for V in $VAR
 	do	if test "$V" != "."
 		then
-		I=$(($I-1))
-		VAL=`decimal $V`
-		if test $VAL = none
-		then
-			printf "Caractere invalide: $V\n"
-			exit
-		fi
-		RESULT=`./calcule "$VAL * pow(16,$I) + $RESULT"`
+			I=$(($I-1))
+			VAL=`decimal $V`
+			if test $VAL = none
+			then
+				printf "Caractere invalide: $V\n"
+				exit
+			fi
+			test -n "$3" && \
+				RESULT=`calcule -O $2 "$VAL * pow(16,$I) + $RESULT"` ||
+				RESULT=`calcule -O 6 "$VAL * pow(16,$I) + $RESULT"`
+
 		fi
 	done
 	test -n "$NEG" && printf "-"

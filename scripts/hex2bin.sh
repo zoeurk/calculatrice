@@ -133,14 +133,14 @@ BIN2HEX)
 	VAL1="$VAL"
 	VAL1=${VAL1%.*}
 	LEN1=${#VAL1}
-	LEN1=`./calcule -O 0 "mod($LEN1,4)"`
+	LEN1=`calcule -O 0 "mod($LEN1,4)"`
 	LEN1=$((4-$LEN1))
 	VAL2="$VAL"
 	if printf "$VAL2" | grep "\." >/dev/null;
 	then
 		VAL2=${VAL2#$VAL1.}
 		LEN2=${#VAL2}
-		LEN2=`./calcule -O 0 "mod($LEN2,4)"`
+		LEN2=`calcule -O 0 "mod($LEN2,4)"`
 		LEN2=$((4-LEN2))
 	else
 		VAL2=""
