@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -510,6 +510,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				cont = 0;
 				break;
 			case '.':
+				/*Faisait bugger*/
 				if(point == 1){
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}else	point = 1;
