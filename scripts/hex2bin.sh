@@ -109,25 +109,33 @@ tohex(){
 		printf "$1"
 	esac
 }
+VAL="$2"
+if printf " $VAL" | grep "\-" >/dev/null
+then
+	NEG=1
+	VAL=`printf " $VAL" | sed 's/-//g'`
+	VAR=$VAL
+fi
 case $1
 in
 HEX2BIN)
-	VAL=$2
-	VAL=`printf "$2" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
+	VAL=$VAL
+	VAL=`printf "$VAL" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
 	for I in $VAL
 	do
 		test $I != "." && RESULT=${RESULT}`tobin $I` || RESULT="${RESULT}."
 	done
+	test -n "$NEG" && printf "-"
 	printf "$RESULT\n"
 
 ;;
 BIN2HEX)
-	VAL1=$2
+	VAL1="$VAL"
 	VAL1=${VAL1%.*}
 	LEN1=${#VAL1}
 	LEN1=`./calcule -O 0 "mod($LEN1,4)"`
 	LEN1=$((4-$LEN1))
-	VAL2=$2
+	VAL2="$VAL"
 	if printf "$VAL2" | grep "\." >/dev/null;
 	then
 		VAL2=${VAL2#$VAL1.}
@@ -159,6 +167,7 @@ BIN2HEX)
 			RESULT=${RESULT}`tohex $I`
 		done
 	fi
+	test -n "$NEG" && printf "-"
 	printf "$RESULT\n"
 ;;
 *)
