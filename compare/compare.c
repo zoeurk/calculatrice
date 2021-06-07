@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -416,7 +416,7 @@ struct retour *reader(char *string, unsigned long int type){
 			if(strncmp(r,matching[i], strlen(matching[i])) == 0)
 				break;
 		}
-		/**r = *(r+back);*/
+		printf("****\n");
 		switch(i){
 			case EQUAL:end = 0;
 				STRING_DEF;
@@ -506,6 +506,9 @@ struct retour *reader(char *string, unsigned long int type){
 				pret->operator = INVERT;
 				break;
 			case 13:/*AND*/
+				if(pret && (pret->operator == AND || pret->operator == OR)){
+					ERROR("Erreur de syntaxe vers l'offset %lu.\n", offset);
+				}
 				if(ret == NULL){
 					ERROR("Erreur de syntaxe vers l'offset %lu.\n", offset);
 				}else{
@@ -521,6 +524,9 @@ struct retour *reader(char *string, unsigned long int type){
 				o.var1 = NULL;
 				break;
 			case 14: /*OR*/
+				if(pret && (pret->operator == AND || pret->operator == OR)){
+					ERROR("Erreur de syntaxe vers l'offset %lu.\n", offset);
+				}
 				if(ret == NULL){
 					ERROR("Erreur de syntaxe vers l'offset %lu.\n", offset);
 				}else{
@@ -578,9 +584,11 @@ struct retour *reader(char *string, unsigned long int type){
 						}
 						break;
 					case '-':
+						if((*(r+1) < 48 || *(r+1) > 57) || *(r+1) == '.' ){
 						//if(!dquote){
-						fprintf(stderr, "\'-%c\': Option unknown.\n", *(r+1));
-						exit(EXIT_FAILURE);
+							fprintf(stderr, "\'-%c\': Option unknown.\n", *(r+1));
+							exit(EXIT_FAILURE);
+						}
 						//}
 						break;
 					default:
