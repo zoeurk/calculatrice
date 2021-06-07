@@ -1,6 +1,5 @@
 #!/bin/sh
-
-VAL=$2;
+test -n "$3" && VAL=$3 || VAL=$2 
 VAR=$VAL
 VIRGULE=0
 if printf " $VAL" | grep "\-" >/dev/null
@@ -164,7 +163,12 @@ TO_HEX)
 				RESULT=${RESULT}`hexadecimal $ENTIER`
 				LAST=$RESULT
 				DOT=$(($DOT-1))
-				test $DOT -eq 0 && break
+				#printf "$RESULT\n"
+				if test -n "$3"
+				then
+					test $DOT -lt -$(($2-1)) && break
+				else 	test $DOT -lt -1 && break
+				fi
 			fi
 		done
 		if ./mcompare "$VIRGULE == 0 && 0 < $SUB"
@@ -211,5 +215,5 @@ TO_DEC)
 ;;
 *)
 	printf "USAGE:\n"
-	printf "$0 TO_HEX|TO_DEC value\n";
+	printf "$0 TO_HEX|TO_DEC [VIRGULE] value\n";
 esac
