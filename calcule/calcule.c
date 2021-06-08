@@ -287,6 +287,11 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				virgule--;
 				break;
 			case '(':
+				if(buffer[0] == '-'){
+					buffer[1] = '1';
+					BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
+					pv->type = '*';
+				}
 				split = 0;
 				init = 0;
 				count++;
@@ -442,12 +447,14 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				break;
 			case '+':
 			case '-':
+				//printf("%s;\n", buffer);
 				/*BUG*/
 				point = 0;
 				split = 0;
 				if((!v || pv->type == 4 || pv->type == '+' || pv->type == '-' || pv->type == '*' || pv->type == '/')
-					&& strlen(buffer) == 0)
+					&& strlen(buffer) == 0){
 					goto number;
+				}
 				if(cont){
 					BUFSET(v, pv,arg->valsize, buffer, end, arg->type);
 					pv->type = argv[i];
@@ -455,13 +462,13 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					cont = 0;
 				}
 				init = 1;
+				//printf("*");
 				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
 				if(buffer[0] == '-' && argv[j] == '-'){
 					buffer[0] = 0;
 					continue;
 				}
 				if((argv[j] == '(' && (argv[j-1] == '-' || argv[j-1] == '+'))){
-					//printf("===><%s>:%c", buffer, argv[j]);
 					switch(argv[j-1]){
 						case '-':
 							strcpy(buffer,"-1");
