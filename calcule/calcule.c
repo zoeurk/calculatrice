@@ -456,7 +456,12 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				}
 				init = 1;
 				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
+				if(buffer[0] == '-' && argv[j] == '-'){
+					buffer[0] = 0;
+					continue;
+				}
 				if((argv[j] == '(' && (argv[j-1] == '-' || argv[j-1] == '+'))){
+					//printf("===><%s>:%c", buffer, argv[j]);
 					switch(argv[j-1]){
 						case '-':
 							strcpy(buffer,"-1");

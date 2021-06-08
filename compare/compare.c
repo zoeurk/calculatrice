@@ -416,7 +416,6 @@ struct retour *reader(char *string, unsigned long int type){
 			if(strncmp(r,matching[i], strlen(matching[i])) == 0)
 				break;
 		}
-		printf("****\n");
 		switch(i){
 			case EQUAL:end = 0;
 				STRING_DEF;
