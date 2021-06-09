@@ -123,6 +123,10 @@ hexadecimal(){
 case $1
 in
 TO_HEX)
+	if ! ./mcompare "\-n $VAL"
+	then printf "Bad value:'$VAL'\n"
+		exit
+	fi
 	ENTIER=`calcule -O 0 "floor($VAL)"`
 	SUB=`calcule -O 6 "( $VAR - $ENTIER )"`
 	dot(){
