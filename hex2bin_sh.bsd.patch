@@ -1,5 +1,5 @@
 --- calcule/scripts/hex2bin.sh	2021-06-10 21:07:56.327491465 +0200
-+++ /home/thomas/Projets/calcule/bsd.txt	2021-06-10 21:12:29.717892405 +0200
++++ calcule/scripts/hex2bin.sh	2021-06-10 21:12:29.717892405 +0200
 @@ -154,7 +154,7 @@
  		VAL2=""
  		LEN2=0
