@@ -72,6 +72,7 @@ in
 			RESULT="${RESULT}."
 		fi
 	done
+	printf "$RESULT" | grep -e "^\." >/dev/null && RESULT=0${RESULT}
 	test -n "$NEG" && printf "-"
 	printf "$RESULT\n"
 ;;
@@ -117,6 +118,7 @@ in
 		R=`printf "$RESULT" | sed -n "/[0\.]$/p"`
 		test -z "$R" && break
 	done
+	printf "$RESULT" | grep -e "^\." >/dev/null && RESULT=0${RESULT}
 	test -n "$NEG" && printf "-"
 	printf "$RESULT\n"
 ;;

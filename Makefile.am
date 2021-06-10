@@ -1,1 +1,1 @@
-SUBDIRS=lib calcule compare
+SUBDIRS=lib calcule compare scripts
