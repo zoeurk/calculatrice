@@ -13,12 +13,12 @@ fi
 case $1
 in
 TO_BIN)
-	if ! ./mcompare "\-n $VAL"
+	if ./mcompare "\-N $VAL"
 	then printf "Bad value:'$VAL'\n"
 		exit
 	fi
-	ENTIER=`calcule -O 0 "floor($VAL)"`
-	SUB=`calcule -O 6 "( $VAR - $ENTIER )"`
+	ENTIER=`./calcule -O 0 "floor($VAL)"`
+	SUB=`./calcule -O 6 "( $VAR - $ENTIER )"`
 	dot(){
 		I=0
 		printf " $VAL" | sed -e 's/\(.\)/\1\n/g' -e 's/\n$//' | \
@@ -35,27 +35,27 @@ TO_BIN)
 	for V in $ENTIER $SUB
 	do
 		VAR=$V
-		while mcompare "( $VAR != 0 )"
+		while ./mcompare "( $VAR != 0 )"
 		do
 			VALUE=$V
-			if mcompare "\-N $VAR"
+			if ./mcompare "\-N $VAR"
 			then
 				printf "Caractere invalid dans: $VAR\n"
 				exit
 			fi
 			if test $VIRGULE -eq 0
 			then
-				VAL=`calcule -O 0 "mod($VAR,2)"`
-				VAR=`calcule -O 0 "($VAR - $VAL)"`
-				VAR=`calcule -O 0 "( $VAR/2 )"`
+				VAL=`./calcule -O 0 "mod($VAR,2)"`
+				VAR=`./calcule -O 0 "($VAR - $VAL)"`
+				VAR=`./calcule -O 0 "( $VAR/2 )"`
 				RESULT=${VAL}${RESULT}
 			else
-				VALUE=`calcule "$VAR*2"`
-				ENTIER=`calcule -O 0 "floor($VALUE)"`
-				VAR=`calcule "( $VALUE - $ENTIER )"`
+				VALUE=`./calcule "$VAR*2"`
+				ENTIER=`./calcule -O 0 "floor($VALUE)"`
+				VAR=`./calcule "( $VALUE - $ENTIER )"`
 				RESULT=${RESULT}${ENTIER}
 				LAST=$RESULT
-				R=`calcule "( $RESULT-0 )"`
+				R=`./calcule "( $RESULT-0 )"`
 				VIRGULE=$(($VIRGULE+1))
 				if test -n "$3"
 				then
@@ -65,7 +65,7 @@ TO_BIN)
 				test $LAST = $R && break;
 			fi
 		done
-		if mcompare "( $SUB != 0 && $VIRGULE == 0 )"
+		if ./mcompare "( $SUB != 0 && $VIRGULE == 0 )"
 		then
 			test -z "$RESULT" && RESULT=0
 			VIRGULE=1
@@ -104,11 +104,12 @@ TO_DEC)
 		if test "$V" != "." -a "$V" != "-"
 		then
 			I=$(($I-1))
-			RESULT=`calcule "$V * pow(2,$I) + $RESULT"`
+			RESULT=`./calcule "$V * pow(2,$I) + $RESULT"`
 		fi
-		test -n "$3" && \
-			RESULT=`calcule -O $2 "$VAL * pow(16,$I) + $RESULT"` ||
-			RESULT=`calcule -O 6 "$VAL * pow(16,$I) + $RESULT"`
+		#test -n "$3" && \
+		#	RESULT=`./calcule -O $2 "$V * pow(2,$I) + $RESULT"` || \
+		#	RESULT=`./calcule -O 6 "$V * pow(2,$I) + $RESULT"`
+		#printf "==>$RESULT\n"
 
 	done
 	test -n "$NEG" && printf "-"

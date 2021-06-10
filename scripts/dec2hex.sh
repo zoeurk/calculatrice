@@ -123,7 +123,7 @@ hexadecimal(){
 case $1
 in
 TO_HEX)
-	if ! ./mcompare "\-n $VAL"
+	if ./mcompare "\-N $VAL"
 	then printf "Bad value:'$VAL'\n"
 		exit
 	fi
