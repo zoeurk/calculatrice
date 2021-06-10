@@ -111,11 +111,12 @@ TO_DEC)
 		fi
 
 	done
-	#while test 1 -eq 1;
-	#do	printf "$RESULT" | grep "\." >/dev/null || break
-	#	RESULT=`printf "$RESULT" | sed '/\ s/[\.,0]$//'`
-	#	printf "$RESULT" | sed '/\ {s/[\.,0]$//; t; q 1}' >/dev/null || break;
-	#done
+	while test 1 -eq 1;
+	do	printf "$RESULT" | grep "\." >/dev/null || break
+		RESULT=`printf "$RESULT" | sed '/\./ s/[\.,0]$//'`
+		R=`printf "$RESULT" | sed -n "/[0\.]$/p"`
+		test -z "$R" && break
+	done
 	test -n "$NEG" && printf "-"
 	printf "$RESULT\n"
 ;;
