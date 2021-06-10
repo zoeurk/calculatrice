@@ -124,5 +124,5 @@ in
 ;;
 *)
 	printf "USAGE:\n"
-	printf "$0 TO_BIN|TO_DEC [VIRGULE] value\n";
+	printf "$0 2BIN|2DEC [VIRGULE] value\n";
 esac

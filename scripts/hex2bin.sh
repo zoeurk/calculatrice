@@ -118,7 +118,7 @@ then
 fi
 case $1
 in
-2BIN)
+HEX2BIN)
 	VAL=$VAL
 	VAL=`printf "$VAL" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
 	for I in $VAL
@@ -128,7 +128,7 @@ in
 	RESULT=`printf "$RESULT" | sed s/^0*//`
 	while test 1 -eq 1;
 	do	printf "$RESULT" | grep "\." >/dev/null || break
-		RESULT=`printf "$RESULT" | sed '/\./ s/[\.,0]$//'`
+		RESULT=`printf "$RESULT" | sed '/\ s/[\.,0]$//'`
 		R=`printf "$RESULT" | sed -n "/[0\.]$/p"`
 		test -z "$R" && break
 	done
@@ -137,7 +137,7 @@ in
 	printf "$RESULT\n"
 
 ;;
-2HEX)
+BIN2HEX)
 	VAL1="$VAL"
 	VAL1=${VAL1%.*}
 	LEN1=${#VAL1}
@@ -188,6 +188,6 @@ in
 ;;
 *)
 	printf "USAGE:\n"
-	printf "$0 2BIN|2HEX value\n";
+	printf "$0 HEX2BIN|BIN2HEX value\n";
 ;;
 esac
