@@ -1,0 +1,20 @@
+--- hex2bin.sh	2021-06-10 17:54:22.362505481 +0200
++++ hex2bin.sh	2021-06-10 19:29:22.863905311 +0200
+@@ -154,7 +154,7 @@
+ 		VAL2=""
+ 		LEN2=0
+ 	fi
+-	for I in $(seq 1 1 $LEN1)
++	for I in $(jot $LEN1 1 $LEN1)
+ 	do	VAL1="0${VAL1}"
+ 	done
+ 	VAL1=`printf "$VAL1" | sed -e 's/\(\(.\)\{4\}\)/\1 /g'`
+@@ -165,7 +165,7 @@
+ 	if test -n "$VAL2"
+ 	then
+ 		RESULT="${RESULT}."
+-		for I in $(seq 1 1 $LEN2)
++		for I in $(jot $LEN2 1 $LEN2)
+ 		do
+ 			VAL2=${VAL2}0
+ 		done
