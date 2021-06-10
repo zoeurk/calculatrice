@@ -104,7 +104,10 @@ TO_DEC)
 		if test "$V" != "." -a "$V" != "-"
 		then
 			I=$(($I-1))
-			RESULT=`./calcule "$V * pow(2,$I) + $RESULT"`
+			test -n "$3" &&\
+				RESULT=`./calcule -O $2 "$V * pow(2,$I) + $RESULT"` || \
+				RESULT=`./calcule -O 6 "$V * pow(2,$I) + $RESULT"`
+				
 		fi
 		#test -n "$3" && \
 		#	RESULT=`./calcule -O $2 "$V * pow(2,$I) + $RESULT"` || \
