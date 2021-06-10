@@ -12,7 +12,7 @@ then
 fi
 case $1
 in
-TO_BIN)
+2BIN)
 	if mcompare "\-N $VAL"
 	then printf "Bad value:'$VAL'\n"
 		exit
@@ -75,7 +75,7 @@ TO_BIN)
 	test -n "$NEG" && printf "-"
 	printf "$RESULT\n"
 ;;
-TO_DEC)
+2DEC)
 	I=0
 	VIRGULE=0
 	VAR=`printf "$VAL" | sed -e 's/\(.\)/\1 /g' -e 's/\( \+\)/ /g' -e 's/ *$//g'`

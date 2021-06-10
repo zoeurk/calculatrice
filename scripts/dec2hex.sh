@@ -122,7 +122,7 @@ hexadecimal(){
 }
 case $1
 in
-TO_HEX)
+2HEX)
 	if ! mcompare "\-n $VAL"
 	then printf "Bad value:'$VAL'\n"
 		exit
@@ -184,7 +184,7 @@ TO_HEX)
 	test -n "$NEG" && printf "-"
 	printf "$RESULT\n"
 ;;
-TO_DEC)
+2DEC)
 	I=0
 	VAR=`printf "$VAL" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
 	for V in $VAR;
@@ -228,5 +228,5 @@ TO_DEC)
 ;;
 *)
 	printf "USAGE:\n"
-	printf "$0 TO_HEX|TO_DEC [VIRGULE] value\n";
+	printf "$0 2HEX|2DEC [VIRGULE] value\n";
 esac
