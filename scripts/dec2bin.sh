@@ -72,6 +72,12 @@ in
 			RESULT="${RESULT}."
 		fi
 	done
+	while test 1 -eq 1;
+	do	printf "$RESULT" | grep "\." >/dev/null || break
+		RESULT=`printf "$RESULT" | sed '/\./ s/[\.,0]$//'`
+		R=`printf "$RESULT" | sed -n "/[0\.]$/p"`
+		test -z "$R" && break
+	done
 	printf "$RESULT" | grep -e "^\." >/dev/null && RESULT=0${RESULT}
 	test -n "$NEG" && printf "-"
 	printf "$RESULT\n"
