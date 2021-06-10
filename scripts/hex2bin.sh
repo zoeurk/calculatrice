@@ -125,6 +125,7 @@ HEX2BIN)
 	do
 		test $I != "." && RESULT=${RESULT}`tobin $I` || RESULT="${RESULT}."
 	done
+	RESULT=`printf "$RESULT" | sed s/^0*//`
 	test -n "$NEG" && printf "-"
 	printf "$RESULT\n"
 
