@@ -121,6 +121,14 @@ in
 HEX2BIN)
 	VAL=$VAL
 	VAL=`printf "$VAL" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
+	for T in $VAL
+	do
+		if test `tobin $T` = "none"
+		then
+			printf "Caractere invalid dans: $VAL\n"
+			exit
+		fi
+	done
 	for I in $VAL
 	do
 		test $I != "." && RESULT=${RESULT}`tobin $I` || RESULT="${RESULT}."
@@ -154,6 +162,15 @@ BIN2HEX)
 		VAL2=""
 		LEN2=0
 	fi
+	TEST=`printf "$VAL" | sed 's/\(.\)/\1 /g'`
+	for T in $TEST
+	do
+		if test $T -ne 1 -a $T -ne 0 -a $T != "."
+		then
+			printf "Caractere invalid dans: $VAL1\n"
+			exit
+		fi
+	done
 	for I in $(seq 1 1 $LEN1)
 	do	VAL1="0${VAL1}"
 	done
