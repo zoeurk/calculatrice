@@ -1,15 +1,37 @@
 #!/bin/sh
-if test -n "$3"
-then VAL=$3 
+if test -z "$3"
+then
+	printf "USAGE:\n"
+	printf "$0 ENCODE|DECODE [VIRGULE] value base\n";
+exit
+fi
+if test -n "$4"
+then VAL=$3
+	TO=$4
 	if printf " $2" | grep -e "[-\.]" >/dev/null
 	then
 		printf "Valeur invalide: $2\n"
 		exit
 	fi
+	if printf " $4" | grep -e "[-\.]" >/dev/null
+	then
+		printf "Valeur invalide: $4\n"
+		exit
+	fi
 else
-	VAL=$2 
+	if printf " $3" | grep -e "[-\.]" >/dev/null
+	then
+		printf "Valeur invalide: $2\n"
+		exit
+	fi
+	VAL=$2
+	TO=$3
 fi
-
+#if test -n "$3"
+#then
+#	#$0 help
+#	exit
+#fi
 #test -n "$3" && VAL=$3 || VAL=$2 
 VAR=$VAL
 VIRGULE=0
@@ -20,120 +42,9 @@ then
 	VAR=$VAL
 fi
 
-decimal(){
-	case $1
-	in
-	0)
-		printf "0"
-	;;
-	1)
-		printf "1"
-	;;
-	2)
-		printf "2"
-	;;
-	3)
-		printf "3"
-	;;
-	4)
-		printf "4"
-	;;
-	5)
-		printf "5"
-	;;
-	6)
-		printf "6"
-	;;
-	7)
-		printf "7"
-	;;
-	8)
-		printf "8"
-	;;
-	9)
-		printf "9"
-	;;
-	A|a)
-		printf "10"
-	;;
-	B|b)
-		printf "11"
-	;;
-	C|c)
-		printf "12"
-	;;
-	D|d)
-		printf "13"
-	;;
-	E|e)
-		printf "14"
-	;;
-	F|f)
-		printf "15"
-	;;
-	*)
-		printf "none"
-		exit
-	esac
-}
-hexadecimal(){
-	case $1
-	in
-	0)
-		printf "0"
-	;;
-	1)
-		printf "1"
-	;;
-	2)
-		printf "2"
-	;;
-	3)
-		printf "3"
-	;;
-	4)
-		printf "4"
-	;;
-	5)
-		printf "5"
-	;;
-	6)
-		printf "6"
-	;;
-	7)
-		printf "7"
-	;;
-	8)
-		printf "8"
-	;;
-	9)
-		printf "9"
-	;;
-	10)
-		printf "A"
-	;;
-	11)
-		printf "B"
-	;;
-	12)
-		printf "C"
-	;;
-	13)
-		printf "D"
-	;;
-	14)
-		printf "E"
-	;;
-	15)
-		printf "F"
-	;;
-	*)
-		printf "none"
-	esac
-}
 case $1
 in
-2HEX)
+ENCODE)
 	if mcompare "\-N $VAL"
 	then printf "Bad value:'$VAL'\n"
 		exit
@@ -165,21 +76,21 @@ in
 			fi
 			if test $VIRGULE -eq 0
 			then
-				VAL=`calcule -O 0 "mod($VAR,16)"`
+				VAL=`calcule -O 0 "mod($VAR,$TO)"`
 				VALUE=`calcule "( $VAR-$VAL )"`
-				VAL=`hexadecimal $VAL`
-				VAR=`calcule -O 0 "( $VALUE/16 )"`
+				#VAL=`hexadecimal $VAL`
+				VAR=`calcule -O 0 "( $VALUE/$TO )"`
 				RESULT=${VAL}${RESULT}
 			else
 				VIRGULE=$(($VIRGULE+1))
-				VALUE=`calcule "$VAR*16"`
+				VALUE=`calcule "$VAR*$TO"`
 				ENTIER=`calcule -O 0 "floor($VALUE)"`
 				VAR=`calcule "( $VALUE - $ENTIER )"`
-				RESULT=${RESULT}`hexadecimal $ENTIER`
+				#RESULT=${RESULT}`hexadecimal $ENTIER`
 				LAST=$RESULT
 				DOT=$(($DOT-1))
 				#printf "$RESULT\n"
-				if test -n "$3"
+				if test -n "$4"
 				then
 					test $DOT -lt -$(($2-1)) && break
 				else 	test $DOT -lt -6 && break
@@ -196,7 +107,7 @@ in
 	test -n "$NEG" && printf "-"
 	printf "$RESULT\n"
 ;;
-2DEC)
+DECODE)
 	I=0
 	VAR=`printf "$VAL" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
 	for V in $VAR;
@@ -217,15 +128,16 @@ in
 	do	if test "$V" != "."
 		then
 			I=$(($I-1))
-			VAL=`decimal $V`
-			if test $VAL = none
-			then
-				printf "Caractere invalide: $V\n"
-				exit
-			fi
-			test -n "$3" && \
-				RESULT=`calcule -O $2 "$VAL * pow(16,$I) + $RESULT"` ||
-				RESULT=`calcule -O 6 "$VAL * pow(16,$I) + $RESULT"`
+			#printf "$V;$I\n"
+			#VAL=`decimal $V`
+			#if test $VAL = none
+			#then
+			#	printf "Caractere invalide: $V\n"
+			#	exit
+			#fi
+			test -n "$4" && \
+				RESULT=`calcule -O $2 "$V * pow($TO,$I) + $RESULT"` ||
+				RESULT=`calcule -O 6 "$V * pow($TO,$I) + $RESULT"`
 
 		fi
 	done
@@ -241,5 +153,5 @@ in
 ;;
 *)
 	printf "USAGE:\n"
-	printf "$0 2HEX|2DEC [VIRGULE] value\n";
+	printf "$0 ENCODE|DECODE [VIRGULE] base value\n";
 esac
