@@ -106,7 +106,7 @@ tohex(){
 		printf "F"
 	;;
 	*)
-		printf "$1"
+		printf "none"
 	esac
 }
 VAL="$2"
@@ -136,7 +136,7 @@ HEX2BIN)
 	RESULT=`printf "$RESULT" | sed s/^0*//`
 	while test 1 -eq 1;
 	do	printf "$RESULT" | grep "\." >/dev/null || break
-		RESULT=`printf "$RESULT" | sed '/\ s/[\.,0]$//'`
+		RESULT=`printf "$RESULT" | sed '/\./ s/[\.,0]$//'`
 		R=`printf "$RESULT" | sed -n "/[0\.]$/p"`
 		test -z "$R" && break
 	done
