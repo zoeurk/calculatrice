@@ -1,9 +1,120 @@
 #!/bin/sh
+decimal(){
+	case $1
+	in
+	0)
+		printf "0"
+	;;
+	1)
+		printf "1"
+	;;
+	2)
+		printf "2"
+	;;
+	3)
+		printf "3"
+	;;
+	4)
+		printf "4"
+	;;
+	5)
+		printf "5"
+	;;
+	6)
+		printf "6"
+	;;
+	7)
+		printf "7"
+	;;
+	8)
+		printf "8"
+	;;
+	9)
+		printf "9"
+	;;
+	A|a)
+		printf "10"
+	;;
+	B|b)
+		printf "11"
+	;;
+	C|c)
+		printf "12"
+	;;
+	D|d)
+		printf "13"
+	;;
+	E|e)
+		printf "14"
+	;;
+	F|f)
+		printf "15"
+	;;
+	*)
+		printf "none"
+		exit
+	esac
+}
+hexadecimal(){
+	case $1
+	in
+	0)
+		printf "0"
+	;;
+	1)
+		printf "1"
+	;;
+	2)
+		printf "2"
+	;;
+	3)
+		printf "3"
+	;;
+	4)
+		printf "4"
+	;;
+	5)
+		printf "5"
+	;;
+	6)
+		printf "6"
+	;;
+	7)
+		printf "7"
+	;;
+	8)
+		printf "8"
+	;;
+	9)
+		printf "9"
+	;;
+	10)
+		printf "A"
+	;;
+	11)
+		printf "B"
+	;;
+	12)
+		printf "C"
+	;;
+	13)
+		printf "D"
+	;;
+	14)
+		printf "E"
+	;;
+	15)
+		printf "F"
+	;;
+	*)
+		printf "none"
+	esac
+}
 if test -z "$3"
 then
 	printf "USAGE:\n"
 	printf "$0 ENCODE|DECODE [VIRGULE] value base\n";
-exit
+	exit
 fi
 if test -n "$4"
 then VAL=$3
@@ -21,7 +132,7 @@ then VAL=$3
 else
 	if printf " $3" | grep -e "[-\.]" >/dev/null
 	then
-		printf "Valeur invalide: $2\n"
+		printf "Valeur invalide: $3\n"
 		exit
 	fi
 	VAL=$2
@@ -41,7 +152,6 @@ then
 	VAL=`printf " $VAL" | sed 's/-//g'`
 	VAR=$VAL
 fi
-
 case $1
 in
 ENCODE)
@@ -78,7 +188,11 @@ ENCODE)
 			then
 				VAL=`calcule -O 0 "mod($VAR,$TO)"`
 				VALUE=`calcule "( $VAR-$VAL )"`
-				#VAL=`hexadecimal $VAL`
+				test $TO -gt 10 -a $TO -le 16 && \
+					VAL=`hexadecimal $VAL`
+				test $TO -gt 16 && VAL=" "$VAL ||VAL=$VAL
+				#echo $VAL
+				#test $VAL -gt 10 && echo "GREAT"
 				VAR=`calcule -O 0 "( $VALUE/$TO )"`
 				RESULT=${VAL}${RESULT}
 			else
@@ -86,7 +200,9 @@ ENCODE)
 				VALUE=`calcule "$VAR*$TO"`
 				ENTIER=`calcule -O 0 "floor($VALUE)"`
 				VAR=`calcule "( $VALUE - $ENTIER )"`
-				#RESULT=${RESULT}`hexadecimal $ENTIER`
+				mcompare "$ENTIER > 10 && $ENTIER < 16"\
+					RESULT=${RESULT}`hexadecimal $ENTIER` ||\
+					RESULT=${RESULT}$ENTIER
 				LAST=$RESULT
 				DOT=$(($DOT-1))
 				#printf "$RESULT\n"
@@ -129,15 +245,19 @@ DECODE)
 		then
 			I=$(($I-1))
 			#printf "$V;$I\n"
-			#VAL=`decimal $V`
-			#if test $VAL = none
-			#then
-			#	printf "Caractere invalide: $V\n"
-			#	exit
-			#fi
+			test $TO -gt 10 -a $TO -le 16 && \
+				VAL=`decimal $V` || \
+				VAL=$V
+			#VAL=$V
+			if test $VAL = none
+			then
+				printf "Caractere invalide: $V\n"
+				exit
+			fi
+			#echo $V
 			test -n "$4" && \
-				RESULT=`calcule -O $2 "$V * pow($TO,$I) + $RESULT"` ||
-				RESULT=`calcule -O 6 "$V * pow($TO,$I) + $RESULT"`
+				RESULT=`./calcule -O $2 "$VAL * pow($TO,$I) + $RESULT"` || \
+				RESULT=`./calcule -O 6 " $VAL * pow($TO,$I) + $RESULT"`
 
 		fi
 	done
