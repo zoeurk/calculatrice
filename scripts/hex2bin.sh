@@ -119,13 +119,14 @@ fi
 case $1
 in
 HEX2BIN)
+	TEST=$VAL
 	VAL=$VAL
 	VAL=`printf "$VAL" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
 	for T in $VAL
 	do
-		if test `tobin $T` = "none"
+		if test `tobin $T` = "none" -a $T != "."
 		then
-			printf "Caractere invalid dans: $VAL\n"
+			printf "Caractere invalid dans: $TEST\n"
 			exit
 		fi
 	done
@@ -165,9 +166,9 @@ BIN2HEX)
 	TEST=`printf "$VAL" | sed 's/\(.\)/\1 /g'`
 	for T in $TEST
 	do
-		if test $T -ne 1 -a $T -ne 0 -a $T != "."
+		if test $T != 1 -a $T != 0 -a $T != "."
 		then
-			printf "Caractere invalid dans: $VAL1\n"
+			printf "Caractere invalid dans: $VAL\n"
 			exit
 		fi
 	done
