@@ -1,5 +1,15 @@
 #!/bin/sh
-test -n "$3" && VAL=$3 || VAL=$2 
+if test -n "$3"
+then VAL=$3 
+	if printf " $2" | grep -e "[-\.]" >/dev/null
+	then
+		printf "Valeur invalide: $2\n"
+		exit
+	fi
+else
+	VAL=$2 
+fi
+
 #VAL=$2;
 VAR=$VAL
 VIRGULE=0

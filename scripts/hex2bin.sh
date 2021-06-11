@@ -172,7 +172,7 @@ BIN2HEX)
 			exit
 		fi
 	done
-	for I in $(seq 1 1 $LEN1)
+	for I in $(jot $LEN1 1 $LEN1)
 	do	VAL1="0${VAL1}"
 	done
 	VAL1=`printf "$VAL1" | sed -e 's/\(\(.\)\{4\}\)/\1 /g'`
@@ -183,7 +183,7 @@ BIN2HEX)
 	if test -n "$VAL2"
 	then
 		RESULT="${RESULT}."
-		for I in $(seq 1 1 $LEN2)
+		for I in $(jot $LEN2 1 $LEN2)
 		do
 			VAL2=${VAL2}0
 		done
