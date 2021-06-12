@@ -159,8 +159,8 @@ ENCODE)
 	then printf "Bad value:'$VAL'\n"
 		exit
 	fi
-	ENTIER=`calcule -O 0 "floor($VAL)"`
-	SUB=`calcule -O 6 "( $VAR - $ENTIER )"`
+	ENTIER=`./calcule -O 0 "floor($VAL)"`
+	SUB=`./calcule -O 6 "( $VAR - $ENTIER )"`
 	dot(){
 		I=0
 		printf " $VAL" | sed -e 's/\(.\)/\1\n/g' -e 's/\n$//' | \
@@ -176,31 +176,31 @@ ENCODE)
 	for V in $ENTIER $SUB
 	do
 		VAR=$V
-		while mcompare "( $VAR != 0)"
+		while ./mcompare "( $VAR != 0)"
 		do
 			VALUE=$V
-			if mcompare "\-N $VAR"
+			if ./mcompare "\-N $VAR"
 			then
 				printf "Caractere invalid dans: $VAR\n"
 				exit
 			fi
 			if test $VIRGULE -eq 0
 			then
-				VAL=`calcule -O 0 "mod($VAR,$TO)"`
-				VALUE=`calcule "( $VAR-$VAL )"`
+				VAL=`./calcule -O 0 "mod($VAR,$TO)"`
+				VALUE=`./calcule "( $VAR-$VAL )"`
 				test $TO -gt 10 -a $TO -le 16 && \
 					VAL=`hexadecimal $VAL`
 				test $TO -gt 16 && VAL=" "$VAL ||VAL=$VAL
 				#echo $VAL
 				#test $VAL -gt 10 && echo "GREAT"
-				VAR=`calcule -O 0 "( $VALUE/$TO )"`
+				VAR=`./calcule -O 0 "( $VALUE/$TO )"`
 				RESULT=${VAL}${RESULT}
 			else
 				VIRGULE=$(($VIRGULE+1))
-				VALUE=`calcule "$VAR*$TO"`
-				ENTIER=`calcule -O 0 "floor($VALUE)"`
-				VAR=`calcule "( $VALUE - $ENTIER )"`
-				mcompare "$ENTIER > 10 && $ENTIER <= 16" &&\
+				VALUE=`./calcule "$VAR*$TO"`
+				ENTIER=`./calcule -O 0 "floor($VALUE)"`
+				VAR=`./calcule "( $VALUE - $ENTIER )"`
+				./mcompare "$ENTIER > 10 && $ENTIER <= 16" &&\
 					RESULT=${RESULT}`hexadecimal $ENTIER` ||\
 					RESULT=${RESULT}$ENTIER
 				LAST=$RESULT
@@ -231,7 +231,10 @@ ENCODE)
 ;;
 DECODE)
 	I=0
-	VAR=`printf "$VAL" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
+	if ! printf "$VAR" | grep " "
+	then
+		VAR=`printf "$VAL" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
+	fi
 	for V in $VAR;
 	do
 		if test "$V" = "."
@@ -262,8 +265,8 @@ DECODE)
 			fi
 			#echo $V
 			test -n "$4" && \
-				RESULT=`calcule -O $2 "$VAL * pow($TO,$I) + $RESULT"` || \
-				RESULT=`calcule -O 6 " $VAL * pow($TO,$I) + $RESULT"`
+				RESULT=`./calcule -O $2 "$VAL * pow($TO,$I) + $RESULT"` || \
+				RESULT=`./calcule -O 6 " $VAL * pow($TO,$I) + $RESULT"`
 
 		fi
 	done
