@@ -155,7 +155,7 @@ fi
 case $1
 in
 ENCODE)
-	if mcompare "\-N $VAL"
+	if ./mcompare "\-N $VAL"
 	then printf "Bad value:'$VAL'\n"
 		exit
 	fi
@@ -200,7 +200,7 @@ ENCODE)
 				VALUE=`calcule "$VAR*$TO"`
 				ENTIER=`calcule -O 0 "floor($VALUE)"`
 				VAR=`calcule "( $VALUE - $ENTIER )"`
-				mcompare "$ENTIER > 10 && $ENTIER < 16"\
+				mcompare "$ENTIER > 10 && $ENTIER <= 16" &&\
 					RESULT=${RESULT}`hexadecimal $ENTIER` ||\
 					RESULT=${RESULT}$ENTIER
 				LAST=$RESULT
@@ -213,11 +213,17 @@ ENCODE)
 				fi
 			fi
 		done
-		if mcompare "$VIRGULE == 0 && 0 < $SUB"
+		if ./mcompare "$VIRGULE == 0 && 0 < $SUB"
 		then
 			VIRGULE=1
 			RESULT="${RESULT}."
 		fi
+	done
+	while test 1 -eq 1;
+	do	printf "$RESULT" | grep "\." >/dev/null || break
+		RESULT=`printf "$RESULT" | sed '/\./ s/[\.,0]$//'`
+		R=`printf "$RESULT" | sed -n "/[0\.]$/p"`
+		test -z "$R" && break
 	done
 	printf "$RESULT" | grep -e "^\." >/dev/null && RESULT=0${RESULT}
 	test -n "$NEG" && printf "-"
