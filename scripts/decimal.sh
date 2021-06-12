@@ -256,8 +256,8 @@ DECODE)
 			fi
 			#echo $V
 			test -n "$4" && \
-				RESULT=`./calcule -O $2 "$VAL * pow($TO,$I) + $RESULT"` || \
-				RESULT=`./calcule -O 6 " $VAL * pow($TO,$I) + $RESULT"`
+				RESULT=`calcule -O $2 "$VAL * pow($TO,$I) + $RESULT"` || \
+				RESULT=`calcule -O 6 " $VAL * pow($TO,$I) + $RESULT"`
 
 		fi
 	done
