@@ -411,6 +411,8 @@ struct retour *reader(char *string, unsigned long int type){
 	f.strings = &strings;
 	f.strings_diff = strings_diff;
 	f.strings_eq = strings_eq;
+	if(r == NULL)
+		return NULL;
 	for(r = string, offset = 1; *r != 0; r++, offset++){
 		for(i = 0; i < 17; i++){
 			if(strncmp(r,matching[i], strlen(matching[i])) == 0)
@@ -770,6 +772,8 @@ int main(int argc, char **argv){
 	if(arg.fd)
 		close(arg.fd);
 	comput(&ret);
+	if(!ret)
+		return 0;
 	i_ret = !ret->ret;
 	return i_ret;
 }
