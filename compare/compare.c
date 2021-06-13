@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -411,8 +411,6 @@ struct retour *reader(char *string, unsigned long int type){
 	f.strings = &strings;
 	f.strings_diff = strings_diff;
 	f.strings_eq = strings_eq;
-	if(r == NULL)
-		return NULL;
 	for(r = string, offset = 1; *r != 0; r++, offset++){
 		for(i = 0; i < 17; i++){
 			if(strncmp(r,matching[i], strlen(matching[i])) == 0)
@@ -766,14 +764,16 @@ int main(int argc, char **argv){
 	memset(file, 0, 28);
 	atexit(bye);
 	parser_parse(&args, argc, argv, &arg);
-	if(arg.mmap == NULL)
-		ret = reader(arg.string, arg.nbrtype);
-	else	ret = reader(arg.mmap, arg.nbrtype);
+	if(arg.string){
+		if(arg.mmap == NULL)
+			ret = reader(arg.string, arg.nbrtype);
+		else	ret = reader(arg.mmap, arg.nbrtype);
+	}
 	if(arg.fd)
 		close(arg.fd);
 	comput(&ret);
 	if(!ret)
-		return 0;
+		return -1;
 	i_ret = !ret->ret;
 	return i_ret;
 }
