@@ -231,7 +231,7 @@ ENCODE)
 ;;
 DECODE)
 	I=0
-	if ! printf "$VAR" | grep " "
+	if ! printf "$VAR" | grep -e "[ \t\n]"
 	then
 		VAR=`printf "$VAL" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
 	fi
