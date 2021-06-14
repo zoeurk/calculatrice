@@ -113,7 +113,7 @@ hexadecimal(){
 if test -z "$3"
 then
 	printf "USAGE:\n"
-	printf "$0 ENCODE|DECODE [VIRGULE] value base\n";
+	printf "$0 ENCODE|DECODE [VIRGULE] \"value\" base\n";
 	exit
 fi
 if test -n "$4"
@@ -282,5 +282,5 @@ DECODE)
 ;;
 *)
 	printf "USAGE:\n"
-	printf "$0 ENCODE|DECODE [VIRGULE] base value\n";
+	printf "$0 ENCODE|DECODE [VIRGULE] \"value\" base\n";
 esac
