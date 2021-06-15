@@ -477,11 +477,11 @@ struct retour *reader(char *string, unsigned long int type){
 				o.var1 = NULL;
 				break;
 			case 12:/*INVERT*/
-				str = r;
+				/*str = r;
 				while(*r != '!' && *r != '(' && *r != 0 && *r != '&' && *r != '|' && *r != ')'){
 					r++;
 					offset++;
-				}
+				}*/
 				/*if(*r != '!'){
 					if(*r == '('){
 						r--;
@@ -491,7 +491,7 @@ struct retour *reader(char *string, unsigned long int type){
 						exit(EXIT_FAILURE);
 					}
 				}else{*/
-					while(*str == '!' || (*(str+1) != 0 && *(str+1) != '&' && *(str+1) != '|' && *(str+1) == ')')){
+				/*	while(*str == '!' || (*(str+1) != 0 && *(str+1) != '&' && *(str+1) != '|' && *(str+1) == ')')){
 						str++;
 					}
 					if((*(str+1) == 0 || *(str+1) == '&' ||  *(str+1) == '|' || *(str+1) == ')')){
@@ -499,10 +499,11 @@ struct retour *reader(char *string, unsigned long int type){
 						exit(EXIT_FAILURE);
 					}
 					//printf("<%c>", *str);
-				//}
+				}*/
 				ALLOC;
 				pret->ret = -1;
 				pret->operator = INVERT;
+				/*fprintf(stderr, "========%i\n",pret->prev->operator);*/
 				break;
 			case 13:/*AND*/
 				if(pret && (pret->operator == AND || pret->operator == OR)){
@@ -640,6 +641,7 @@ void comput(struct retour **r){
 				INVERT:
 				pprev = pret->prev;
 				pnext = pret->next;
+				//fprintf(stderr, "%i;%i\n", pprev == NULL, pnext == NULL);
 				if(pprev){
 					pprev->next = pnext;
 					if(pnext)
@@ -667,7 +669,8 @@ void comput(struct retour **r){
 				pret = ret = ret->next;
 				pprev = pret->prev;
 				free(pret->prev);
-				pret->prev = pprev;
+				//pret->prev = pprev;
+				pret->prev = NULL;
 				pret = ret;
 				continue;
 			case C_PARENTHESE:
