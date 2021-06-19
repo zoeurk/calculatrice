@@ -203,10 +203,10 @@ char file[28];
 		r++;\
 		offset++;\
 	}\
-	if(*r == 0){\
+	/*if(*r == 0){\
 		fprintf(stderr, "Erreur de syntaxe vers l'offset: %lu\n", offset);\
 		exit(EXIT_FAILURE);\
-	}\
+	}*/ \
 	if((*r < 48 || *r > 57) && *r != ' ' && *r != '\t' && *r != '\n' && *r != ')' && *r !=0 ){\
 		*(r+1) = 0;\
 		printf("Numerique attendu chaine de caracter declaree: '%s'.\n", o.var2);\
