@@ -199,9 +199,13 @@ char file[28];
 	offset += (inc+1);\
 	REMOVE_SPACE;\
 	o.var2 = r;\
-	while((*r >47 && *r < 58) || *r == '-' || *r =='.'){\
+	while(((*r >47 && *r < 58) || *r == '-' || *r =='.') && *r != 0){\
 		r++;\
 		offset++;\
+	}\
+	if(*r == 0){\
+		fprintf(stderr, "Erreur de syntaxe vers l'offset: %lu\n", offset);\
+		exit(EXIT_FAILURE);\
 	}\
 	if((*r < 48 || *r > 57) && *r != ' ' && *r != '\t' && *r != '\n' && *r != ')' && *r !=0 ){\
 		*(r+1) = 0;\
@@ -477,11 +481,11 @@ struct retour *reader(char *string, unsigned long int type){
 				o.var1 = NULL;
 				break;
 			case 12:/*INVERT*/
-				/*str = r;
+				str = r;
 				while(*r != '!' && *r != '(' && *r != 0 && *r != '&' && *r != '|' && *r != ')'){
 					r++;
 					offset++;
-				}*/
+				}
 				/*if(*r != '!'){
 					if(*r == '('){
 						r--;
@@ -491,7 +495,7 @@ struct retour *reader(char *string, unsigned long int type){
 						exit(EXIT_FAILURE);
 					}
 				}else{*/
-				/*	while(*str == '!' || (*(str+1) != 0 && *(str+1) != '&' && *(str+1) != '|' && *(str+1) == ')')){
+					while(*str == '!' || (*(str+1) != 0 && *(str+1) != '&' && *(str+1) != '|' && *(str+1) == ')')){
 						str++;
 					}
 					if((*(str+1) == 0 || *(str+1) == '&' ||  *(str+1) == '|' || *(str+1) == ')')){
@@ -499,11 +503,10 @@ struct retour *reader(char *string, unsigned long int type){
 						exit(EXIT_FAILURE);
 					}
 					//printf("<%c>", *str);
-				}*/
+				//}
 				ALLOC;
 				pret->ret = -1;
 				pret->operator = INVERT;
-				/*fprintf(stderr, "========%i\n",pret->prev->operator);*/
 				break;
 			case 13:/*AND*/
 				if(pret && (pret->operator == AND || pret->operator == OR)){
@@ -641,7 +644,6 @@ void comput(struct retour **r){
 				INVERT:
 				pprev = pret->prev;
 				pnext = pret->next;
-				//fprintf(stderr, "%i;%i\n", pprev == NULL, pnext == NULL);
 				if(pprev){
 					pprev->next = pnext;
 					if(pnext)
@@ -669,8 +671,7 @@ void comput(struct retour **r){
 				pret = ret = ret->next;
 				pprev = pret->prev;
 				free(pret->prev);
-				//pret->prev = pprev;
-				pret->prev = NULL;
+				pret->prev = pprev;
 				pret = ret;
 				continue;
 			case C_PARENTHESE:
@@ -767,16 +768,12 @@ int main(int argc, char **argv){
 	memset(file, 0, 28);
 	atexit(bye);
 	parser_parse(&args, argc, argv, &arg);
-	if(arg.string){
-		if(arg.mmap == NULL)
-			ret = reader(arg.string, arg.nbrtype);
-		else	ret = reader(arg.mmap, arg.nbrtype);
-	}
+	if(arg.mmap == NULL)
+		ret = reader(arg.string, arg.nbrtype);
+	else	ret = reader(arg.mmap, arg.nbrtype);
 	if(arg.fd)
 		close(arg.fd);
 	comput(&ret);
-	if(!ret)
-		return -1;
 	i_ret = !ret->ret;
 	return i_ret;
 }
