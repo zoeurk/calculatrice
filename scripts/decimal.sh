@@ -113,7 +113,7 @@ hexadecimal(){
 if test -z "$3"
 then
 	printf "USAGE:\n"
-	printf "$0 ENCODE|DECODE [VIRGULE] \"value\" base\n";
+	printf "$0 ENCODE|DECODE [VIRGULE] value base\n";
 	exit
 fi
 if test -n "$4"
@@ -231,7 +231,7 @@ ENCODE)
 ;;
 DECODE)
 	I=0
-	if ! printf "$VAR" | grep -e "[ \t\n]"
+	if ! printf "$VAR" | grep -e "[\t\n ] >/dev/null"
 	then
 		VAR=`printf "$VAL" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
 	fi
@@ -282,5 +282,5 @@ DECODE)
 ;;
 *)
 	printf "USAGE:\n"
-	printf "$0 ENCODE|DECODE [VIRGULE] \"value\" base\n";
+	printf "$0 ENCODE|DECODE [VIRGULE] base value\n";
 esac
