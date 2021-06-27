@@ -224,8 +224,9 @@ char file[28];
 	}\
 	/*printf("%s,%s\n",o.var1, o.var2);*/\
 	*r = 0; \
-	if(o.var1 != NULL && strlen(o.var1) > 0 && o.var2 != NULL && strlen(o.var2) > 0)\
-	CONVERT(type);\
+	if(o.var1 != NULL && strlen(o.var1) > 0 && o.var2 != NULL && strlen(o.var2) > 0){\
+		CONVERT(type);\
+	}\
 	pret->ret = fn(var1,var2);\
 	o.var1 = o.var2 = NULL;\
 	o.type = 0;
