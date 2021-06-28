@@ -134,7 +134,7 @@ hexadecimal(){
 case $1
 in
 2HEX)
-	if mcompare "\-N $VAL"
+	if ntest "\-N $VAL"
 	then printf "Bad value:'$VAL'\n"
 		exit
 	fi
@@ -155,10 +155,10 @@ in
 	for V in $ENTIER $SUB
 	do
 		VAR=$V
-		while mcompare "( $VAR != 0)"
+		while ntest "( $VAR != 0)"
 		do
 			VALUE=$V
-			if mcompare "\-N $VAR"
+			if ntest "\-N $VAR"
 			then
 				printf "Caractere invalid dans: $VAR\n"
 				exit
@@ -186,7 +186,7 @@ in
 				fi
 			fi
 		done
-		if mcompare "$VIRGULE == 0 && 0 < $SUB"
+		if ntest "$VIRGULE == 0 && 0 < $SUB"
 		then
 			VIRGULE=1
 			RESULT="${RESULT}."

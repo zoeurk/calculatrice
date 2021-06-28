@@ -155,7 +155,7 @@ fi
 case $1
 in
 ENCODE)
-	if mcompare "\-N $VAL"
+	if ntest "\-N $VAL"
 	then printf "Bad value:'$VAL'\n"
 		exit
 	fi
@@ -176,10 +176,10 @@ ENCODE)
 	for V in $ENTIER $SUB
 	do
 		VAR=$V
-		while mcompare "( $VAR != 0)"
+		while ntest "( $VAR != 0)"
 		do
 			VALUE=$V
-			if mcompare "\-N $VAR"
+			if ntest "\-N $VAR"
 			then
 				printf "Caractere invalid dans: $VAR\n"
 				exit
@@ -200,7 +200,7 @@ ENCODE)
 				VALUE=`calcule "$VAR*$TO"`
 				ENTIER=`calcule -O 0 "floor($VALUE)"`
 				VAR=`calcule "( $VALUE - $ENTIER )"`
-				mcompare "$ENTIER > 10 && $ENTIER <= 16" &&\
+				ntest "$ENTIER > 10 && $ENTIER <= 16" &&\
 					RESULT=${RESULT}`hexadecimal $ENTIER` ||\
 					RESULT=${RESULT}$ENTIER
 				LAST=$RESULT
@@ -213,7 +213,7 @@ ENCODE)
 				fi
 			fi
 		done
-		if mcompare "$VIRGULE == 0 && 0 < $SUB"
+		if ntest "$VIRGULE == 0 && 0 < $SUB"
 		then
 			VIRGULE=1
 			RESULT="${RESULT}."
