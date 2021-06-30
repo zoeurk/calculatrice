@@ -1,1 +1,1 @@
-SUBDIRS=lib calcule compare scripts
+SUBDIRS=lib calcule ntest scripts
