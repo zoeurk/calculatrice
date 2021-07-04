@@ -226,8 +226,10 @@ char file[28];
 	*r = 0; \
 	if(o.var1 != NULL && strlen(o.var1) > 0 && o.var2 != NULL && strlen(o.var2) > 0){\
 		CONVERT(type);\
+		pret->ret = fn(var1,var2);\
+	}else{\
+		pret->ret = 0;\
 	}\
-	pret->ret = fn(var1,var2);\
 	o.var1 = o.var2 = NULL;\
 	o.type = 0;
 
@@ -740,7 +742,6 @@ struct retour *comput(struct retour **r){
 				if(pnext)
 					pprev->next->prev =pprev;
 				free(pret);
-				//pret = ret;
 				return pprev;
 		}
 		//if(pret)
