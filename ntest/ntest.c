@@ -830,7 +830,7 @@ int main(int argc, char **argv){
 	memset(file, 0, 28);
 	atexit(bye);
 	parser_parse(&args, argc, argv, &arg);
-	if(arg.string){
+	if(arg.string || arg.mmap){
 		if(arg.mmap == NULL)
 			ret = reader(arg.string, arg.nbrtype);
 		else	ret = reader(arg.mmap, arg.nbrtype);
