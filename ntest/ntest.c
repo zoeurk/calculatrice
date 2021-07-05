@@ -226,6 +226,7 @@ char file[28];
 	*r = 0; \
 	if(o.var1 != NULL && strlen(o.var1) > 0 && o.var2 != NULL && strlen(o.var2) > 0){\
 		CONVERT(type);\
+	/*};*/\
 		pret->ret = fn(var1,var2);\
 	}else{\
 		pret->ret = 0;\
@@ -511,7 +512,7 @@ struct retour *reader(char *string, unsigned long int type){
 			case LESS:
 				STRING_DEF;
 				NUMBERS(0, f.less);
-					o.var1 = NULL;
+				o.var1 = NULL;
 				break;
 			case STRINGS_EQ:
 				end = 0;
@@ -802,9 +803,9 @@ void arguments(int key, char *arg, struct parser_state *state){
 			}
 			break;
 		default:
-			if(a->string == NULL)
+			if(a->string == NULL){
 				a->string = arg;
-			else{
+			}else{
 				fprintf(stderr, "Trop d'arguments\n");
 				exit(EXIT_FAILURE);
 			}
@@ -826,18 +827,31 @@ struct parser args = {options, arguments, "[OPTIONS]", NULL, "Petit outil de tes
 
 int main(int argc, char **argv){
 	struct arguments arg = {FLOAT, NULL, NULL, 0, 0};
-	int i_ret;
+	struct retour *pret;
+	int i_ret,___i_ret___ = 0;
 	memset(file, 0, 28);
 	atexit(bye);
 	parser_parse(&args, argc, argv, &arg);
 	if(arg.string || arg.mmap){
-		if(arg.mmap == NULL)
+		if(arg.mmap == NULL){
 			ret = reader(arg.string, arg.nbrtype);
-		else	ret = reader(arg.mmap, arg.nbrtype);
+		}
+		else{
+			ret = reader(arg.mmap, arg.nbrtype);
+		}
 	}
 	if(arg.fd)
 		close(arg.fd);
 	comput(&ret);
+	pret = ret;
+	while(pret){
+		___i_ret___++;
+		pret = pret->next;
+	}
+	if(___i_ret___ > 1){
+		fprintf(stderr, "Erreur de syntaxe\n");
+		exit(EXIT_FAILURE);
+	}
 	if(!ret)
 		return -1;
 	i_ret = !ret->ret;
@@ -943,6 +957,8 @@ static int strings(void *str){
 }
 
 static int strings_eq(void *str1, void *str2){
+	if(!str1 || !str2)
+		return 0;
 	if(strcmp((char *)str1, (char *)str2) == 0)
 		return 1;
 	return 0;
