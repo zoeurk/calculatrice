@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -675,6 +675,10 @@ struct retour *reader(char *string, unsigned long int type){
 	}
 	pprev = pret = ret;
 	_end_ = 0;
+	/*if(pret && pret->ret == -1){
+		fprintf(stderr,"Erreur de syntaxe.\n");
+		exit(EXIT_FAILURE);
+	}*/
 	if(pret && (pret->operator == AND || pret->operator == OR)){
 		fprintf(stderr,"Erreur de syntaxe.\n");
 		exit(EXIT_FAILURE);
@@ -852,8 +856,10 @@ int main(int argc, char **argv){
 		fprintf(stderr, "Erreur de syntaxe\n");
 		exit(EXIT_FAILURE);
 	}
-	if(!ret)
-		return -1;
+	if(!ret){
+		fprintf(stderr, "Erreur de syntaxe\n");
+		exit(EXIT_FAILURE);
+	}
 	i_ret = !ret->ret;
 	return i_ret;
 }
