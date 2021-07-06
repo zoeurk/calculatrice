@@ -856,10 +856,8 @@ int main(int argc, char **argv){
 		fprintf(stderr, "Erreur de syntaxe\n");
 		exit(EXIT_FAILURE);
 	}
-	if(!ret){
-		fprintf(stderr, "Erreur de syntaxe\n");
-		exit(EXIT_FAILURE);
-	}
+	if(!ret)
+		return -2;
 	i_ret = !ret->ret;
 	return i_ret;
 }
