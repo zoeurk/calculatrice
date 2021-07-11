@@ -6,6 +6,9 @@ pv = pv->next;
 #define INIT_BUFSET(pv,buffer,end, ___type___) \
 pv->val = (void *)pv + sizeof(struct value);\
 switch(___type___){\
+	/*case CHAR:\
+		*((char *)pv->val) = (char)atoi(buffer);\
+		break;*/\
 	case FLOAT:\
 		*((float *)pv->val) = strtof(buffer,&end);\
 		break;\
@@ -35,8 +38,8 @@ if(len == -1 && strcmp(pi, buffer) == 0 && _pi_ == NULL){\
 	if(len == -1){\
 		switch(arg->type){\
 			case FLOAT:\
-					sprintf(buffer,"%f", *((float *)_pi_));\
-			break;\
+				sprintf(buffer,"%f", *((float *)_pi_));\
+				break;\
 			case DOUBLE:\
 				sprintf(buffer,"%lf", *((double *)_pi_));\
 				break;\
@@ -59,7 +62,7 @@ exit(EXIT_FAILURE)
 #define BUFSET(v, pv,valsize, buffer, end,___type___)\
 if(bufset){ \
 	if(v == NULL)\
-	v = pv = ___calloc___((void **)&v,sizeof(struct value)+valsize);\
+		v = pv = ___calloc___((void **)&v,sizeof(struct value)+valsize);\
 	else{\
 		MAILLON(pv, sizeof(struct value)+valsize);\
 	}\
@@ -293,18 +296,22 @@ if(pv->prev == NULL){\
 		free(start->prev);\
 		free(start);\
 	}
+void caddition(void *val1, void *val2);
 void faddition(void *val1, void *val2);
 void daddition(void *val1, void *val2);
 void ldaddition(void *val1, void *val2);
 
+void csoustraction(void *val1, void *val2);
 void fsoustraction(void *val1, void *val2);
 void dsoustraction(void *val1, void *val2);
 void ldsoustraction(void *val1, void *val2);
 
+void cmultiplication(void *val1, void *val2);
 void fmultiplication(void *val1, void *val2);
 void dmultiplication(void *val1, void *val2);
 void ldmultiplication(void *val1, void *val2);
 
+void cdivision(void *val1, void *val2);
 void fdivision(void *val1, void *val2);
 void ddivision(void *val1, void *val2);
 void lddivision(void *val1, void *val2);
@@ -312,6 +319,9 @@ void lddivision(void *val1, void *val2);
 void print_float(void *val,char *format);
 void print_double(void *val, char *format);
 void print_ldouble(void *val, char *format);
+void print_char(void *val, char *format);
+
+void ccomplement(void *val1);
 
 void fcosinus(void *val);
 void dcosinus(void *val);
