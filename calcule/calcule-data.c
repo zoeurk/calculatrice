@@ -12,7 +12,15 @@ void print_double(void *val, char *format){
 void print_ldouble(void *val, char *format){
 	printf(format, *((long double *)val));
 }
-
+void print_char(void *val, char *format){
+	printf(format, *((char *)val));
+}
+void ccomplement(void *val1){
+	*((char *)val1) = ~*((char *)val1);
+}
+void caddition(void *val1, void *val2){
+	*((char *)val1) += *((char *) val2);
+}
 void faddition(void *val1, void *val2){
 	*((float *)val1) += *((float *) val2);
 }
@@ -32,6 +40,9 @@ void dsoustraction(void *val1, void *val2){
 void ldsoustraction(void *val1, void *val2){
 	*((long double *)val1) -= *((long double *) val2);
 }
+void csoustraction(void *val1, void *val2){
+	*((char *)val1) -= *((char *) val2);
+}
 
 void fmultiplication(void *val1, void *val2){
 	*((float *)val1) *= *((float *)val2);
@@ -42,6 +53,9 @@ void dmultiplication(void *val1, void *val2){
 void ldmultiplication(void *val1, void *val2){
 	*((long double *)val1) *= *((long double *)val2);
 }
+void cmultiplication(void *val1, void *val2){
+	*((char *)val1) *= *((char *) val2);
+}
 
 void fdivision(void *val1, void *val2){
 	*((float *)val1) /= *((float *)val2);
@@ -51,6 +65,9 @@ void ddivision(void *val1, void *val2){
 }
 void lddivision(void *val1, void *val2){
 	*((long double *)val1) /= *((long double *)val2);
+}
+void cdivision(void *val1, void *val2){
+	*((char *)val1) /= *((char *) val2);
 }
 
 void fcosinus(void *val){

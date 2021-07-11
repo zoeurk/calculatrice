@@ -37,7 +37,6 @@ enum VALUE{
 	FLOAT = 1,
 	DOUBLE = 2,
 	LDOUBLE = 4,
-	CHAR = 8
 };
 enum VALUE_TYPE{
 	VALUE = 1,
@@ -47,27 +46,24 @@ enum VALUE_TYPE{
 	ADD = '+',
 	LESS = '-',
 	MULT = '*',
-	DIV = '/',
-	COMP = '~'
+	DIV = '/'
 };
 enum OPERATOR{
 	COS = 1, /*fait*/
 	SIN = 2, /*fait*/
 	TAN = 3, /*fait*/
-	ACOS = 4, /*fait*/
-	ASIN = 5, /*fait*/
-	ATAN = 6, /*fait*/
-	/*XOR,NOR,AND,NAND,Complement à 1(~)
-	*/
-	SQRT = 7, /*fait*/
-	EXP = 8, /*fait*/
-	LOG = 9, /*fait*/
-	LOG10 = 10,/*fait*/
-	FABS = 11, /*fait*/
-	CEIL = 12, /*fait*/
-	FLOOR = 13,/*fait*/
-	POW = 14, /*fait*/
-	FMOD = 15 /*fait*/
+	SQRT = 4, /*fait*/
+	EXP = 5, /*fait*/
+	LOG = 6, /*fait*/
+	LOG10 = 7,/*fait*/
+	FABS = 8, /*fait*/
+	CEIL = 9, /*fait*/
+	FLOOR = 10,/*fait*/
+	POW = 11, /*fait*/
+	FMOD = 12, /*fait*/
+	ACOS = 13, /*fait*/
+	ASIN = 14, /*fait*/
+	ATAN = 15 /*fait*/
 };
 enum TYPE{
 	FORMAT   = 1,
@@ -76,7 +72,6 @@ enum TYPE{
 };
 /*Ajouter fonction*/
 struct function{
-	void (*complement)(void *);
 	void (*addition)(void *, void *);
 	void (*soustraction)(void *, void *);
 	void (*multiplication)(void *, void *);
@@ -135,36 +130,9 @@ void arguments(int key, char *arg, struct parser_state *state){
 			a->format = arg;
 			break;
 		/*Ajouter fonction*/
-		case 'c':
-			a->print = print_char;
-			a->valsize = sizeof(char);
-			a->fn.complement = &ccomplement;
-			a->fn.addition = &caddition;
-			a->fn.soustraction = &csoustraction;
-			a->fn.multiplication = &cmultiplication;
-			a->fn.division = &cdivision;
-			a->fn.cosinus = NULL;
-			a->fn.acosinus = NULL;
-			a->fn.sinus = NULL;
-			a->fn.asinus = NULL;
-			a->fn.tangente = NULL;
-			a->fn.tangente = NULL;
-			a->fn.sqrt = NULL;
-			a->fn.exp = NULL;
-			a->fn.ceil = NULL;
-			a->fn.log = NULL;
-			a->fn.log10 = NULL;
-			a->fn.fabs = NULL;
-			a->fn.floor = NULL;
-			a->fn.mod = NULL;
-			a->fn.power = NULL;
-			a->type = CHAR;
-			break;
-
 		case 'f':
 			a->print = print_float;
 			a->valsize = sizeof(float);
-			a->fn.complement = NULL;
 			a->fn.addition = &faddition;
 			a->fn.soustraction = &fsoustraction;
 			a->fn.multiplication = &fmultiplication;
@@ -186,10 +154,9 @@ void arguments(int key, char *arg, struct parser_state *state){
 			a->fn.power = &fpower;
 			a->type = FLOAT;
 			break;
-		case 'd':
+		case 'l':
 			a->print = print_double;
 			a->valsize = sizeof(double);
-			a->fn.complement = NULL;
 			a->fn.addition = daddition;
 			a->fn.soustraction = &dsoustraction;
 			a->fn.multiplication = &dmultiplication;
@@ -211,10 +178,9 @@ void arguments(int key, char *arg, struct parser_state *state){
 			a->fn.power = &dpower;
 			a->type = DOUBLE;
 			break;
-		case 'D':
+		case 'L':
 			a->print = print_ldouble;
 			a->valsize = sizeof(long double);
-			a->fn.complement = NULL;
 			a->fn.addition = &ldaddition;
 			a->fn.soustraction = &ldsoustraction;
 			a->fn.multiplication = &ldmultiplication;
@@ -267,13 +233,9 @@ void arguments(int key, char *arg, struct parser_state *state){
 struct info program = {"version: 1.0","zoeurk@gmail.com"};
 struct parser_option options[] =	{
 					{ "float", 'f', 0, NULL, "Utiliser le type float"},
-					{ "double", 'd', 0 , NULL, "Utiliser le type double"},
-					{ "ldouble", 'D', 0, NULL, "Utiliser le type long double"},
+					{ "double", 'l', 0 , NULL, "Utiliser le type double"},
+					{ "ldouble", 'L', 0, NULL, "Utiliser le type long double"},
 					{ "format", 'O', 0, "FORMAT", "Nombre de chiffre apres la virgule"},
-					/*{ "char", 'c', 0, NULL, "Utiliser le format char"},
-					{ "short",'S',
-					{ "int" ,'i'},*
-					{ "long int",'L'}*/
 					{ "file", 'F', 0, "FILE", "lire le fichier"},
 					{ "set-pi", 'p', 0, "PI", "Initialiser pi a la valeur de PI"},
 					{ "view-pi", 'P', 0, NULL, "Voir la valeur de pi par default"},
@@ -294,7 +256,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 	struct value *v = NULL, *pv = NULL;
 	char buffer[BUFFER], *end,
 		/*Ajouter entree*/
-		*trigo[ENTRY] = {"PI", "cos", "acos", "sin", "asin", "tan", "atan",/*NON, AND, OR, XOR, AND,*/ "sqrt", "exp", "ceil", "log", "log10", "fabs", "floor", "mod", "pow"};
+		*trigo[ENTRY] = {"PI", "cos", "acos", "sin", "asin", "tan", "atan", "sqrt", "exp", "ceil", "log", "log10", "fabs", "floor", "mod", "pow"};
 	int i, j = 0, point = 0, wait = 0,
 		parenthese = 0, o_parentheses = 0, c_parentheses = 0, split = 0, signe = 0,
 		bufset = 0, count = 0, len = 0, virgule = 0, num = 0, init = 0, cont = 0;
@@ -339,7 +301,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					argv[(cont == 0)?i-1:i-cont] != '*' && 
 					argv[(cont == 0)?i-1:i-cont] != '+' && 
 					argv[(cont == 0)?i-1:i-cont] != '-' && 
-					argv[(cont == 0)?i-1:i-cont] != '~' && 
 					argv[(cont == 0)?i-1:i-cont] != '(' &&
 					argv[(cont == 0)?i-1:i-cont] != ',' &&
 					argv[(cont == 0)?i-1:i-cont] != '\n' &&
@@ -484,22 +445,13 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				pv->type = C_PARENTHESE;
 				c_parentheses++;
 				break;
-			case '~':
-				if(v == NULL)
-					v = pv = ___calloc___((void **)&v,sizeof(struct value)+arg->valsize);
-				else{
-					MAILLON(pv,sizeof(struct value) + arg->valsize)
-				}
-				pv->type = '~';
-				//printf("%s\n", &argv[i+1]);
-				break;
 			case '+':
 			case '-':
 				//printf("%s;\n", buffer);
 				/*BUG*/
 				point = 0;
 				split = 0;
-				if((!v || pv->type == 4 || pv->type == '+' || pv->type == '-' || pv->type == '*' || pv->type == '/' || pv->type == '~')
+				if((!v || pv->type == 4 || pv->type == '+' || pv->type == '-' || pv->type == '*' || pv->type == '/')
 					&& strlen(buffer) == 0){
 					goto number;
 				}
@@ -553,9 +505,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				init = 1;
 				if(i == 0){
 					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
-				}
-				if(pv && pv->prev && (pv->type == '+' || pv->type == '-' || pv->type == '/' || pv->type == '*' || pv->type == '~')){
-					ERROR("Erreur de syntaxe vers l'offset: %i.\n", i+1);
 				}
 				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
 				if((strcmp(buffer,trigo[0]) != 0) && (j > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
@@ -717,40 +666,10 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 		switch(pv->type){
 			case VALUE:
 				break;
-			case '~':
-				printf("ok\n");
-				if(pv->next && pv->next->type == O_PARENTHESE){
-					printf("\\o/\n");
-					calcule(&pv->next, f, type);
-					//exit(0);
-				}else{
-					pv->next->type = VALUE;
-					//*((unsigned char *)pv->next->val) = ~*((unsigned char *)pv->next->val);
-					printf("KO:%i\n",*((char *)pv->next->val));
-					f.complement(pv->next->val);
-					pprev = pv->prev;
-					pnext = pv->next;
-					if(pprev){
-						pprev->next = pnext;
-						if(pnext)
-							pprev->next->prev = pprev;
-						printf("FAILURE\n");
-						free(pv);
-						pv = *v;
-						//exit(0);
-					}else{
-						printf("yes\n");
-						pv = (*v) = (*v)->next;
-						free((*v)->prev);
-						(*v)->prev = NULL;
-						pv = *v;
-					}
-				}
-				continue;
 			case '+': case '-':
 				/*modifier ici*/
 				for(preader = pv; 
-					preader && preader->type != '*' && preader->type != '/' && preader->type != '~' && preader->type != O_PARENTHESE && 
+					preader && preader->type != '*' && preader->type != '/' && preader->type != O_PARENTHESE && 
 					preader->operator != COS && preader->operator != ACOS && 
 					preader->operator != SIN && preader->operator != ASIN && 
 					preader->operator != TAN && preader->operator != ATAN &&
@@ -785,7 +704,7 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 			case '*': case '/':
 				/*modifier ici*/
 				for(preader = pv;
-					preader != NULL && preader->type != O_PARENTHESE && preader->type != '~' &&
+					preader != NULL && preader->type != O_PARENTHESE && 
 					preader->operator != COS && preader->operator != ACOS &&
 					preader->operator != SIN && preader->operator != ASIN && 
 					preader->operator != TAN && preader->operator != ATAN &&
@@ -958,7 +877,7 @@ int main(int argc, char **argv){
 	/*Modifier ici*/
 	struct arguments arg = {NULL, FLOAT, 0, sizeof(float), &print_float, "%f", &fpi, NULL, {{NULL,0}},
 		/*Ajouter fonction*/
-		{NULL, &faddition,&fsoustraction,&fmultiplication, &fdivision, &fcosinus,&facosinus, &fsinus, &fasinus, &ftangente, &fatangente,
+		{&faddition,&fsoustraction,&fmultiplication, &fdivision, &fcosinus,&facosinus, &fsinus, &fasinus, &ftangente, &fatangente,
 		&fsqrt, &fexp, &fceil, &flog, &flog10, &ffabs, &ffloor,
 		&ffmod, &fpower}};
 	void *ptr = NULL;
@@ -983,9 +902,6 @@ int main(int argc, char **argv){
 	}else{
 		*format = 0;
 		switch(arg.type){
-			case CHAR:
-				strcat(format, "%i");
-				break;
 			case FLOAT:
 				strcat(format,"%f");
 				break;
