@@ -918,15 +918,15 @@ int main(int argc, char **argv){
 		switch(arg.type){
 			case FLOAT:
 				fpi = strtof(arg.pi, &r);
-				arg.pi = &fpi;
+				//arg.pi = &fpi;
 				break;
 			case DOUBLE:
 				dpi = strtod(arg.pi, &r);
-				arg.pi = &dpi;
+				//arg.pi = &dpi;
 				break;
 			case LDOUBLE:
 				ldpi = strtold(arg.pi, &r);
-				arg.pi = &ldpi;
+				//arg.pi = &ldpi;
 				break;
 		}
 	}
