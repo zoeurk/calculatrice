@@ -930,6 +930,20 @@ int main(int argc, char **argv){
 				break;
 		}
 	}
+	switch(arg.type){
+		case FLOAT:
+			fpi = strtof(arg.pi, &r);
+			arg.pi = &fpi;
+			break;
+		case DOUBLE:
+			dpi = strtod(arg.pi, &r);
+			arg.pi = &dpi;
+			break;
+		case LDOUBLE:
+			ldpi = strtold(arg.pi, &r);
+			arg.pi = &ldpi;
+			break;
+	}
 	if((arg.options&V_PI) == V_PI){
 		printf("%.48Lf\n", ldpi);
 		exit(EXIT_SUCCESS);
