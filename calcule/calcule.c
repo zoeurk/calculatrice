@@ -918,31 +918,32 @@ int main(int argc, char **argv){
 		switch(arg.type){
 			case FLOAT:
 				fpi = strtof(arg.pi, &r);
-				//arg.pi = &fpi;
+				arg.pi = &fpi;
 				break;
 			case DOUBLE:
 				dpi = strtod(arg.pi, &r);
-				//arg.pi = &dpi;
+				arg.pi = &dpi;
 				break;
 			case LDOUBLE:
 				ldpi = strtold(arg.pi, &r);
-				//arg.pi = &ldpi;
+				arg.pi = &ldpi;
 				break;
 		}
-	}
-	switch(arg.type){
-		case FLOAT:
-			fpi = strtof(arg.pi, &r);
-			arg.pi = &fpi;
-			break;
-		case DOUBLE:
-			dpi = strtod(arg.pi, &r);
-			arg.pi = &dpi;
-			break;
-		case LDOUBLE:
-			ldpi = strtold(arg.pi, &r);
-			arg.pi = &ldpi;
-			break;
+	}else{
+		switch(arg.type){
+			case FLOAT:
+				fpi = (float)M_PI;
+				arg.pi = &fpi;
+				break;
+			case DOUBLE:
+				dpi = (double)M_PI;
+				arg.pi = &dpi;
+				break;
+			case LDOUBLE:
+				ldpi = (long double)M_PI;
+				arg.pi = &ldpi;
+				break;
+		}
 	}
 	if((arg.options&V_PI) == V_PI){
 		printf("%.48Lf\n", ldpi);
