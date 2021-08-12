@@ -270,7 +270,6 @@ if(pv->prev == NULL){\
 	}else{\
 		ppprev = start->prev->prev;\
 		ppnext = end->next;\
-		printf("%i\n",virgule->type);\
 		ppv = virgule;\
 		ppprev->next = virgule->prev;\
 		while(ppv != end){\
