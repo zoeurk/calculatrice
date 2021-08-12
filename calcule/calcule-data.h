@@ -278,8 +278,12 @@ if(pv->prev == NULL){\
 		free(virgule);\
 		ppprev->next->prev = ppprev;\
 		ppprev->next->next = ppnext;\
-		ppprev->next->next->prev = ppprev->next;\
+		if(ppnext)\
+			ppprev->next->next->prev = ppprev->next;\
+		ppv = (*v);\
 	}
+
+
 
 void caddition(void *val1, void *val2);
 void faddition(void *val1, void *val2);
