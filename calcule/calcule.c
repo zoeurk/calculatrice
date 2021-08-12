@@ -660,8 +660,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 }
 struct value *calcule(struct value **v, struct function f, unsigned long int *type){
 	struct two_numbers two = {NULL, NULL, NULL};
-	struct value *pv = *v, *ppv, *pnext, *ppnext, *pprev, *preader, *pcur, *pstart, *vdup = NULL, *pvdup;
-	int o_parentheses, count;
+	struct value *pv = *v, *ppv, *pnext, *ppnext, *pprev, *preader, *pcur, *pstart, *vdup = NULL, *pvdup, *ptest;
+	int o_parentheses, count;11
 	while(pv){
 		switch(pv->type){
 			case VALUE:

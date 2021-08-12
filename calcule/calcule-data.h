@@ -269,20 +269,23 @@ if(pv->prev == NULL){\
 		free(end);\
 	}else{\
 		ppprev = start->prev->prev;\
+		ppnext = end->next;\
+		printf("%i\n",virgule->type);\
+		ppv = virgule;\
+		ppprev->next = virgule->prev;\
+		while(ppv != end){\
+			ptest = ppv->next;\
+			free(ppv);\
+			ppv = ptest;\
+		}\
 		free(start->prev);\
 		free(start);\
-		ppnext = end->next;\
-		free(end->prev);\
 		free(end);\
-		ppprev->next = virgule->prev;\
-		free(virgule);\
 		ppprev->next->prev = ppprev;\
 		ppprev->next->next = ppnext;\
 		if(ppnext)\
 			ppprev->next->next->prev = ppprev->next;\
 		ppv = (*v);\
-	}
-
 
 
 void caddition(void *val1, void *val2);
