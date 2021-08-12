@@ -246,7 +246,7 @@ if(pv->prev == NULL){\
 	while(pnext->type != 1)\
 	pnext = pnext->next;
 
-#define UPDATE(v, ppv,pprev, pnext, start, virgule, end)\
+#define UPDATE(v, pprev, pnext, start, virgule, end)\
 	ppv = *v;\
 	if(ppv == start->prev){\
 		pnext = ppv;\
@@ -268,34 +268,19 @@ if(pv->prev == NULL){\
 			ppv->next->prev = ppv;\
 		free(end);\
 	}else{\
-		while(ppv->next != start->prev){\
-			pnext = ppv->next;\
-			ppv = pnext;\
-		}\
-		ppv->next = ppv->next->next->next;\
-		ppv->next->prev = ppv;\
-		while(ppv != virgule){\
-			pnext = ppv->next;\
-			ppv = pnext;\
-			count++;\
-		}\
-		pprev = ppv->prev;\
-		while(ppv != end){\
-			pnext = ppv->next;\
-			free(ppv);\
-			ppv = pnext;\
-		}\
-		pnext = ppv->next;\
-		pprev->next = pnext;\
-		if(pprev->next)\
-			pprev->next->prev = pprev;\
-		ppv->next = end->next;\
-		if(ppv->next)\
-			ppv->next->prev = ppv;\
-		free(end);\
+		ppprev = start->prev->prev;\
 		free(start->prev);\
 		free(start);\
+		ppnext = end->next;\
+		free(end->prev);\
+		free(end);\
+		ppprev->next = virgule->prev;\
+		free(virgule);\
+		ppprev->next->prev = ppprev;\
+		ppprev->next->next = ppnext;\
+		ppprev->next->next->prev = ppprev->next;\
 	}
+
 void caddition(void *val1, void *val2);
 void faddition(void *val1, void *val2);
 void daddition(void *val1, void *val2);
