@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -12,7 +12,7 @@
 
 #include "calcule-data.h"
 
-#define BUFFER 4096
+#define BUFFER 38
 
 struct value{
 	int value;
@@ -36,34 +36,50 @@ struct two_numbers{
 enum VALUE{
 	FLOAT = 1,
 	DOUBLE = 2,
-	LDOUBLE = 4,
+	LDOUBLE = 3,
+	CHAR = 4,
+	UCHAR = 5,
+	SHORT = 6,
+	USHORT = 7,
+	INT = 8,
+	UINT = 9,
+	LINT = 10,
+	LUINT = 11,
+	LLINT = 12,
+	LLUINT = 13
 };
 enum VALUE_TYPE{
 	VALUE = 1,
 	OPERATOR = 2,
-	O_PARENTHESE = 4,
-	C_PARENTHESE = 8,
+	O_PARENTHESE = 3,
+	C_PARENTHESE = 4,
+	AND = 5,
+	OR = 6,
+	XOR = 7,
+	L_MOVE = 8,
+	R_MOVE = 9,
+	COMP = '~',
 	ADD = '+',
 	LESS = '-',
 	MULT = '*',
-	DIV = '/'
+	DIV = '/',
 };
 enum OPERATOR{
 	COS = 1, /*fait*/
 	SIN = 2, /*fait*/
 	TAN = 3, /*fait*/
-	SQRT = 4, /*fait*/
-	EXP = 5, /*fait*/
-	LOG = 6, /*fait*/
-	LOG10 = 7,/*fait*/
-	FABS = 8, /*fait*/
-	CEIL = 9, /*fait*/
-	FLOOR = 10,/*fait*/
-	POW = 11, /*fait*/
-	FMOD = 12, /*fait*/
-	ACOS = 13, /*fait*/
-	ASIN = 14, /*fait*/
-	ATAN = 15 /*fait*/
+	ACOS = 4, /*fait*/
+	ASIN = 5, /*fait*/
+	ATAN = 6, /*fait*/
+	SQRT = 7, /*fait*/
+	EXP = 8, /*fait*/
+	LOG = 9, /*fait*/
+	LOG10 = 10,/*fait*/
+	FABS = 11, /*fait*/
+	CEIL = 12, /*fait*/
+	FLOOR = 13,/*fait*/
+	POW = 14, /*fait*/
+	FMOD = 15 /*fait*/
 };
 enum TYPE{
 	FORMAT   = 1,
@@ -72,6 +88,12 @@ enum TYPE{
 };
 /*Ajouter fonction*/
 struct function{
+	void (*complement)(void *);
+	void (*and)(void *, void *);
+	void (*or)(void *, void *);
+	void (*xor)(void *, void *);
+	void (*l_move)(void *,void *);
+	void (*r_move)(void *, void *);
 	void (*addition)(void *, void *);
 	void (*soustraction)(void *, void *);
 	void (*multiplication)(void *, void *);
@@ -130,9 +152,315 @@ void arguments(int key, char *arg, struct parser_state *state){
 			a->format = arg;
 			break;
 		/*Ajouter fonction*/
+		case 'T':
+			a->print = print_ullint;
+			a->valsize = sizeof(unsigned long long int);
+			a->fn.complement = &ullicomplement;
+			a->fn.l_move = &ullil_move;
+			a->fn.r_move = &ullir_move;
+			a->fn.and = &ulliand;
+			a->fn.or = &ullior;
+			a->fn.xor = &ullixor;
+			a->fn.addition = &ulliaddition;
+			a->fn.soustraction = &ullisoustraction;
+			a->fn.multiplication = &ullimultiplication;
+			a->fn.division = &ullidivision;
+			a->fn.cosinus = NULL;
+			a->fn.acosinus = NULL;
+			a->fn.sinus = NULL;
+			a->fn.asinus = NULL;
+			a->fn.tangente = NULL;
+			a->fn.tangente = NULL;
+			a->fn.sqrt = NULL;
+			a->fn.exp = NULL;
+			a->fn.ceil = NULL;
+			a->fn.log = NULL;
+			a->fn.log10 = NULL;
+			a->fn.fabs = NULL;
+			a->fn.floor = NULL;
+			a->fn.mod = &ullifmod;
+			a->fn.power = NULL;
+			a->type = LLUINT;
+			break;
+		case 't':
+			a->print = print_llint;
+			a->valsize = sizeof(long long int);
+			a->fn.complement = &llicomplement;
+			a->fn.l_move = &llil_move;
+			a->fn.r_move = &llir_move;
+			a->fn.and = &lliand;
+			a->fn.or = &llior;
+			a->fn.xor = &llixor;
+			a->fn.addition = &lliaddition;
+			a->fn.soustraction = &llisoustraction;
+			a->fn.multiplication = &llimultiplication;
+			a->fn.division = &llidivision;
+			a->fn.cosinus = NULL;
+			a->fn.acosinus = NULL;
+			a->fn.sinus = NULL;
+			a->fn.asinus = NULL;
+			a->fn.tangente = NULL;
+			a->fn.tangente = NULL;
+			a->fn.sqrt = NULL;
+			a->fn.exp = NULL;
+			a->fn.ceil = NULL;
+			a->fn.log = NULL;
+			a->fn.log10 = NULL;
+			a->fn.fabs = NULL;
+			a->fn.floor = NULL;
+			a->fn.mod = &llifmod;
+			a->fn.power = NULL;
+			a->type = LLINT;
+			break;
+		case 'L':
+			a->print = print_ulint;
+			a->valsize = sizeof(unsigned long int);
+			a->fn.complement = &ulicomplement;
+			a->fn.l_move = &ulil_move;
+			a->fn.r_move = &ulir_move;
+			a->fn.and = &uliand;
+			a->fn.or = &ulior;
+			a->fn.xor = &ulixor;
+			a->fn.addition = &uliaddition;
+			a->fn.soustraction = &ulisoustraction;
+			a->fn.multiplication = &ulimultiplication;
+			a->fn.division = &ulidivision;
+			a->fn.cosinus = NULL;
+			a->fn.acosinus = NULL;
+			a->fn.sinus = NULL;
+			a->fn.asinus = NULL;
+			a->fn.tangente = NULL;
+			a->fn.tangente = NULL;
+			a->fn.sqrt = NULL;
+			a->fn.exp = NULL;
+			a->fn.ceil = NULL;
+			a->fn.log = NULL;
+			a->fn.log10 = NULL;
+			a->fn.fabs = NULL;
+			a->fn.floor = NULL;
+			a->fn.mod = &ulifmod;
+			a->fn.power = NULL;
+			a->type = LUINT;
+			break;
+		case 'l':
+			a->print = print_lint;
+			a->valsize = sizeof(long int);
+			a->fn.complement = &licomplement;
+			a->fn.l_move = &lil_move;
+			a->fn.r_move = &lir_move;
+			a->fn.and = &liand;
+			a->fn.or = &lior;
+			a->fn.xor = &lixor;
+			a->fn.addition = &liaddition;
+			a->fn.soustraction = &lisoustraction;
+			a->fn.multiplication = &limultiplication;
+			a->fn.division = &lidivision;
+			a->fn.cosinus = NULL;
+			a->fn.acosinus = NULL;
+			a->fn.sinus = NULL;
+			a->fn.asinus = NULL;
+			a->fn.tangente = NULL;
+			a->fn.tangente = NULL;
+			a->fn.sqrt = NULL;
+			a->fn.exp = NULL;
+			a->fn.ceil = NULL;
+			a->fn.log = NULL;
+			a->fn.log10 = NULL;
+			a->fn.fabs = NULL;
+			a->fn.floor = NULL;
+			a->fn.mod = &lifmod;
+			a->fn.power = NULL;
+			a->type = LINT;
+			break;
+		case 'I':
+			a->print = print_uint;
+			a->valsize = sizeof(unsigned int);
+			a->fn.complement = &uicomplement;
+			a->fn.l_move = &uil_move;
+			a->fn.r_move = &uir_move;
+			a->fn.and = &uiand;
+			a->fn.or = &uior;
+			a->fn.xor = &uixor;
+			a->fn.addition = &uiaddition;
+			a->fn.soustraction = &uisoustraction;
+			a->fn.multiplication = &uimultiplication;
+			a->fn.division = &uidivision;
+			a->fn.cosinus = NULL;
+			a->fn.acosinus = NULL;
+			a->fn.sinus = NULL;
+			a->fn.asinus = NULL;
+			a->fn.tangente = NULL;
+			a->fn.tangente = NULL;
+			a->fn.sqrt = NULL;
+			a->fn.exp = NULL;
+			a->fn.ceil = NULL;
+			a->fn.log = NULL;
+			a->fn.log10 = NULL;
+			a->fn.fabs = NULL;
+			a->fn.floor = NULL;
+			a->fn.mod = &uifmod;
+			a->fn.power = NULL;
+			a->type = UINT;
+			break;
+		case 'i':
+			a->print = print_int;
+			a->valsize = sizeof(int);
+			a->fn.complement = &icomplement;
+			a->fn.l_move = &il_move;
+			a->fn.r_move = &ir_move;
+			a->fn.and = &iand;
+			a->fn.or = &ior;
+			a->fn.xor = &ixor;
+			a->fn.addition = &iaddition;
+			a->fn.soustraction = &isoustraction;
+			a->fn.multiplication = &imultiplication;
+			a->fn.division = &idivision;
+			a->fn.cosinus = NULL;
+			a->fn.acosinus = NULL;
+			a->fn.sinus = NULL;
+			a->fn.asinus = NULL;
+			a->fn.tangente = NULL;
+			a->fn.tangente = NULL;
+			a->fn.sqrt = NULL;
+			a->fn.exp = NULL;
+			a->fn.ceil = NULL;
+			a->fn.log = NULL;
+			a->fn.log10 = NULL;
+			a->fn.fabs = NULL;
+			a->fn.floor = NULL;
+			a->fn.mod = &ifmod;
+			a->fn.power = NULL;
+			a->type = INT;
+			break;
+		case 's':
+			a->print = print_short;
+			a->valsize = sizeof(short int);
+			a->fn.complement = &scomplement;
+			a->fn.l_move = &sl_move;
+			a->fn.r_move = &sr_move;
+			a->fn.and = &sand;
+			a->fn.or = &sor;
+			a->fn.xor = &sxor;
+			a->fn.addition = &saddition;
+			a->fn.soustraction = &ssoustraction;
+			a->fn.multiplication = &smultiplication;
+			a->fn.division = &sdivision;
+			a->fn.cosinus = NULL;
+			a->fn.acosinus = NULL;
+			a->fn.sinus = NULL;
+			a->fn.asinus = NULL;
+			a->fn.tangente = NULL;
+			a->fn.tangente = NULL;
+			a->fn.sqrt = NULL;
+			a->fn.exp = NULL;
+			a->fn.ceil = NULL;
+			a->fn.log = NULL;
+			a->fn.log10 = NULL;
+			a->fn.fabs = NULL;
+			a->fn.floor = NULL;
+			a->fn.mod = &sfmod;
+			a->fn.power = NULL;
+			a->type = SHORT;
+			break;
+		case 'S':
+			a->print = print_ushort;
+			a->valsize = sizeof(short int);
+			a->fn.complement = &uscomplement;
+			a->fn.l_move = &usl_move;
+			a->fn.r_move = &usr_move;
+			a->fn.and = &usand;
+			a->fn.or = &usor;
+			a->fn.xor = &usxor;
+			a->fn.addition = &usaddition;
+			a->fn.soustraction = &ussoustraction;
+			a->fn.multiplication = &usmultiplication;
+			a->fn.division = &usdivision;
+			a->fn.cosinus = NULL;
+			a->fn.acosinus = NULL;
+			a->fn.sinus = NULL;
+			a->fn.asinus = NULL;
+			a->fn.tangente = NULL;
+			a->fn.tangente = NULL;
+			a->fn.sqrt = NULL;
+			a->fn.exp = NULL;
+			a->fn.ceil = NULL;
+			a->fn.log = NULL;
+			a->fn.log10 = NULL;
+			a->fn.fabs = NULL;
+			a->fn.floor = NULL;
+			a->fn.mod = &usfmod;
+			a->fn.power = NULL;
+			a->type = USHORT;
+			break;
+		case 'c':
+			a->print = print_char;
+			a->valsize = sizeof(char);
+			a->fn.complement = &ccomplement;
+			a->fn.l_move = &cl_move;
+			a->fn.r_move = &cr_move;
+			a->fn.and = &cand;
+			a->fn.or = &cor;
+			a->fn.xor = &cxor;
+			a->fn.addition = &caddition;
+			a->fn.soustraction = &csoustraction;
+			a->fn.multiplication = &cmultiplication;
+			a->fn.division = &cdivision;
+			a->fn.cosinus = NULL;
+			a->fn.acosinus = NULL;
+			a->fn.sinus = NULL;
+			a->fn.asinus = NULL;
+			a->fn.tangente = NULL;
+			a->fn.tangente = NULL;
+			a->fn.sqrt = NULL;
+			a->fn.exp = NULL;
+			a->fn.ceil = NULL;
+			a->fn.log = NULL;
+			a->fn.log10 = NULL;
+			a->fn.fabs = NULL;
+			a->fn.floor = NULL;
+			a->fn.mod = &cfmod;
+			a->fn.power = NULL;
+			a->type = CHAR;
+			break;
+		case 'C':
+			a->print = print_uchar;
+			a->valsize = sizeof(char);
+			a->fn.complement = &uccomplement;
+			a->fn.l_move = &ucl_move;
+			a->fn.r_move = &ucr_move;
+			a->fn.and = &ucand;
+			a->fn.or = &ucor;
+			a->fn.xor = &ucxor;
+			a->fn.addition = &ucaddition;
+			a->fn.soustraction = &ucsoustraction;
+			a->fn.multiplication = &ucmultiplication;
+			a->fn.division = &ucdivision;
+			a->fn.cosinus = NULL;
+			a->fn.acosinus = NULL;
+			a->fn.sinus = NULL;
+			a->fn.asinus = NULL;
+			a->fn.tangente = NULL;
+			a->fn.tangente = NULL;
+			a->fn.sqrt = NULL;
+			a->fn.exp = NULL;
+			a->fn.ceil = NULL;
+			a->fn.log = NULL;
+			a->fn.log10 = NULL;
+			a->fn.fabs = NULL;
+			a->fn.floor = NULL;
+			a->fn.mod = &ucfmod;
+			a->fn.power = NULL;
+			a->type = UCHAR;
+			break;
 		case 'f':
 			a->print = print_float;
 			a->valsize = sizeof(float);
+			a->fn.complement = NULL;
+			a->fn.l_move = NULL;
+			a->fn.r_move = NULL;
+			a->fn.and = NULL;
+			a->fn.or = NULL;
+			a->fn.xor = NULL;
 			a->fn.addition = &faddition;
 			a->fn.soustraction = &fsoustraction;
 			a->fn.multiplication = &fmultiplication;
@@ -154,9 +482,15 @@ void arguments(int key, char *arg, struct parser_state *state){
 			a->fn.power = &fpower;
 			a->type = FLOAT;
 			break;
-		case 'l':
+		case 'd':
 			a->print = print_double;
 			a->valsize = sizeof(double);
+			a->fn.complement = NULL;
+			a->fn.l_move = NULL;
+			a->fn.r_move = NULL;
+			a->fn.and = NULL;
+			a->fn.or = NULL;
+			a->fn.xor = NULL;
 			a->fn.addition = daddition;
 			a->fn.soustraction = &dsoustraction;
 			a->fn.multiplication = &dmultiplication;
@@ -178,9 +512,15 @@ void arguments(int key, char *arg, struct parser_state *state){
 			a->fn.power = &dpower;
 			a->type = DOUBLE;
 			break;
-		case 'L':
+		case 'D':
 			a->print = print_ldouble;
 			a->valsize = sizeof(long double);
+			a->fn.complement = NULL;
+			a->fn.l_move = NULL;
+			a->fn.r_move = NULL;
+			a->fn.and = NULL;
+			a->fn.or = NULL;
+			a->fn.xor = NULL;
 			a->fn.addition = &ldaddition;
 			a->fn.soustraction = &ldsoustraction;
 			a->fn.multiplication = &ldmultiplication;
@@ -233,15 +573,27 @@ void arguments(int key, char *arg, struct parser_state *state){
 struct info program = {"version: 1.0","zoeurk@gmail.com"};
 struct parser_option options[] =	{
 					{ "float", 'f', 0, NULL, "Utiliser le type float"},
-					{ "double", 'l', 0 , NULL, "Utiliser le type double"},
-					{ "ldouble", 'L', 0, NULL, "Utiliser le type long double"},
+					{ "double", 'd', 0 , NULL, "Utiliser le type double"},
+					{ "ldouble", 'D', 0, NULL, "Utiliser le type long double"},
+					{ "char", 'c', 0, NULL, "Utiliser le type char"},
+					{ "unsigned-char", 'C', 0, NULL, "Utiliser le type char"},
+					{ "short",'s', 0, NULL, "Utiliser le type short int"},
+					{ "unsigned-short",'S', 0, NULL, "Utiliser le type short int"},
+					{ "int" ,'i', 0, NULL, "Utiliser le tye int"},
+					{ "unsigned-int" ,'I', 0, NULL, "Utiliser le tye int"},
+					{ "long-int" ,'l', 0, NULL, "Utiliser le tye long int"},
+					{ "unsigned-long-int" ,'L', 0, NULL, "Utiliser le tye unsigned long int"},
+					{ "long-long-int" ,'t', 0, NULL, "Utiliser le tye long long int"},
+					{ "unsigned-long-long-int" ,'T', 0, NULL, "Utiliser le tye unsigned long long int"},
 					{ "format", 'O', 0, "FORMAT", "Nombre de chiffre apres la virgule"},
 					{ "file", 'F', 0, "FILE", "lire le fichier"},
-					{ "set-pi", 'p', 0, "PI", "Initialiser pi a la valeur de PI"},
+					{ "set-pi", 'p', 0, "PI", "Initialiser pi"},
 					{ "view-pi", 'P', 0, NULL, "Voir la valeur de pi par default"},
 					{0}
 				};
-struct parser args = {options, arguments, "[OPTIONS]", "[\"calcule\"]", "Petit outil de calcule", &program, NULL};
+
+struct parser_state ps = {NULL, NULL, 0, 0, 0, 0, 0, 35, 75, 75, NULL, NULL, NULL, NULL};
+struct parser args = {options, arguments, "[OPTIONS]", "[\"calcule\"]", "Petit outil de calcule", &program, &ps};
 
 void *___calloc___(void **ptr, unsigned long int size){
 	if((*ptr = calloc(1, size)) == NULL){
@@ -252,15 +604,21 @@ void *___calloc___(void **ptr, unsigned long int size){
 }
 /*A modifier*/
 #define ENTRY 16
+#define TEMP 16
+#define MODULO 15
+#define RACINE_CARRE 8
+struct value *v = NULL;
 struct value *initialisation(char *argv, struct arguments *arg){
-	struct value *v = NULL, *pv = NULL;
-	char buffer[BUFFER], *end,
+	struct value *pv = NULL, *pprev, *pnext;
+	char buffer[BUFFER], temp[TEMP], *end,
 		/*Ajouter entree*/
-		*trigo[ENTRY] = {"PI", "cos", "acos", "sin", "asin", "tan", "atan", "sqrt", "exp", "ceil", "log", "log10", "fabs", "floor", "mod", "pow"};
+		*trigo[ENTRY] = {"PI", "cos", "acos", "sin", "asin", "tan", "atan", "sqrt", "exp", "ceil", "log", "log10", "fabs", "floor", "mod", "pow"},
+		*operator[5] = {"<<", ">>", "AND", "OR", "XOR"};
 	int i, j = 0, point = 0, wait = 0,
 		parenthese = 0, o_parentheses = 0, c_parentheses = 0, split = 0, signe = 0,
 		bufset = 0, count = 0, len = 0, virgule = 0, num = 0, init = 0, cont = 0;
 	memset(buffer, 0, BUFFER);
+	memset(temp ,0, TEMP);
 	for(i = 0; argv[i] != 0; i++){
 		switch(argv[i])
 		{	
@@ -302,6 +660,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					argv[(cont == 0)?i-1:i-cont] != '+' && 
 					argv[(cont == 0)?i-1:i-cont] != '-' && 
 					argv[(cont == 0)?i-1:i-cont] != '(' &&
+					argv[(cont == 0)?i-1:i-cont] != '~' &&
 					argv[(cont == 0)?i-1:i-cont] != ',' &&
 					argv[(cont == 0)?i-1:i-cont] != '\n' &&
 					argv[(cont == 0)?i-1:i-cont] != '\t' &&
@@ -445,13 +804,39 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				pv->type = C_PARENTHESE;
 				c_parentheses++;
 				break;
+			case '~':
+				if(arg->type < CHAR){
+					fprintf(stderr, "Erreur: Operande dans ce mode.\n");
+					exit(EXIT_FAILURE);
+				}
+				if(pv && pv->type == '~'){
+					pprev = pv->prev;
+					pnext = pv->next;
+					if(pprev){
+						pv = pv->prev;
+						free(pv->next);
+						pv->next = NULL;
+					}else{
+						free(v);
+						v = NULL;
+						pv = v;
+					}
+				}else{
+					if(v == NULL)
+						v = pv = ___calloc___((void **)&v,sizeof(struct value)+arg->valsize);
+					else{
+						MAILLON(pv, sizeof(struct value));
+					}
+					pv->type = '~';
+				}
+				break;
 			case '+':
 			case '-':
 				//printf("%s;\n", buffer);
 				/*BUG*/
 				point = 0;
 				split = 0;
-				if((!v || pv->type == 4 || pv->type == '+' || pv->type == '-' || pv->type == '*' || pv->type == '/')
+				if((!v || pv->type == '~'|| pv->type == O_PARENTHESE || pv->type == '+' || pv->type == '-' || pv->type == '*' || pv->type == '/')
 					&& strlen(buffer) == 0){
 					goto number;
 				}
@@ -482,12 +867,17 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					pv->type = '*';
 					continue;
 				}
-				if(argv[j] != ',' && (strcmp(buffer,trigo[0]) != 0) && (j > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
-				{	if(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n'){
+				if((strncmp(&argv[j-1],">>",2) && strncmp(&argv[j-1],"<<",2) &&
+					strncmp(&argv[j-2], "AND",3) && strncmp(&argv[j-1],"OR",2) && strncmp(&argv[j-2],"XOR",3)) &&
+					(argv[j] != ',' && (strcmp(buffer,trigo[0]) != 0) && (j > 1 && (argv[j] < 48 || argv[j] >57) && argv[j] != ')'))
+				){
+					//printf("%c\n", argv[j-2]);
+					if(argv[j] == ' ' || argv[j] == '\t' || argv[j] == '\n'){
 						goto next;
 					}
 					/*BUG*/
-					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
+					fprintf(stderr,"%s\n", &argv[j-1]);
+					ERROR(">>>Erreur de syntaxe vers l'offset %i\n",i);
 				}
 				if(argv[j] == ','){
 					j++;
@@ -522,7 +912,10 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				cont = 0;
 				break;
 			case '.':
-				/*Faisait bugger*/
+				if(arg->type >= CHAR){
+					fprintf(stderr,"Erreur: Virgule dans un calcule binaire\n");
+					exit(EXIT_FAILURE);
+				}
 				if(point == 1){
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}else	point = 1;
@@ -554,18 +947,28 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					(
 							((argv[i] == '-' || argv[i] == '+') && strlen(buffer) == 0)
 					)) && len == 0)
-				){
+				){	if((arg->type == UCHAR || arg->type == UINT || arg->type == LUINT || arg->type == LLUINT) && (argv[i] == '-' || argv[i] == '+')){
+						fprintf(stderr, "WARNING: Chiffre signe pour un type non signe\n");
+						//exit(EXIT_FAILURE);
+					}
 					if((argv[i+1] == '\n' || argv[i+1] == '\t' || argv[i+1] == ' ') && argv[i] != '-' && argv[i] != '+')
 						split = 1;
 					if(strlen(buffer)+2 > BUFFER){
-						fprintf(stderr, "buffer trop court: >4096 octets.\n");
+						fprintf(stderr, "buffer trop court: 56 octets.\n");
 						exit(EXIT_FAILURE);
 					}
 					strncat(buffer,&argv[i],1);
 					num = 1;
 					wait = 1;
 					cont = 0;
-				}else{
+				}else{ if(pv && pv->type == OPERATOR)
+					{
+						if(strlen(buffer) == 0){
+							ERROR("Erreur de synntaxe vers l'offset %i\n", i);
+						}
+						//printf("===>%s\n", buffer);
+					}
+					//printf("%li\n",arg->type);
 					signe = (buffer[0] == '-' || buffer[0] == '+') ? 1 : 0;
 					if(signe == 1){
 						strncat (buffer, "1", 2);
@@ -593,7 +996,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 							((j = 15) && argv[i] == trigo[j-1][len]) ||
 							((j = 16) && argv[i] == trigo[j-1][len])
 						) && wait == 0
-					){	
+					){
 						if(cont && len > 0){
 							ERROR("Erreur de syntaxe vers l'offset %i\n", i+1);
 						}
@@ -603,6 +1006,11 @@ struct value *initialisation(char *argv, struct arguments *arg){
 						if(len == (int)strlen(trigo[j-1]) && ((argv[i+1] == '(' || argv[i+1] == ' ' || argv[i+1] == '\n' || argv[i+1] == '\t')
 							|| strcmp(buffer,trigo[0]) == 0)
 						){
+							if(arg->type >= CHAR && j != MODULO){
+								//fprintf(stderr,"%i\n", j);
+								fprintf(stderr,"Erreur: fonction '%s' non valide dans ce mode\n", buffer);
+								exit(EXIT_FAILURE);
+							}
 							if(strcmp(trigo[0], buffer) == 0){
 								num = 1;
 								parenthese = 0;
@@ -612,7 +1020,67 @@ struct value *initialisation(char *argv, struct arguments *arg){
 						signe = 0;
 						cont = 0;
 					}else{
-						ERROR("Erreur de syntaxe vers l'offset %i\n", i+1);
+							if(	((j = 1) && argv[i] == operator[j-1][len]) ||
+								((j = 2) && argv[i] == operator[j-1][len]) ||
+								((j = 3) && argv[i] == operator[j-1][len]) ||
+								((j = 4) && argv[i] == operator[j-1][len]) ||
+								((j = 5) && argv[i] == operator[j-1][len])
+							){
+								//printf("%s:%c\n", temp, argv[i]);
+								if(arg->type < CHAR){
+									fprintf(stderr,"Erreur: Operateur binaire non supporte dans ce mode\n");
+									exit(EXIT_FAILURE);
+								}
+								temp[len] = argv[i];
+								//printf("==>%s\n",temp);
+								if(strncmp(operator[j-1],temp, strlen(operator[j-1])) == 0){
+									if(strlen(buffer) == 0){
+										ERROR("Erreur de syntaxe vers l'offset %i\n", i);
+									}
+									BUFSET(v, pv,arg->valsize, buffer, end, arg->type);
+									switch(j)
+									{
+										case 1:
+											pv->type = L_MOVE;
+											break;
+										case 2:
+											pv->type = R_MOVE;
+											break;
+										case 3:
+											pv->type = AND;
+											break;
+										case 4:
+											pv->type = OR;
+											break;
+										case 5:
+											pv->type = XOR;
+											break;
+									}
+									//printf("%s\n", buffer);
+									memset(temp, 0, TEMP);
+									len = 0;
+									bufset = 1;
+									//temp[0] = 0;
+									//buffer[0] = 0;
+									//if(argv[i+1] == ' ' || argv[i+1] == '\t' || argv[i+1] == '\n'){
+										//printf("==========================\n");
+										for(i = i+1; argv[i] == ' ' || argv[i] == '\t' || argv[i] == '\n'; i++);;
+									//}
+									//Modifier ici
+									i-=1;
+									//if(argv[i] == '('){
+									//	printf("parenthese\n");
+									//}
+									split = 0;
+									//exit(0);
+									continue;
+								}
+							}else{
+								
+								ERROR("Erreur de syntaxe vers l'offset %i\n", i-(int)strlen(temp));
+							}
+							len++;
+						//ERROR("Erreur de syntaxe vers l'offset %i\n", i+1);
 					}
 				}
 				bufset = 1;
@@ -635,7 +1103,12 @@ struct value *initialisation(char *argv, struct arguments *arg){
 		if(parenthese){
 			_ERROR_("Erreur de syntax\n");
 		}
+		/*if(pv && pv->type == 2 && (pv->operator == AND || pv->operator == OR || pv->operator == XOR || pv->operator == L_MOVE || pv->operator == R_MOVE))
+			printf("<%s>\n", buffer);*/
 		if(bufset == 1){
+			if(strlen(buffer) == 0){
+				ERROR("Erreur de syntax vers l'offset: %i\n",i);
+			}
 			MAILLON(pv,sizeof(struct value) + arg->valsize);
 			PI_INTEGRATION(trigo[0],buffer,i-1, arg->pi);
 			INIT_BUFSET(pv,buffer,end, arg->type);
@@ -656,12 +1129,27 @@ struct value *initialisation(char *argv, struct arguments *arg){
 		INIT_BUFSET(pv,buffer,end, arg->type);
 		pv->type = VALUE;
 	}
+	/*pv = v;
+	while(pv){
+		printf("%i", pv->type);
+		if(pv->type == 1)
+			printf(":%i\n", *((int *)pv->val));
+		else	printf("\n");
+		pv = pv->next;
+	}
+	exit(0);
+	while(pv){
+		printf("%i\n", pv->type);
+		pv = pv->next;
+	}
+	printf("===\n");*/
+	//exit(0);
 	return v;
 }
 struct value *calcule(struct value **v, struct function f, unsigned long int *type){
 	struct two_numbers two = {NULL, NULL, NULL};
-	struct value *pv = *v, *ppv, *pnext, *ppnext, *pprev, *preader, *pcur, *pstart, *vdup = NULL, *pvdup, *ptest;
-	int o_parentheses, count;11
+	struct value *pv = *v, *ppv, *pnext, *ppnext, *pprev, *ppprev, *preader, *pcur, *pstart, *vdup = NULL, *pvdup, *ptest;
+	int o_parentheses, count;
 	while(pv){
 		switch(pv->type){
 			case VALUE:
@@ -669,7 +1157,7 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 			case '+': case '-':
 				/*modifier ici*/
 				for(preader = pv; 
-					preader && preader->type != '*' && preader->type != '/' && preader->type != O_PARENTHESE && 
+					preader && preader->type != '~' && preader->type != '*'  && preader->type != '/' && preader->type != O_PARENTHESE && 
 					preader->operator != COS && preader->operator != ACOS && 
 					preader->operator != SIN && preader->operator != ASIN && 
 					preader->operator != TAN && preader->operator != ATAN &&
@@ -689,17 +1177,49 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 						f.addition(pv->prev->val, pv->next->val);
 						break;
 					case '-':
+						//if(pv->prev == NULL){
+						//	printf("GRRRR\n");
+						//	exit(0); 
+						//}
+						switch(*type){
+							case UCHAR:
+								if(*((unsigned char *)pv->prev->val) < *((unsigned char *)pv->next->val)){
+									fprintf(stderr, "WARNING: Resultat signe dans un type non signe\n");
+								}
+								break;
+							case USHORT:
+								if(*((unsigned short int *)pv->prev->val) < *((unsigned short int *)pv->next->val)){
+									fprintf(stderr, "WARNING: Resultat signe dans un type non signe\n");
+								}
+								break;
+							case UINT:
+								if(*((unsigned int *)pv->prev->val) < *((unsigned int *)pv->next->val)){
+									fprintf(stderr, "WARNING: Resultat signe dans un type non signe\n");
+								}
+								break;
+							case LUINT:
+								if(*((unsigned long int *)pv->prev->val) < *((unsigned long int *)pv->next->val)){
+									fprintf(stderr, "WARNING: Resultat signe dans un type non signe\n");
+								}
+								break;
+							case LLUINT:
+								if(*((unsigned long long int *)pv->prev->val) < *((unsigned long long int *)pv->next->val)){
+									fprintf(stderr, "WARNING: Resultat signe dans un type non signe\n");
+								}
+								break;
+						}
 						f.soustraction(pv->prev->val, pv->next->val);
 						break;
 				}
-				pprev = pv->prev;
+				SUIVANT;
+				/*pprev = pv->prev;
 				pnext = pv->next->next;
 				pprev->next = pnext;
 				if(pnext)
 					pprev->next->prev = pprev;
 				free(pv->next);
 				free(pv);
-				pv = *v;
+				pv = *v;*/
 				continue;
 			case '*': case '/':
 				/*modifier ici*/
@@ -724,37 +1244,263 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 						f.multiplication(pv->prev->val, pv->next->val);
 						break;
 					case '/':
+						//printf("==>%i\n", *((int *)pv->next->val));
 						switch(*type){
+							case CHAR:
+								if(*((char *)pv->next->val) == 0){
+									fprintf(stderr,"Division par 0 detectee\n");
+									exit(EXIT_FAILURE);
+								}
+								break;
+							case UCHAR:
+								if(*((unsigned char *)pv->next->val) == 0){
+									fprintf(stderr,"Division par 0 detectee\n");
+									exit(EXIT_FAILURE);
+								}
+								break;
+							case SHORT:
+								if(*((short int *)pv->next->val) == 0){
+									fprintf(stderr,"Division par 0 detectee\n");
+									exit(EXIT_FAILURE);
+								}
+								break;
+							case USHORT:
+								if(*((unsigned short int *)pv->next->val) == 0){
+									fprintf(stderr,"Division par 0 detectee\n");
+									exit(EXIT_FAILURE);
+								}
+								break;
+							case INT:
+								if(*((int *)pv->next->val) == 0){
+									fprintf(stderr,"Division par 0 detectee\n");
+									exit(EXIT_FAILURE);
+								}
+								break;
+							case UINT:
+								if(*((unsigned int *)pv->next->val) == 0){
+									fprintf(stderr,"Division par 0 detectee\n");
+									exit(EXIT_FAILURE);
+								}
+								break;
+							case LINT:
+								if(*((long int *)pv->next->val) == 0){
+									fprintf(stderr,"Division par 0 detectee\n");
+									exit(EXIT_FAILURE);
+								}
+								break;
+							case LUINT:
+								if(*((unsigned long int *)pv->next->val) == 0){
+									fprintf(stderr,"Division par 0 detectee\n");
+									exit(EXIT_FAILURE);
+								}
+								break;
 							case FLOAT:
 								if(*((float *)pv->next->val) == 0){
-									fprintf(stderr,"Division par 0 detectee");
-									return NULL;
+									fprintf(stderr,"Division par 0 detectee\n");
+									exit(EXIT_FAILURE);
 								}
 								break;
 							case DOUBLE:
 								if(*((double *)pv->next->val) == 0){
-									fprintf(stderr,"Division par 0 detectee");
-									return NULL;
+									fprintf(stderr,"Division par 0 detectee\n");
+									exit(EXIT_FAILURE);
 								}
 								break;
 							case LDOUBLE:
 								if(*((long double *)pv->next->val) == 0){
-									fprintf(stderr,"Division par 0 detectee");
-									return NULL;
+									fprintf(stderr,"Division par 0 detectee\n");
+									exit(EXIT_FAILURE);
 								}
 								break;
 						}
+						//printf("%i\n", pv->prev->type);
+						//exit(0);
 						f.division(pv->prev->val, pv->next->val);
 						break;
 				}
-				pprev = pv->prev;
+				SUIVANT;
+				/*pprev = pv->prev;
 				pnext = pv->next->next;
 				pprev->next = pnext;
 				if(pnext)
 					pprev->next->prev = pprev;
 				free(pv->next);
 				free(pv);
+				pv = *v;*/
+				continue;
+			case '~':
+				if(pv->next->type == O_PARENTHESE){
+					pv = calcule(&pv->next, f, type);
+					if(pv->prev)
+						pv = pv->prev;
+				}
+				f.complement(pv->next->val);
+				pprev = pv->prev;
+				pnext = pv->next;
+				if(pprev){
+					pprev->next = pnext;
+					if(pnext)
+						pprev->next->prev = pprev;
+					free(pv);
+					pv = *v;
+				}else{
+					pv = *v = (*v)->next;
+					free((*v)->prev);
+					(*v)->prev = NULL;
+					pv = *v;
+					
+				}
 				pv = *v;
+				continue;
+			case AND:
+				for(preader = pv;
+					preader != NULL && preader->type != O_PARENTHESE && 
+					preader->type != '+' && preader->type != '-' &&
+					preader->type != '*' && preader->type != '/' &&
+					preader->operator != COS && preader->operator != ACOS &&
+					preader->operator != SIN && preader->operator != ASIN && 
+					preader->operator != TAN && preader->operator != ATAN &&
+					preader->operator != SQRT && preader->operator != EXP &&
+					preader->operator != CEIL && preader->operator != LOG &&
+					preader->operator != LOG10 && preader->operator != FABS &&
+					preader->operator != FLOOR &&
+					preader->operator != FMOD && preader->operator != POW;
+					preader = preader->next);
+				if(preader){
+					pv = preader;
+					preader = NULL;
+					continue;
+				}
+				f.and(pv->prev->val, pv->next->val);
+				SUIVANT;
+				/*pprev = pv->prev;
+				pnext = pv->next->next;
+				pprev->next = pnext;
+				if(pnext)
+					pprev->next->prev = pprev;
+				free(pv->next);
+				free(pv);
+				pv = *v;*/
+				continue;
+			case OR:
+				for(preader = pv;
+					preader != NULL && preader->type != O_PARENTHESE && 
+					preader->type != '+' && preader->type != '-' &&
+					preader->type != '*' && preader->type != '/' &&
+					preader->operator != COS && preader->operator != ACOS &&
+					preader->operator != SIN && preader->operator != ASIN && 
+					preader->operator != TAN && preader->operator != ATAN &&
+					preader->operator != SQRT && preader->operator != EXP &&
+					preader->operator != CEIL && preader->operator != LOG &&
+					preader->operator != LOG10 && preader->operator != FABS &&
+					preader->operator != FLOOR &&
+					preader->operator != FMOD && preader->operator != POW;
+					preader = preader->next);
+				if(preader){
+					pv = preader;
+					preader = NULL;
+					continue;
+				}
+				f.or(pv->prev->val, pv->next->val);
+				SUIVANT;
+				/*pprev = pv->prev;
+				pnext = pv->next->next;
+				pprev->next = pnext;
+				if(pnext)
+					pprev->next->prev = pprev;
+				free(pv->next);
+				free(pv);
+				pv = *v;*/
+				continue;
+			case XOR:
+				for(preader = pv;
+					preader != NULL && preader->type != O_PARENTHESE && 
+					preader->type != '+' && preader->type != '-' &&
+					preader->type != '*' && preader->type != '/' &&
+					preader->operator != COS && preader->operator != ACOS &&
+					preader->operator != SIN && preader->operator != ASIN && 
+					preader->operator != TAN && preader->operator != ATAN &&
+					preader->operator != SQRT && preader->operator != EXP &&
+					preader->operator != CEIL && preader->operator != LOG &&
+					preader->operator != LOG10 && preader->operator != FABS &&
+					preader->operator != FLOOR &&
+					preader->operator != FMOD && preader->operator != POW;
+					preader = preader->next);
+				if(preader){
+					pv = preader;
+					preader = NULL;
+					continue;
+				}
+				f.xor(pv->prev->val, pv->next->val);
+				SUIVANT;
+				/*pprev = pv->prev;
+				pnext = pv->next->next;
+				pprev->next = pnext;
+				if(pnext)
+					pprev->next->prev = pprev;
+				free(pv->next);
+				free(pv);
+				pv = *v;*/
+				continue;
+			case L_MOVE:
+				for(preader = pv;
+					preader != NULL && preader->type != O_PARENTHESE && 
+					preader->type != '+' && preader->type != '-' &&
+					preader->type != '*' && preader->type != '/' &&
+					preader->operator != COS && preader->operator != ACOS &&
+					preader->operator != SIN && preader->operator != ASIN && 
+					preader->operator != TAN && preader->operator != ATAN &&
+					preader->operator != SQRT && preader->operator != EXP &&
+					preader->operator != CEIL && preader->operator != LOG &&
+					preader->operator != LOG10 && preader->operator != FABS &&
+					preader->operator != FLOOR &&
+					preader->operator != FMOD && preader->operator != POW;
+					preader = preader->next);
+				if(preader){
+					pv = preader;
+					preader = NULL;
+					continue;
+				}
+				f.l_move(pv->prev->val, pv->next->val);
+				SUIVANT;
+				/*pprev = pv->prev;
+				pnext = pv->next->next;
+				pprev->next = pnext;
+				if(pnext)
+					pprev->next->prev = pprev;
+				free(pv->next);
+				free(pv);
+				pv = *v;*/
+				continue;
+			case R_MOVE:
+				for(preader = pv;
+					preader != NULL && preader->type != O_PARENTHESE && 
+					preader->type != '+' && preader->type != '-' &&
+					preader->type != '*' && preader->type != '/' &&
+					preader->operator != COS && preader->operator != ACOS &&
+					preader->operator != SIN && preader->operator != ASIN && 
+					preader->operator != TAN && preader->operator != ATAN &&
+					preader->operator != SQRT && preader->operator != EXP &&
+					preader->operator != CEIL && preader->operator != LOG &&
+					preader->operator != LOG10 && preader->operator != FABS &&
+					preader->operator != FLOOR &&
+					preader->operator != FMOD && preader->operator != POW;
+					preader = preader->next);
+				if(preader){
+					pv = preader;
+					preader = NULL;
+					continue;
+				}
+				f.r_move(pv->prev->val, pv->next->val);
+				SUIVANT;
+				/*pprev = pv->prev;
+				pnext = pv->next->next;
+				pprev->next = pnext;
+				if(pnext)
+					pprev->next->prev = pprev;
+				free(pv->next);
+				free(pv);
+				pv = *v;*/
 				continue;
 			case O_PARENTHESE:
 				SINGLE_ARG(pv,o_parentheses != 0, type);
@@ -832,13 +1578,13 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 					case FMOD:
 						MULTIPLE_ARGS(preader, pv, pcur, o_parentheses, pnext, pprev, two.start, two.virgule, two.end, type);
 						f.mod(pprev->val,pnext->val);
-						UPDATE(v, ppv,pprev, pnext, two.start, two.virgule, two.end);
+						UPDATE(v, pprev, pnext, two.start, two.virgule, two.end);
 						pv = *v;
 						continue;
 					case POW:
 						MULTIPLE_ARGS(preader, pv, pcur, o_parentheses, pnext, pprev, two.start, two.virgule, two.end, type);
 						f.power(pprev->val,pnext->val);
-						UPDATE(v, ppv,pprev, pnext, two.start, two.virgule, two.end);
+						UPDATE(v, pprev, pnext, two.start, two.virgule, two.end);
 						pv = *v;
 						continue;
 				}
@@ -850,7 +1596,7 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 }
 void calcule_destroy(struct value *v, char *format, void (*print)(void *, char*)){
 	struct value *pv = v;
-	/*unsigned long int count = 0;*/
+	unsigned long int count = 0;
 	while(pv){
 		v = pv->next;
 		/*if(pv->type == O_PARENTHESE)
@@ -861,33 +1607,71 @@ void calcule_destroy(struct value *v, char *format, void (*print)(void *, char*)
 			printf("\noperator:%i:%c\n",pv->operator, pv->operator);
 		if(pv->type == C_PARENTHESE)
 			printf(")");*/
-		free(pv);
+		//free(pv);
 		pv = v;
-		/*count++;*/
+		count++;
 	}
-	/*if(count > 1){
+	if(count > 1){
 		printf("\nPlease Report a bug.\n");
 		exit(EXIT_FAILURE);
-	}*/
+	}
+}
+void bye(void){
+	struct value *pv;
+	while(v){
+		pv = v->next;
+		free(v);
+		v = pv;
+	}
 }
 int main(int argc, char **argv){
-	long double ldpi = (long double) M_PI;
+	long double ldpi = (long double)  M_PI;
 	double dpi = (double) M_PI;
 	float fpi = (float) M_PI;
 	/*Modifier ici*/
 	struct arguments arg = {NULL, FLOAT, 0, sizeof(float), &print_float, "%f", &fpi, NULL, {{NULL,0}},
 		/*Ajouter fonction*/
-		{&faddition,&fsoustraction,&fmultiplication, &fdivision, &fcosinus,&facosinus, &fsinus, &fasinus, &ftangente, &fatangente,
+		{NULL, NULL, NULL, NULL, NULL, NULL,&faddition,&fsoustraction,&fmultiplication, &fdivision, &fcosinus,&facosinus, &fsinus, &fasinus, &ftangente, &fatangente,
 		&fsqrt, &fexp, &fceil, &flog, &flog10, &ffabs, &ffloor,
 		&ffmod, &fpower}};
 	void *ptr = NULL;
 	char format[56], *r;
+	//memset(&ps,0,sizeof(struct parser_state));
+	//parser_usage(&args);
+	//exit(0);
+	atexit(bye);
+	ps.argv = argv;
+	ps.parser = &args;
+	/*ps.err_stream = stderr;
+	ps.out_stream = stdout;*/
 	parser_parse(&args, argc, argv, &arg);
 	if((arg.options&FORMAT) == FORMAT){
 		*format = 0;
 		strcat(format,"%.");
 		strcat(format,arg.format);
 		switch(arg.type){
+			case LLUINT:
+				strcat(format,"llu");
+				break;
+			case LLINT:
+				strcat(format,"ll");
+				break;
+			case LUINT:
+				strcat(format,"ul");
+				break;
+			case LINT:
+				strcat(format, "li");
+				break;
+			case UINT:
+			case USHORT:
+			case UCHAR:
+				strcat(format, "u");
+				break;
+			case INT:
+			case SHORT:
+			case CHAR:
+				strcat(format,"i");
+				break;
 			case FLOAT:
 				strcat(format,"f");
 				break;
@@ -902,6 +1686,28 @@ int main(int argc, char **argv){
 	}else{
 		*format = 0;
 		switch(arg.type){
+			case LLUINT:
+				strcat(format,"%llu");
+				break;
+			case LLINT:
+				strcat(format,"%lli");
+				break;
+			case LUINT:
+				strcat(format,"%lu");
+				break;
+			case LINT:
+				strcat(format,"%li");
+				break;
+			case UINT:
+			case USHORT:
+			case UCHAR:
+				strcat(format,"%u");
+				break;
+			case INT:
+			case SHORT:
+			case CHAR:
+				strcat(format,"%i");
+				break;
 			case FLOAT:
 				strcat(format,"%f");
 				break;
@@ -932,19 +1738,25 @@ int main(int argc, char **argv){
 	}else{
 		switch(arg.type){
 			case FLOAT:
+				//printf("***\n");
+				//fpi = strtof(arg.pi, &r);
 				fpi = (float)M_PI;
 				arg.pi = &fpi;
+				//printf("%f\n",fpi);
 				break;
 			case DOUBLE:
+				//dpi = strtod(arg.pi, &r);
 				dpi = (double)M_PI;
 				arg.pi = &dpi;
 				break;
 			case LDOUBLE:
 				ldpi = (long double)M_PI;
 				arg.pi = &ldpi;
+				//printf("%LF\n",ldpi);
 				break;
 		}
 	}
+	//printf("%LF\n", *((long double *)arg.pi));
 	if((arg.options&V_PI) == V_PI){
 		printf("%.48Lf\n", ldpi);
 		exit(EXIT_SUCCESS);
@@ -958,6 +1770,8 @@ int main(int argc, char **argv){
 	if(ptr == NULL)
 		calcule_destroy(arg.v, format, NULL);
 	else	calcule_destroy(arg.v, format, arg.print);
+	free(arg.v);
+	arg.v = v = NULL;
 	printf("\n");
 	return 0;
 }

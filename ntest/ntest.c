@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -184,7 +184,7 @@ struct parser_option options[] =	{
 					{ "unsigned-short", 'S', 0, NULL, "Utiliser le type unsigned short int"},
 					{ "int", 'i', 0, NULL, "Utiliser le type int"},
 					{ "unsigned-int", 'I', 0, NULL, "Utiliser le type unsigned int"},
-					{ "long-int" ,'l', 0, NULL, "Utiliser le tye unsigned long int"},
+					{ "long-int" ,'l', 0, NULL, "Utiliser le tye long int"},
 					{ "unsigned-long-int" ,'L', 0, NULL, "Utiliser le tye unsigned long int"},
 					{ "long-long-int" ,'t', 0, NULL, "Utiliser le tye long long int"},
 					{ "unsigned-long-long-int" ,'T', 0, NULL, "Utiliser le tye unsigned long long int"},
@@ -257,6 +257,9 @@ char file[28];
 			*((char *)var2) = (char)atoi(o.var2);\
 			break;\
 		case UCHAR:\
+			if(o.var1[0] == '-' || o.var1[0] == '+' || o.var2[0] == '-' || o.var2[0] == '+'){\
+				fprintf(stderr,"WARNING: nombre signe detecte, le resultat peut etre impredictible\n");\
+			}\
 			if(strchr(o.var1,'.')){\
 				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
 				exit(EXIT_FAILURE);\
@@ -269,6 +272,9 @@ char file[28];
 			*((unsigned char *)var2) = atoi(o.var2);\
 			break;\
 		case USHORT:\
+			if(o.var1[0] == '-' || o.var1[0] == '+' || o.var2[0] == '-' || o.var2[0] == '+'){\
+				fprintf(stderr,"WARNING: nombre signe detecte, le resultat peut etre impredictible\n");\
+			}\
 			if(strchr(o.var1,'.')){\
 				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
 				exit(EXIT_FAILURE);\
@@ -305,6 +311,9 @@ char file[28];
 			*((int *)var2) = atoi(o.var2);\
 			break;\
 		case UINT:\
+			if(o.var1[0] == '-' || o.var1[0] == '+' || o.var2[0] == '-' || o.var2[0] == '+'){\
+				fprintf(stderr,"WARNING: nombre signe detecte, le resultat peut etre impredictible\n");\
+			}\
 			if(strchr(o.var1,'.')){\
 				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
 				exit(EXIT_FAILURE);\
@@ -317,6 +326,9 @@ char file[28];
 			*((unsigned int *)var2) = (unsigned int)atoi(o.var2);\
 			break;\
 		case LUINT:\
+			if(o.var1[0] == '-' || o.var1[0] == '+' || o.var2[0] == '-' || o.var2[0] == '+'){\
+				fprintf(stderr,"WARNING: nombre signe detecte, le resultat peut etre impredictible\n");\
+			}\
 			if(strchr(o.var1,'.')){\
 				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
 				exit(EXIT_FAILURE);\
@@ -341,6 +353,9 @@ char file[28];
 			*((long long int *)var2) = (long long int)atoll(o.var2);\
 			break;\
 		case LLUINT:\
+			if(o.var1[0] == '-' || o.var1[0] == '+' || o.var2[0] == '-' || o.var2[0] == '+'){\
+				fprintf(stderr,"WARNING: nombre signe detecte, le resultat peut etre impredictible\n");\
+			}\
 			if(strchr(o.var1,'.')){\
 				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
 				exit(EXIT_FAILURE);\
@@ -1101,6 +1116,9 @@ void arguments(int key, char *arg, struct parser_state *state){
 	int fd, fd_, random;
 	struct stat s;
 	char buffer[1024];
+
+	//parser_usage(state->parser);
+	//exit(0);
 	switch(key){
 		case 'C':
 			a->nbrtype = UCHAR;
@@ -1184,14 +1202,21 @@ void bye(void){
 	if(strlen(file))
 		remove(file);
 }
-struct parser args = {options, arguments, "[OPTIONS]", NULL, "Petit outil de test", &program, NULL};
+struct parser_state ps = {NULL, NULL, 0, 0, 0, 0, 0, 35, 75, 75, NULL, NULL, NULL, NULL};
+struct parser args = {options, arguments, "[OPTIONS]", NULL, "Petit outil de test", &program, &ps};
 
 int main(int argc, char **argv){
 	struct arguments arg = {FLOAT, NULL, NULL, 0, 0};
 	struct retour *pret;
 	int i_ret,___i_ret___ = 0;
+	//memset(&ps,0,sizeof(struct parser_state));
+	//ps.arg_colonne = 100;
 	memset(file, 0, 28);
 	atexit(bye);
+	ps.argv = argv;
+	ps.parser = &args;
+	/*ps.err_stream = stderr;
+	ps.out_stream = stdout;*/
 	parser_parse(&args, argc, argv, &arg);
 	if(arg.string || arg.mmap){
 		if(arg.mmap == NULL){

@@ -6,4 +6,6 @@ aclocal
 autoreconf --install  
 ./configure --prefix=/usr --exec-prefix=/usr  
 make  
-make install
+make install  
+  
+(Bon j'ai pas reinvente la roue mais je me suis bien amuse)
