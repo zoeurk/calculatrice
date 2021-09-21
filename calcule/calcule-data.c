@@ -51,12 +51,20 @@ void uccomplement(void *val1){
 	*((unsigned char *)val1) = ~*((unsigned char *)val1);
 }
 void cl_move(void *val1,void *val2){
+	if(*((char *)val2) < 0){
+		fprintf(stderr,"left move negatif\n");
+		exit(EXIT_FAILURE);
+	}
 	*((char *)val1) = *((char *)val1) << *((char *)val2);
 }
 void ucl_move(void *val1,void *val2){
 	*((unsigned char *)val1) = *((unsigned char *)val1) << *((unsigned char *)val2);
 }
 void cr_move(void *val1,void *val2){
+	if(*((char *)val2) < 0){
+		fprintf(stderr,"right move negatif\n");
+		exit(EXIT_FAILURE);
+	}
 	*((char *)val1) = *((char *)val1) >> *((char *)val2);
 }
 void ucr_move(void *val1,void *val2){
@@ -85,9 +93,17 @@ void scomplement(void *val1){
 	*((short int *)val1) = ~*((short int *)val1);
 }
 void sl_move(void *val1,void *val2){
+	if(*((short int *)val2) < 0){
+		fprintf(stderr,"left move negatif\n");
+		exit(EXIT_FAILURE);
+	}
 	*((short int *)val1) = *((short int *)val1) << *((short int *)val2);
 }
 void sr_move(void *val1,void *val2){
+	if(*((short int *)val2) < 0){
+		fprintf(stderr,"right move negatif\n");
+		exit(EXIT_FAILURE);
+	}
 	*((short int *)val1) = *((short int *)val1) >> *((short int *)val2);
 }
 void sand(void *val1,void *val2){
@@ -123,9 +139,17 @@ void icomplement(void *val1){
 	*((int *)val1) = ~*((int *)val1);
 }
 void il_move(void *val1,void *val2){
+	if(*((int *)val2) < 0){
+		fprintf(stderr,"left move negatif\n");
+		exit(EXIT_FAILURE);
+	}
 	*((int *)val1) = *((int *)val1) << *((int *)val2);
 }
 void ir_move(void *val1,void *val2){
+	if(*((int *)val2) < 0){
+		fprintf(stderr,"right move negatif\n");
+		exit(EXIT_FAILURE);
+	}
 	*((int *)val1) = *((int *)val1) >> *((int *)val2);
 }
 void iand(void *val1,void *val2){
@@ -164,9 +188,17 @@ void licomplement(void *val1){
 	*((long int *)val1) = ~*((long int *)val1);
 }
 void lil_move(void *val1,void *val2){
+	if(*((long int *)val2) < 0){
+		fprintf(stderr,"left move negatif\n");
+		exit(EXIT_FAILURE);
+	}
 	*((long int *)val1) = *((long *)val1) << *((long int *)val2);
 }
 void lir_move(void *val1,void *val2){
+	if(*((long int *)val2) < 0){
+		fprintf(stderr,"right move negatif\n");
+		exit(EXIT_FAILURE);
+	}
 	*((long int *)val1) = *((long int *)val1) >> *((long int *)val2);
 }
 void liand(void *val1,void *val2){
@@ -202,9 +234,17 @@ void llicomplement(void *val1){
 	*((long long int *)val1) = ~*((long long int *)val1);
 }
 void llil_move(void *val1,void *val2){
+	if(*((long long int *)val2) < 0){
+		fprintf(stderr,"left move negatif\n");
+		exit(EXIT_FAILURE);
+	}
 	*((long long int *)val1) = *((long long *)val1) << *((long long int *)val2);
 }
 void llir_move(void *val1,void *val2){
+	if(*((long long int *)val2) < 0){
+		fprintf(stderr,"right move negatif\n");
+		exit(EXIT_FAILURE);
+	}
 	*((long long int *)val1) = *((long long int *)val1) >> *((long long int *)val2);
 }
 void lliand(void *val1,void *val2){
