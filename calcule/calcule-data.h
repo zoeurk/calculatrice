@@ -1,3 +1,5 @@
+#ifndef CALCULE_DATA_H
+#define CALCULE_DATA_H
 #define MAILLON(pv, size)\
 pv->next = ___calloc___((void **)&pv->next,size);\
 pv->next->prev = pv;\
@@ -532,5 +534,4 @@ void ipower(void *val1, void *val2);*/
 void fpower(void *val1, void *val2);
 void dpower(void *val1, void *val2);
 void ldpower(void *val1, void *val2);
-
-
+#endif
