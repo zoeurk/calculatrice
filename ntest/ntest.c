@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -327,7 +327,6 @@ char file[28];
 			str = o.var1;\
 			_end_ = 0;\
 			while(*str != 0){\
-				/*printf("%c\n", *str);*/ \
 				if(*str == '.'){ \
 					dot++; \
 				} \
@@ -335,12 +334,11 @@ char file[28];
 					_end_ = 1;\
 					break;\
 				}\
-				if((*str < 48 || *str > 57) && (*str != '.' || dot > 1) && *str != '-' && *str != '+' && *str != 0){\
+				if((*str < 48 || *str > 57) && *str != '.' && *str != '-' && *str != 0){\
 					_end_ = 1;\
 					break;\
 				}\
 				str++;\
-				signe++;\
 			}\
 			if(!_end_)\
 				pret->ret = ret1;\
@@ -423,7 +421,7 @@ char file[28];
 		}\
 	}
 
-/*int test_numerique(char *buffer){
+int test_numerique(char *buffer){
 	char *pbuf = buffer;
 	while(*pbuf != 0){
 		if((*pbuf < 48 || *pbuf >57) && *pbuf != '-' && *pbuf != '.'){
@@ -432,7 +430,7 @@ char file[28];
 		pbuf++;
 	}
 	return 0;
-}*/
+}
 struct retour *reader(char *string, unsigned long int type){
 	struct fn f;
 	struct retour *pret= NULL, *pprev;
@@ -668,7 +666,6 @@ struct retour *reader(char *string, unsigned long int type){
 						//}
 						break;
 					default:
-					printf("=>%s\n", r);
 						if(o.var1 == NULL){
 							o.var1 = r;
 						}
@@ -676,9 +673,8 @@ struct retour *reader(char *string, unsigned long int type){
 							fprintf(stderr, "=>Erreur de syntaxe vers l'offset: %lu.\n", offset);
 							exit(EXIT_FAILURE);
 						}*/
-						if((*r < 48 || *r > 57) && *r != '-'){
+						if((*r < 48 || *r > 57) && *r != '.' && *r != '-')
 							o.type = STRING;
-						}
 						break;
 				}
 		}
@@ -686,10 +682,6 @@ struct retour *reader(char *string, unsigned long int type){
 	}
 	pprev = pret = ret;
 	_end_ = 0;
-	/*if(pret && pret->ret == -1){
-		fprintf(stderr,"Erreur de syntaxe.\n");
-		exit(EXIT_FAILURE);
-	}*/
 	if(pret && (pret->operator == AND || pret->operator == OR)){
 		fprintf(stderr,"Erreur de syntaxe.\n");
 		exit(EXIT_FAILURE);
