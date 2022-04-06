@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -331,11 +331,16 @@ char file[28];
 				if(*str == '.'){ \
 					dot++; \
 				} \
-				if((*str < 48 || *str > 57) && (*str != '.' || dot > 1) && *str != '-' && *str != 0){\
+				if(signe && *(str-1) > 47 && (*(str-1) < 58 || (*str+1))){\
+					_end_ = 1;\
+					break;\
+				}\
+				if((*str < 48 || *str > 57) && (*str != '.' || dot > 1) && *str != '-' && *str != '+' && *str != 0){\
 					_end_ = 1;\
 					break;\
 				}\
 				str++;\
+				signe++;\
 			}\
 			if(!_end_)\
 				pret->ret = ret1;\
@@ -434,7 +439,7 @@ struct retour *reader(char *string, unsigned long int type){
 	struct objet o = {0, 0, NULL, NULL};
 	void *var2 = NULL;
 	char *matching[17] = {"==", "!=" ,">=", "<=", ">", "<", "~=", "!~", "-z", "-Z", "-n", "-N", "!", "&&", "||","(",")"};
-	char *r = NULL, *str = NULL, quote = 0, dquote = 0, dot = 0;
+	char *r = NULL, *str = NULL, quote = 0, dquote = 0, dot = 0, signe = 0;
 	unsigned long int size, offset, i, ___quote___ = 0, parentheses = 0, end = 0;
 	int j, _end_;
 	switch(type){
