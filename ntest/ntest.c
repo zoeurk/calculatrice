@@ -14,16 +14,6 @@
 #include <sys/mman.h>
 
 enum TYPE{
-	CHAR,
-	UCHAR,
-	SHORT,
-	USHORT,
-	INT,
-	UINT,
-	LINT,
-	LUINT,
-	LLINT,
-	LLUINT,
 	FLOAT,
 	DOUBLE,
 	LDOUBLE
@@ -67,48 +57,6 @@ struct fn{
 	int (*strings_diff)(void *, void *);
 };
 
-static int c_equal(void *num1, void *num2);
-static int c_diff(void *num1, void *num2);
-static int c_e_less(void *num1, void *num2);
-static int c_less(void *num1, void *num2);
-static int c_e_greater(void *num1, void *num2);
-static int c_greater(void *num1, void *num2);
-
-static int uc_equal(void *num1, void *num2);
-static int uc_diff(void *num1, void *num2);
-static int uc_e_less(void *num1, void *num2);
-static int uc_less(void *num1, void *num2);
-static int uc_e_greater(void *num1, void *num2);
-static int uc_greater(void *num1, void *num2);
-
-static int s_equal(void *num1, void *num2);
-static int s_diff(void *num1, void *num2);
-static int s_e_less(void *num1, void *num2);
-static int s_less(void *num1, void *num2);
-static int s_e_greater(void *num1, void *num2);
-static int s_greater(void *num1, void *num2);
-
-static int us_equal(void *num1, void *num2);
-static int us_diff(void *num1, void *num2);
-static int us_e_less(void *num1, void *num2);
-static int us_less(void *num1, void *num2);
-static int us_e_greater(void *num1, void *num2);
-static int us_greater(void *num1, void *num2);
-
-static int i_equal(void *num1, void *num2);
-static int i_diff(void *num1, void *num2);
-static int i_e_less(void *num1, void *num2);
-static int i_less(void *num1, void *num2);
-static int i_e_greater(void *num1, void *num2);
-static int i_greater(void *num1, void *num2);
-
-static int ui_equal(void *num1, void *num2);
-static int ui_diff(void *num1, void *num2);
-static int ui_e_less(void *num1, void *num2);
-static int ui_less(void *num1, void *num2);
-static int ui_e_greater(void *num1, void *num2);
-static int ui_greater(void *num1, void *num2);
-
 static int f_equal(void *num1, void *num2);
 static int f_diff(void *num1, void *num2);
 static int f_e_less(void *num1, void *num2);
@@ -130,64 +78,12 @@ static int ld_less(void *num1, void *num2);
 static int ld_e_greater(void *num1, void *num2);
 static int ld_greater(void *num1, void *num2);
 
-int i_equal(void *num1, void *num2);
-int i_diff(void *num1, void *num2);
-int i_e_less(void *num1, void *num2);
-int i_less(void *num1, void *num2);
-int i_e_greater(void *num1, void *num2);
-int i_greater(void *num1, void *num2);
-
-int ui_equal(void *num1, void *num2);
-int ui_diff(void *num1, void *num2);
-int ui_e_less(void *num1, void *num2);
-int ui_less(void *num1, void *num2);
-int ui_e_greater(void *num1, void *num2);
-int ui_greater(void *num1, void *num2);
-
-int li_equal(void *num1, void *num2);
-int li_diff(void *num1, void *num2);
-int li_e_less(void *num1, void *num2);
-int li_less(void *num1, void *num2);
-int li_e_greater(void *num1, void *num2);
-int li_greater(void *num1, void *num2);
-
-int lui_equal(void *num1, void *num2);
-int lui_diff(void *num1, void *num2);
-int lui_e_less(void *num1, void *num2);
-int lui_less(void *num1, void *num2);
-int lui_e_greater(void *num1, void *num2);
-int lui_greater(void *num1, void *num2);
-
-int lli_equal(void *num1, void *num2);
-int lli_diff(void *num1, void *num2);
-int lli_e_less(void *num1, void *num2);
-int lli_less(void *num1, void *num2);
-int lli_e_greater(void *num1, void *num2);
-int lli_greater(void *num1, void *num2);
-
-int llui_equal(void *num1, void *num2);
-int llui_diff(void *num1, void *num2);
-int llui_e_less(void *num1, void *num2);
-int llui_less(void *num1, void *num2);
-int llui_e_greater(void *num1, void *num2);
-int llui_greater(void *num1, void *num2);
-
 static int strings(void *str);
 static int strings_eq(void *str1, void *str2);
 static int strings_diff(void *str1, void *str2);
 
 struct info program = {"version: 1.0","zoeurk@gmail.com"};
 struct parser_option options[] =	{
-					{ "char", 'c', 0, NULL, "Utiliser le type char"},
-					{ "unsigned-char", 'C', 0, NULL, "Utiliser le type unsigned char"},
-					{ "short", 's', 0, NULL, "Utiliser le type short int"},
-					{ "unsigned-short", 'S', 0, NULL, "Utiliser le type unsigned short int"},
-					{ "int", 'i', 0, NULL, "Utiliser le type int"},
-					{ "unsigned-int", 'I', 0, NULL, "Utiliser le type unsigned int"},
-					{ "long-int" ,'l', 0, NULL, "Utiliser le tye long int"},
-					{ "unsigned-long-int" ,'L', 0, NULL, "Utiliser le tye unsigned long int"},
-					{ "long-long-int" ,'t', 0, NULL, "Utiliser le tye long long int"},
-					{ "unsigned-long-long-int" ,'T', 0, NULL, "Utiliser le tye unsigned long long int"},
 					{ "float", 'f', 0, NULL, "Utiliser le type float"},
 					{ "double", 'd', 0 , NULL, "Utiliser le type double"},
 					{ "ldouble", 'D', 0, NULL, "Utiliser le type long double"},
@@ -244,129 +140,6 @@ char file[28];
 
 #define CONVERT(type)\
 	switch(type){\
-		case CHAR:\
-			if(strchr(o.var1,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((char *)var1) = (char)atoi(o.var1);\
-			if(strchr(o.var2,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((char *)var2) = (char)atoi(o.var2);\
-			break;\
-		case UCHAR:\
-			if(o.var1[0] == '-' || o.var1[0] == '+' || o.var2[0] == '-' || o.var2[0] == '+'){\
-				fprintf(stderr,"WARNING: nombre signe detecte, le resultat peut etre impredictible\n");\
-			}\
-			if(strchr(o.var1,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((unsigned char *)var1) = (unsigned char)atoi(o.var1);\
-			if(strchr(o.var2,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((unsigned char *)var2) = atoi(o.var2);\
-			break;\
-		case USHORT:\
-			if(o.var1[0] == '-' || o.var1[0] == '+' || o.var2[0] == '-' || o.var2[0] == '+'){\
-				fprintf(stderr,"WARNING: nombre signe detecte, le resultat peut etre impredictible\n");\
-			}\
-			if(strchr(o.var1,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((unsigned short *)var1) = (unsigned short)atoi(o.var1);\
-			if(strchr(o.var2,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((int *)var2) = atoi(o.var2);\
-			break;\
-		case SHORT:\
-			if(strchr(o.var1,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((short int *)var1) = (short int)atoi(o.var1);\
-			if(strchr(o.var2,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((short int *)var2) = (short int)atoi(o.var2);\
-			break;\
-		case INT:\
-			if(strchr(o.var1,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((int *)var1) = atoi(o.var1);\
-			if(strchr(o.var2,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((int *)var2) = atoi(o.var2);\
-			break;\
-		case UINT:\
-			if(o.var1[0] == '-' || o.var1[0] == '+' || o.var2[0] == '-' || o.var2[0] == '+'){\
-				fprintf(stderr,"WARNING: nombre signe detecte, le resultat peut etre impredictible\n");\
-			}\
-			if(strchr(o.var1,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((unsigned int *)var1) = (unsigned int)atoi(o.var1);\
-			if(strchr(o.var2,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((unsigned int *)var2) = (unsigned int)atoi(o.var2);\
-			break;\
-		case LUINT:\
-			if(o.var1[0] == '-' || o.var1[0] == '+' || o.var2[0] == '-' || o.var2[0] == '+'){\
-				fprintf(stderr,"WARNING: nombre signe detecte, le resultat peut etre impredictible\n");\
-			}\
-			if(strchr(o.var1,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((long unsigned int *)var1) = (long unsigned int)atol(o.var1);\
-			if(strchr(o.var2,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((long unsigned int *)var2) = (long unsigned int)atol(o.var2);\
-			break;\
-		case LLINT:\
-			if(strchr(o.var1,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((long long int *)var1) = (long long int)atoll(o.var1);\
-			if(strchr(o.var2,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((long long int *)var2) = (long long int)atoll(o.var2);\
-			break;\
-		case LLUINT:\
-			if(o.var1[0] == '-' || o.var1[0] == '+' || o.var2[0] == '-' || o.var2[0] == '+'){\
-				fprintf(stderr,"WARNING: nombre signe detecte, le resultat peut etre impredictible\n");\
-			}\
-			if(strchr(o.var1,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((long long unsigned int *)var1) = (long long unsigned int)atoi(o.var1);\
-			if(strchr(o.var2,'.')){\
-				fprintf(stderr,"Chiffre a virgule interdit dans ce mode.\n");\
-				exit(EXIT_FAILURE);\
-			}\
-			*((unsigned int *)var2) = (long long unsigned int)atol(o.var2);\
-			break;\
 		case FLOAT:\
 			___CONVERT___(float, strtof)\
 			break;\
@@ -456,8 +229,7 @@ char file[28];
 	/*};*/\
 		pret->ret = fn(var1,var2);\
 	}else{\
-		if(pret->operator == 0)\
-			pret->ret = 0;\
+		pret->ret = 0;\
 	}\
 	o.var1 = o.var2 = NULL;\
 	o.type = 0;
@@ -555,7 +327,11 @@ char file[28];
 			str = o.var1;\
 			_end_ = 0;\
 			while(*str != 0){\
-				if((*str < 48 || *str > 57) && *str != '.' && *str != '-' && *str != 0){\
+				/*printf("%c\n", *str);*/ \
+				if(*str == '.'){ \
+					dot++; \
+				} \
+				if((*str < 48 || *str > 57) && (*str != '.' || dot > 1) && *str != '-' && *str != 0){\
 					_end_ = 1;\
 					break;\
 				}\
@@ -642,7 +418,7 @@ char file[28];
 		}\
 	}
 
-int test_numerique(char *buffer){
+/*int test_numerique(char *buffer){
 	char *pbuf = buffer;
 	while(*pbuf != 0){
 		if((*pbuf < 48 || *pbuf >57) && *pbuf != '-' && *pbuf != '.'){
@@ -651,147 +427,17 @@ int test_numerique(char *buffer){
 		pbuf++;
 	}
 	return 0;
-}
+}*/
 struct retour *reader(char *string, unsigned long int type){
 	struct fn f;
 	struct retour *pret= NULL, *pprev;
 	struct objet o = {0, 0, NULL, NULL};
 	void *var2 = NULL;
 	char *matching[17] = {"==", "!=" ,">=", "<=", ">", "<", "~=", "!~", "-z", "-Z", "-n", "-N", "!", "&&", "||","(",")"};
-	char *r = NULL, *str = NULL, quote = 0, dquote = 0;
+	char *r = NULL, *str = NULL, quote = 0, dquote = 0, dot = 0;
 	unsigned long int size, offset, i, ___quote___ = 0, parentheses = 0, end = 0;
 	int j, _end_;
 	switch(type){
-		case CHAR:
-			f.diff = c_diff;
-			f.equal = c_equal;
-			f.less = c_less ;
-			f.e_less = c_e_less ;
-			f.greater = c_greater;
-			f.e_greater = c_e_greater;
-			size = sizeof(char);
-			o.size = size;
-			var1 = ___calloc___(&var1, 2*size);
-			//var1 = malloc(2*size);
-			var2 = var1+size;
-			break;
-		case SHORT:
-			f.diff = s_diff;
-			f.equal = s_equal;
-			f.less = s_less ;
-			f.e_less = s_e_less ;
-			f.greater = s_greater;
-			f.e_greater = s_e_greater;
-			size = sizeof(short int);
-			o.size = size;
-			var1 = ___calloc___(&var1, 2*size);
-			//var1 = malloc(2*size);
-			var2 = var1+size;
-			break;
-		case INT:
-			f.diff = i_diff;
-			f.equal = i_equal;
-			f.less = i_less ;
-			f.e_less = i_e_less ;
-			f.greater = i_greater;
-			f.e_greater = i_e_greater;
-			size = sizeof(int);
-			o.size = size;
-			var1 = ___calloc___(&var1, 2*size);
-			//var1 = malloc(2*size);
-			var2 = var1+size;
-			break;
-		case UCHAR:
-			f.diff = uc_diff;
-			f.equal = uc_equal;
-			f.less = uc_less ;
-			f.e_less = uc_e_less ;
-			f.greater = uc_greater;
-			f.e_greater = uc_e_greater;
-			size = sizeof(unsigned char);
-			o.size = size;
-			var1 = ___calloc___(&var1, 2*size);
-			//var1 = malloc(2*size);
-			var2 = var1+size;
-			break;
-		case USHORT:
-			f.diff = us_diff;
-			f.equal = us_equal;
-			f.less = us_less ;
-			f.e_less = us_e_less ;
-			f.greater = us_greater;
-			f.e_greater = us_e_greater;
-			size = sizeof(unsigned short int);
-			o.size = size;
-			var1 = ___calloc___(&var1, 2*size);
-			//var1 = malloc(2*size);
-			var2 = var1+size;
-			break;
-		case UINT:
-			f.diff = ui_diff;
-			f.equal = ui_equal;
-			f.less = ui_less ;
-			f.e_less = ui_e_less ;
-			f.greater = ui_greater;
-			f.e_greater = ui_e_greater;
-			size = sizeof(unsigned int);
-			o.size = size;
-			var1 = ___calloc___(&var1, 2*size);
-			//var1 = malloc(2*size);
-			var2 = var1+size;
-			break;
-		case LINT:
-			f.diff = li_diff;
-			f.equal = li_equal;
-			f.less = li_less ;
-			f.e_less = li_e_less ;
-			f.greater = li_greater;
-			f.e_greater = li_e_greater;
-			size = sizeof(long int);
-			o.size = size;
-			var1 = ___calloc___(&var1, 2*size);
-			//var1 = malloc(2*size);
-			var2 = var1+size;
-			break;
-		case LUINT:
-			f.diff = lui_diff;
-			f.equal = lui_equal;
-			f.less = lui_less ;
-			f.e_less = lui_e_less ;
-			f.greater = lui_greater;
-			f.e_greater = lui_e_greater;
-			size = sizeof(long unsigned int);
-			o.size = size;
-			var1 = ___calloc___(&var1, 2*size);
-			//var1 = malloc(2*size);
-			var2 = var1+size;
-			break;
-		case LLINT:
-			f.diff = lli_diff;
-			f.equal = lli_equal;
-			f.less = lli_less ;
-			f.e_less = lli_e_less ;
-			f.greater = lli_greater;
-			f.e_greater = lli_e_greater;
-			size = sizeof(long long int);
-			o.size = size;
-			var1 = ___calloc___(&var1, 2*size);
-			//var1 = malloc(2*size);
-			var2 = var1+size;
-			break;
-		case LLUINT:
-			f.diff = llui_diff;
-			f.equal = llui_equal;
-			f.less = llui_less ;
-			f.e_less = llui_e_less ;
-			f.greater = llui_greater;
-			f.e_greater = llui_e_greater;
-			size = sizeof(long long unsigned int);
-			o.size = size;
-			var1 = ___calloc___(&var1, 2*size);
-			//var1 = malloc(2*size);
-			var2 = var1+size;
-			break;
 		case FLOAT:
 			f.diff = f_diff;
 			f.equal = f_equal;
@@ -836,9 +482,8 @@ struct retour *reader(char *string, unsigned long int type){
 	f.strings_eq = strings_eq;
 	for(r = string, offset = 1; *r != 0; r++, offset++){
 		for(i = 0; i < 17; i++){
-			if(strncmp(r,matching[i], strlen(matching[i])) == 0){
+			if(strncmp(r,matching[i], strlen(matching[i])) == 0)
 				break;
-			}
 		}
 		/*if(o.var1 && i == 17)
 			exit(EXIT_FAILURE);*/
@@ -1011,12 +656,14 @@ struct retour *reader(char *string, unsigned long int type){
 						break;
 					case '-':
 						if((*(r+1) < 48 || *(r+1) > 57) || *(r+1) == '.' ){
+						//if(!dquote){
 							fprintf(stderr, "\'-%c\': Option unknown.\n", *(r+1));
 							exit(EXIT_FAILURE);
 						}
-						o.var1 = r;
+						//}
 						break;
 					default:
+					printf("=>%s\n", r);
 						if(o.var1 == NULL){
 							o.var1 = r;
 						}
@@ -1024,8 +671,9 @@ struct retour *reader(char *string, unsigned long int type){
 							fprintf(stderr, "=>Erreur de syntaxe vers l'offset: %lu.\n", offset);
 							exit(EXIT_FAILURE);
 						}*/
-						if((*r < 48 || *r > 57) && *r != '.' && *r != '-')
+						if((*r < 48 || *r > 57) && *r != '-'){
 							o.type = STRING;
+						}
 						break;
 				}
 		}
@@ -1033,6 +681,10 @@ struct retour *reader(char *string, unsigned long int type){
 	}
 	pprev = pret = ret;
 	_end_ = 0;
+	/*if(pret && pret->ret == -1){
+		fprintf(stderr,"Erreur de syntaxe.\n");
+		exit(EXIT_FAILURE);
+	}*/
 	if(pret && (pret->operator == AND || pret->operator == OR)){
 		fprintf(stderr,"Erreur de syntaxe.\n");
 		exit(EXIT_FAILURE);
@@ -1116,28 +768,7 @@ void arguments(int key, char *arg, struct parser_state *state){
 	int fd, fd_, random;
 	struct stat s;
 	char buffer[1024];
-
-	//parser_usage(state->parser);
-	//exit(0);
 	switch(key){
-		case 'C':
-			a->nbrtype = UCHAR;
-			break;
-		case 'S':
-			a->nbrtype = USHORT;
-			break;
-		case 'I':
-			a->nbrtype = UINT;
-			break;
-		case 'c':
-			a->nbrtype = CHAR;
-			break;
-		case 's':
-			a->nbrtype = SHORT;
-			break;
-		case 'i':
-			a->nbrtype = INT;
-			break;
 		case 'f':
 			a->nbrtype = FLOAT;
 			break;
@@ -1202,21 +833,14 @@ void bye(void){
 	if(strlen(file))
 		remove(file);
 }
-struct parser_state ps = {NULL, NULL, 0, 0, 0, 0, 0, 35, 75, 75, NULL, NULL, NULL, NULL};
-struct parser args = {options, arguments, "[OPTIONS]", NULL, "Petit outil de test", &program, &ps};
+struct parser args = {options, arguments, "[OPTIONS]", NULL, "Petit outil de test", &program, NULL};
 
 int main(int argc, char **argv){
 	struct arguments arg = {FLOAT, NULL, NULL, 0, 0};
 	struct retour *pret;
 	int i_ret,___i_ret___ = 0;
-	//memset(&ps,0,sizeof(struct parser_state));
-	//ps.arg_colonne = 100;
 	memset(file, 0, 28);
 	atexit(bye);
-	ps.argv = argv;
-	ps.parser = &args;
-	/*ps.err_stream = stderr;
-	ps.out_stream = stdout;*/
 	parser_parse(&args, argc, argv, &arg);
 	if(arg.string || arg.mmap){
 		if(arg.mmap == NULL){
@@ -1239,315 +863,9 @@ int main(int argc, char **argv){
 		exit(EXIT_FAILURE);
 	}
 	if(!ret)
-		return -2;
+		return -1;
 	i_ret = !ret->ret;
 	return i_ret;
-}
-
-
-int c_equal(void *num1, void *num2){
-	if(*((char *)num1) == *((char *)num2))
-		return 1;
-	return 0;
-}
-int c_diff(void *num1, void *num2){
-	if(*((char *)num1) != *((char *)num2))
-		return 1;
-	return 0;
-}
-int c_e_less(void *num1, void *num2){
-	if(*((char *)num1) <= *((char *)num2))
-		return 1;
-	return 0;
-}
-int c_less(void *num1, void *num2){
-	if(*((char *)num1) < *((char *)num2))
-		return 1;
-	return 0;
-}
-int c_e_greater(void *num1, void *num2){
-	if(*((char *)num1) >= *((char *)num2))
-		return 1;
-	return 0;
-}
-int c_greater(void *num1, void *num2){
-	if(*((char *)num1) > *((char *)num2))
-		return 1;
-	return 0;
-}
-int uc_equal(void *num1, void *num2){
-	if(*((unsigned char *)num1) == *((unsigned char *)num2))
-		return 1;
-	return 0;
-}
-int uc_diff(void *num1, void *num2){
-	if(*((char *)num1) != *((unsigned char *)num2))
-		return 1;
-	return 0;
-}
-int uc_e_less(void *num1, void *num2){
-	if(*((unsigned char *)num1) <= *((unsigned char *)num2))
-		return 1;
-	return 0;
-}
-int uc_less(void *num1, void *num2){
-	if(*((unsigned char *)num1) < *((unsigned char *)num2))
-		return 1;
-	return 0;
-}
-
-int uc_e_greater(void *num1, void *num2){
-	if(*((unsigned char *)num1) >= *((unsigned char *)num2))
-		return 1;
-	return 0;
-}
-int uc_greater(void *num1, void *num2){
-	if(*((unsigned char *)num1) > *((unsigned char *)num2))
-		return 1;
-	return 0;
-}
-
-int s_equal(void *num1, void *num2){
-	if(*((short int *)num1) == *((short int *)num2))
-		return 1;
-	return 0;
-}
-int s_diff(void *num1, void *num2){
-	if(*((short int *)num1) != *((short int *)num2))
-		return 1;
-	return 0;
-}
-int s_e_less(void *num1, void *num2){
-	if(*((short int *)num1) <= *((short int *)num2))
-		return 1;
-	return 0;
-}
-int s_less(void *num1, void *num2){
-	if(*((short int *)num1) < *((short int *)num2))
-		return 1;
-	return 0;
-}
-int s_e_greater(void *num1, void *num2){
-	if(*((short int *)num1) >= *((short int *)num2))
-		return 1;
-	return 0;
-}
-int s_greater(void *num1, void *num2){
-	if(*((short int *)num1) > *((short int *)num2))
-		return 1;
-	return 0;
-}
-int us_equal(void *num1, void *num2){
-	if(*((unsigned short int *)num1) == *((unsigned short int *)num2))
-		return 1;
-	return 0;
-}
-int us_diff(void *num1, void *num2){
-	if(*((unsigned short int *)num1) != *((unsigned short int *)num2))
-		return 1;
-	return 0;
-}
-int us_e_less(void *num1, void *num2){
-	if(*((unsigned short int *)num1) <= *((unsigned short int *)num2))
-		return 1;
-	return 0;
-}
-int us_less(void *num1, void *num2){
-	if(*((unsigned short int *)num1) < *((unsigned short int *)num2))
-		return 1;
-	return 0;
-}
-int us_e_greater(void *num1, void *num2){
-	if(*((unsigned short int *)num1) >= *((unsigned short int *)num2))
-		return 1;
-	return 0;
-}
-int us_greater(void *num1, void *num2){
-	if(*((unsigned short int *)num1) > *((unsigned short int *)num2))
-		return 1;
-	return 0;
-}
-
-int i_equal(void *num1, void *num2){
-	if(*((int *)num1) == *((int *)num2))
-		return 1;
-	return 0;
-}
-int i_diff(void *num1, void *num2){
-	if(*((int *)num1) != *((int *)num2))
-		return 1;
-	return 0;
-}
-int i_e_less(void *num1, void *num2){
-	if(*((int *)num1) <= *((int *)num2))
-		return 1;
-	return 0;
-}
-int i_less(void *num1, void *num2){
-	if(*((int *)num1) < *((int *)num2))
-		return 1;
-	return 0;
-}
-int i_e_greater(void *num1, void *num2){
-	if(*((int *)num1) >= *((int *)num2))
-		return 1;
-	return 0;
-}
-int i_greater(void *num1, void *num2){
-	if(*((int *)num1) > *((int *)num2))
-		return 1;
-	return 0;
-}
-int ui_equal(void *num1, void *num2){
-	if(*((int *)num1) == *((int *)num2))
-		return 1;
-	return 0;
-}
-
-int ui_diff(void *num1, void *num2){
-	if(*((unsigned int *)num1) != *((unsigned int *)num2))
-		return 1;
-	return 0;
-}
-int ui_e_less(void *num1, void *num2){
-	if(*((unsigned int *)num1) <= *((unsigned int *)num2))
-		return 1;
-	return 0;
-}
-int ui_less(void *num1, void *num2){
-	if(*((unsigned int *)num1) < *((unsigned int *)num2))
-		return 1;
-	return 0;
-}
-int ui_e_greater(void *num1, void *num2){
-	if(*((unsigned int *)num1) >= *((unsigned int *)num2))
-		return 1;
-	return 0;
-}
-int ui_greater(void *num1, void *num2){
-	if(*((unsigned int *)num1) >= *((unsigned int *)num2))
-		return 1;
-	return 0;
-}
-int li_equal(void *num1, void *num2){
-	if(*((long int *)num1) == *((long int *)num2))
-		return 1;
-	return 0;
-}
-int li_diff(void *num1, void *num2){
-	if(*((long int *)num1) != *((long int *)num2))
-		return 1;
-	return 0;
-}
-int li_e_less(void *num1, void *num2){
-	if(*((long int *)num1) <= *((long int *)num2))
-		return 1;
-	return 0;
-}
-int li_less(void *num1, void *num2){
-	if(*((long int *)num1) < *((long int *)num2))
-		return 1;
-	return 0;
-}
-int li_e_greater(void *num1, void *num2){
-	if(*((long int *)num1) >= *((long int *)num2))
-		return 1;
-	return 0;
-}
-int li_greater(void *num1, void *num2){
-	if(*((long int *)num1) > *((long int *)num2))
-		return 1;
-	return 0;
-}
-int lui_equal(void *num1, void *num2){
-	if(*((long unsigned int *)num1) == *((long unsigned int *)num2))
-		return 1;
-	return 0;
-}
-int lui_diff(void *num1, void *num2){
-	if(*((long unsigned int *)num1) != *((long unsigned int *)num2))
-		return 1;
-	return 0;
-}
-int lui_e_less(void *num1, void *num2){
-	if(*((long unsigned int *)num1) <= *((long unsigned int *)num2))
-		return 1;
-	return 0;
-}
-int lui_less(void *num1, void *num2){
-	if(*((long unsigned int *)num1) < *((long unsigned int *)num2))
-		return 1;
-	return 0;
-}
-int lui_e_greater(void *num1, void *num2){
-	if(*((long unsigned int *)num1) >= *((long unsigned int *)num2))
-		return 1;
-	return 0;
-}
-int lui_greater(void *num1, void *num2){
-	if(*((long unsigned int *)num1) > *((long unsigned int *)num2))
-		return 1;
-	return 0;
-}
-int lli_equal(void *num1, void *num2){
-	if(*((long long int *)num1) == *((long long int *)num2))
-		return 1;
-	return 0;
-}
-int lli_diff(void *num1, void *num2){
-	if(*((long long int *)num1) != *((long long int *)num2))
-		return 1;
-	return 0;
-}
-int lli_e_less(void *num1, void *num2){
-	if(*((long long int *)num1) <= *((long long int *)num2))
-		return 1;
-	return 0;
-}
-int lli_less(void *num1, void *num2){
-	if(*((long long int *)num1) < *((long long int *)num2))
-		return 1;
-	return 0;
-}
-int lli_e_greater(void *num1, void *num2){
-	if(*((long long int *)num1) >= *((long long int *)num2))
-		return 1;
-	return 0;
-}
-int lli_greater(void *num1, void *num2){
-	if(*((long long int *)num1) > *((long long int *)num2))
-		return 1;
-	return 0;
-}
-int llui_equal(void *num1, void *num2){
-	if(*((long long unsigned *)num1) == *((long long unsigned *)num2))
-		return 1;
-	return 0;
-}
-int llui_diff(void *num1, void *num2){
-	if(*((long unsigned int *)num1) != *((long long unsigned *)num2))
-		return 1;
-	return 0;
-}
-int llui_e_less(void *num1, void *num2){
-	if(*((long long unsigned *)num1) <= *((long long unsigned *)num2))
-		return 1;
-	return 0;
-}
-int llui_less(void *num1, void *num2){
-	if(*((long long unsigned *)num1) < *((long long unsigned *)num2))
-		return 1;
-	return 0;
-}
-int llui_e_greater(void *num1, void *num2){
-	if(*((long long unsigned *)num1) >= *((long long unsigned *)num2))
-		return 1;
-	return 0;
-}
-int llui_greater(void *num1, void *num2){
-	if(*((long long unsigned *)num1) > *((long long unsigned *)num2))
-		return 1;
-	return 0;
 }
 int f_equal(void *num1, void *num2){
 	if(*((float *)num1) == *((float *)num2))
@@ -1569,6 +887,7 @@ int f_less(void *num1, void *num2){
 		return 1;
 	return 0;
 }
+
 int f_e_greater(void *num1, void *num2){
 	if(*((float *)num1) >= *((float *)num2))
 		return 1;
