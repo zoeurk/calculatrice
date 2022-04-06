@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "parsearg.h"
+#include "../lib/parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -203,7 +203,9 @@ char file[28];
 	offset += (inc+1);\
 	REMOVE_SPACE;\
 	o.var2 = r;\
-	while(((*r >47 && *r < 58) || *r == '-' || *r =='.') && *r != 0){\
+	while(((*r >47 && *r < 58) || (*r == '+' && *r == '-') || (*r =='.' && dot < 2)) && *r != 0){\
+		if(*r == '.')\
+			dot++;\
 		r++;\
 		offset++;\
 	}\
@@ -327,17 +329,22 @@ char file[28];
 			str = o.var1;\
 			_end_ = 0;\
 			while(*str != 0){\
-				if(*str == '.'){ \
-					dot++; \
-				} \
 				if(signe && *(str-1) > 47 && (*(str-1) < 58 || (*str+1))){\
 					_end_ = 1;\
 					break;\
 				}\
-				if((*str < 48 || *str > 57) && *str != '.' && *str != '-' && *str != 0){\
+				if((*str < 48 || *str > 57) && (*str != '.' && dot < 2) && *str != '+' && *str !='-' &&  *str != 0){\
 					_end_ = 1;\
 					break;\
 				}\
+				if(*str == '.'){\
+					dot++;\
+					if(dot == 2){\
+						_end_ = 1;\
+						break;\
+					}\
+				}\
+				printf("%i\n", dot);\
 				str++;\
 			}\
 			if(!_end_)\
