@@ -203,9 +203,13 @@ char file[28];
 	offset += (inc+1);\
 	REMOVE_SPACE;\
 	o.var2 = r;\
-	while(((*r >47 && *r < 58) || (*r == '+' && *r == '-') || (*r =='.' && dot < 2)) && *r != 0){\
+	while(((*r >47 && *r < 58) || (signe || (*r == '+' && *r == '-')) || (*r =='.' && dot < 2)) && *r != 0){\
 		if(*r == '.')\
 			dot++;\
+		if((*r >47 && *r <58) || *r == '.')\
+			signe++;\
+		if(signe == 2)\
+			_end_ = 1;\
 		r++;\
 		offset++;\
 	}\
@@ -326,14 +330,11 @@ char file[28];
 		case 0:\
 			break;\
 		case 1:\
+			signe = 0;\
 			str = o.var1;\
 			_end_ = 0;\
 			while(*str != 0){\
-				if(signe && *(str-1) > 47 && (*(str-1) < 58 || (*str+1))){\
-					_end_ = 1;\
-					break;\
-				}\
-				if((*str < 48 || *str > 57) && (*str != '.' && dot < 2) && *str != '+' && *str !='-' &&  *str != 0){\
+				if(*str == '.' && *(str+1) == 0){\
 					_end_ = 1;\
 					break;\
 				}\
@@ -344,7 +345,13 @@ char file[28];
 						break;\
 					}\
 				}\
-				printf("%i\n", dot);\
+				if(signe == 1 && (*str == '-' || *str == '+')){\
+					_end_ = 1;\
+					break;\
+				}\
+				if((signe == 0 && *str > 47 && *str < 58) || *str == '.')\
+					signe = 1;\
+				/*printf("%i::%i\n", dot, signe);*/\
 				str++;\
 			}\
 			if(!_end_)\
