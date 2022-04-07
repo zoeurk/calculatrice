@@ -584,6 +584,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 							zero(test);
 							if(strcmp(test, buffer) != 0){
 								fprintf(stderr, "Nombre trop long:%s\n", buffer);
+								exit(EXIT_FAILURE);
 							}
 							break;
 						case DOUBLE:
@@ -592,6 +593,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 							zero(test);
 							if(strcmp(test, buffer) != 0){
 								fprintf(stderr, "Nombre trop long:%s\n", buffer);
+								exit(EXIT_FAILURE);
 							}
 							break;
 						case LDOUBLE:
@@ -600,6 +602,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 							zero(test);
 							if(strcmp(test, buffer) != 0){
 								fprintf(stderr, "Nombre trop long:%s\n", buffer);
+								exit(EXIT_FAILURE);
 							}
 							break;
 					}
