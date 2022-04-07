@@ -250,41 +250,75 @@ void *___calloc___(void **ptr, unsigned long int size){
 	}
 	return *ptr;
 }
+/*ZERO(str1, str2)\
+	for(str1 = &str2[strlen(str2)-1];str2 != str1 && *str1 == '0'; *str1 = 0, str1--);;\
+	if(str1 == '.')*str1 = 0;\
+	if(*str1 == str && *str1 == 0){\
+		*str1 = '0';\
+		*(str1+1) = 0;\
+	}*/
+
 void zero(char *str, int type){
 	float f;
 	double d;
 	long double ld;
 	char buffer[BUFFER], *pbuf;
-	for(pbuf = &str[strlen(str)-1];str != pbuf && *pbuf == '0'; *pbuf = 0, pbuf--);;
-	if(pbuf == '.')*pbuf = 0;
-	if(*pbuf == 0)*pbuf = '0';
+	if(strchr(str,'.') != NULL){
+		for(pbuf = &str[strlen(str)-1];str != pbuf && *pbuf == '0'; *pbuf = 0, pbuf--);;
+		if(pbuf == '.')*pbuf = 0;
+		if(pbuf == str && *pbuf == 0){
+			*pbuf = '0';
+			*(pbuf+1) = 0;
+		}
+		//ZERO(pbuf, str);
+	}
 	switch(type){
 		case FLOAT:
 				f = strtof(str, NULL);
 				sprintf(buffer,"%f", f);
-				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
-				if(*pbuf == '.') *pbuf = 0;
-				if(*pbuf == 0)*pbuf = '0';
-				if(strcmp(str, buffer) != 0)
-					printf("Nombre trop long\n");
+				if(strchr(buffer,'.') != NULL){
+					for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
+					if(*pbuf == '.') *pbuf = 0;
+					if(pbuf == buffer && *pbuf == 0){
+						*pbuf = '0';
+						*(pbuf+1) = 0;
+					}
+					//ZERO(pbuf, buffer);
+					if(strcmp(str, buffer) != 0)
+						printf("Nombre trop long\n");
+					}
 				break;
 		case DOUBLE:
 				d = strtod(str, NULL);
 				sprintf(buffer,"%lf", d);
-				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
-				if(*pbuf == '.') *pbuf = 0;
-				if(*pbuf == 0)*pbuf = '0';
-				if(strcmp(str, buffer) != 0)
-					printf("Nombre trop long\n");
+				if(strchr(buffer,'.') != NULL){
+					for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
+					if(*pbuf == '.') *pbuf = 0;
+					if(pbuf == buffer && *pbuf == 0){
+						*pbuf = '0';
+						*(pbuf+1) = 0;
+					}
+					//ZERO(pbuf, buffer);
+					//if(*pbuf == 0)*pbuf = '0';
+					if(strcmp(str, buffer) != 0)
+						printf("Nombre trop long\n");
+					}
 				break;
 		case LDOUBLE:
 				ld = strtold(str, NULL);
 				sprintf(buffer,"%Lf", ld);
-				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
-				if(*pbuf == '.') *pbuf = 0;
-				if(*pbuf == 0)*pbuf = '0';
-				if(strcmp(str, buffer) != 0)
-					printf("Nombre trop long\n");
+				if(strchr(buffer,'.') != NULL){
+					//ZERO(pbuf, buffer);
+					/*for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
+					if(*pbuf == '.') *pbuf = 0;
+					if(pbuf == buffer && *pbuf == 0){
+						*pbuf = '0';
+						*(pbuf+1) = 0;
+					}*/
+					//if(*pbuf == 0)*pbuf = '0';
+					if(strcmp(str, buffer) != 0)
+						printf("Nombre trop long:%s::%s\n", str, buffer);
+				}
 				break;
 	}
 	//char *pstr = &str[strlen(str)-1];
