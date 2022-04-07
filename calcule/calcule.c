@@ -250,32 +250,65 @@ void *___calloc___(void **ptr, unsigned long int size){
 	}
 	return *ptr;
 }
-void zero(char *str){
-	char *pstr = &str[strlen(str)-1];
-	printf("====>%c\n", *pstr);
-	if(strchr(str,'.'))
+void zero(char *str, int type){
+	float f;
+	double d;
+	long double ld;
+	char buffer[BUFFER], *pbuf;
+	switch(type){
+		case FLOAT:
+				f = strtof(str, NULL);
+				sprintf(buffer,"%f", f);
+				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
+				if(*pbuf == '.') *pbuf = 0;
+				if(strcmp(str, buffer) != 0)
+					printf("Nombre trop long\n");
+				break;
+		case DOUBLE:
+				d = strtod(str, NULL);
+				sprintf(buffer,"%lf", d);
+				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
+				if(*pbuf == '.') *pbuf = 0;
+				if(strcmp(str, buffer) != 0)
+					printf("Nombre trop long\n");
+				break;
+		case LDOUBLE:
+				ld = strtold(str, NULL);
+				sprintf(buffer,"%Lf", ld);
+				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
+				if(*pbuf == '.') *pbuf = 0;
+				if(strcmp(str, buffer) != 0)
+					printf("Nombre trop long\n");
+				break;
+	}
+	//char *pstr = &str[strlen(str)-1];
+	//if(strchr(str, '.'))
+	//if(*pstr == '0' && *(pstr+1) == 0)
+	//	*pstr = 0;
+	//if(*pstr == '.' && *(pstr + 1) == 0)
+		//*pstr = 0;
+	//printf("===>%s\n", str);
+	/*if(strchr(str,'.'))
 		while(*pstr == '0'){
 			*pstr = 0;
 			pstr--;
 		}
+	pstr = &str[strlen(str)];
 	printf("+++>%s\n", pstr);
 	if(*pstr == '.')
-		*pstr = 0;
+		*pstr = 0;*/
 	//return str;
 }
 /*A modifier*/
 #define ENTRY 16
 struct value *initialisation(char *argv, struct arguments *arg){
 	struct value *v = NULL, *pv = NULL;
-	char buffer[BUFFER], test[BUFFER], *end,
+	char buffer[BUFFER], *end,
 		/*Ajouter entree*/
 		*trigo[ENTRY] = {"PI", "cos", "acos", "sin", "asin", "tan", "atan", "sqrt", "exp", "ceil", "log", "log10", "fabs", "floor", "mod", "pow"};
 	int i, j = 0, point = 0, wait = 0,
 		parenthese = 0, o_parentheses = 0, c_parentheses = 0, split = 0, signe = 0,
 		bufset = 0, count = 0, len = 0, virgule = 0, num = 0, init = 0, cont = 0;
-	long double ld = 0;
-	double d = 0;
-	float f = 0;
 	memset(buffer, 0, BUFFER);
 	for(i = 0; argv[i] != 0; i++){
 		switch(argv[i])
@@ -284,6 +317,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				cont++;
 				continue;
 			case ',':
+				zero(buffer, arg->type);
 				split = 0;
 				init = 1;
 				if(virgule == 0){
@@ -303,6 +337,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				virgule--;
 				break;
 			case '(':
+				zero(buffer, arg->type);
 				if(buffer[0] == '-'){
 					buffer[1] = '1';
 					BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
@@ -402,6 +437,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				o_parentheses++;
 				break;
 			case ')':
+				zero(buffer, arg->type);
 				split = 0;
 				cont = 0;
 				init = 0;
@@ -471,6 +507,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					&& strlen(buffer) == 0){
 					goto number;
 				}
+				zero(buffer, arg->type);
 				if(cont){
 					BUFSET(v, pv,arg->valsize, buffer, end, arg->type);
 					pv->type = argv[i];
@@ -529,6 +566,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					}
 					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
 				}
+				zero(buffer, arg->type);
 				next:
 				wait = 0;
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
@@ -579,38 +617,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 						exit(EXIT_FAILURE);
 					}
 					strncat(buffer,&argv[i],1);
-					/*switch(arg->type){
-						case FLOAT:
-							f = strtof(buffer, NULL);
-							sprintf(test,"%f", f);
-							zero(test);
-							zero(buffer);
-							if(strcmp(test, buffer) != 0){
-								fprintf(stderr, "Nombre trop grand:%s\n", buffer);
-								exit(EXIT_FAILURE);
-							}
-							break;
-						case DOUBLE:
-							d = strtod(buffer, NULL);
-							sprintf(test,"%lf", d);
-							zero(test);
-							zero(buffer);
-							if(strcmp(test, buffer) != 0){
-								fprintf(stderr, "Nombre trop grand:%s\n", buffer);
-								exit(EXIT_FAILURE);
-							}
-							break;
-						case LDOUBLE:
-							ld = strtof(buffer, NULL);
-							sprintf(test,"%Lf", ld);
-							zero(test);
-							zero(buffer);
-							if(strcmp(test, buffer) != 0){
-								fprintf(stderr, "Nombre trop grand:%s\n", buffer);
-								exit(EXIT_FAILURE);
-							}
-							break;*/
-					}
 					num = 1;
 					wait = 1;
 					cont = 0;
@@ -668,6 +674,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				break;
 		}
 	}
+	if(bufset)
+		zero(buffer, arg->type);
 	if(v){
 		if(c_parentheses > o_parentheses){
 			_ERROR_("Trop de parentheses fermees\n");
