@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "parsearg.h"
+#include "../lib/parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -285,7 +285,7 @@ void zero(char *str, int type){
 					}
 					//ZERO(pbuf, buffer);
 					if(strcmp(str, buffer) != 0)
-						printf("Nombre trop long\n");
+						printf("WARNING: Nombre trop long pour etre converti dans ce format\n");
 					}
 				break;
 		case DOUBLE:
@@ -301,7 +301,7 @@ void zero(char *str, int type){
 					//ZERO(pbuf, buffer);
 					//if(*pbuf == 0)*pbuf = '0';
 					if(strcmp(str, buffer) != 0)
-						printf("Nombre trop long\n");
+						printf("WARNING: Nombre trop long pour etre converti dans ce format\n");
 					}
 				break;
 		case LDOUBLE:
@@ -317,27 +317,10 @@ void zero(char *str, int type){
 					}
 					//if(*pbuf == 0)*pbuf = '0';
 					if(strcmp(str, buffer) != 0)
-						printf("Nombre trop long:%s::%s\n", str, buffer);
+						printf("WARNING: Nombre trop long pour etre converti dans ce format\n");
 				}
 				break;
 	}
-	//char *pstr = &str[strlen(str)-1];
-	//if(strchr(str, '.'))
-	//if(*pstr == '0' && *(pstr+1) == 0)
-	//	*pstr = 0;
-	//if(*pstr == '.' && *(pstr + 1) == 0)
-		//*pstr = 0;
-	//printf("===>%s\n", str);
-	/*if(strchr(str,'.'))
-		while(*pstr == '0'){
-			*pstr = 0;
-			pstr--;
-		}
-	pstr = &str[strlen(str)];
-	printf("+++>%s\n", pstr);
-	if(*pstr == '.')
-		*pstr = 0;*/
-	//return str;
 }
 /*A modifier*/
 #define ENTRY 16
