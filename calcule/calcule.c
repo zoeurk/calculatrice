@@ -582,8 +582,9 @@ struct value *initialisation(char *argv, struct arguments *arg){
 							f = strtof(buffer, NULL);
 							sprintf(test,"%f", f);
 							zero(test);
+							zero(buffer);
 							if(strcmp(test, buffer) != 0){
-								fprintf(stderr, "Nombre trop long:%s\n", buffer);
+								fprintf(stderr, "Nombre trop grand:%s\n", buffer);
 								exit(EXIT_FAILURE);
 							}
 							break;
@@ -591,8 +592,9 @@ struct value *initialisation(char *argv, struct arguments *arg){
 							d = strtod(buffer, NULL);
 							sprintf(test,"%lf", d);
 							zero(test);
+							zero(buffer);
 							if(strcmp(test, buffer) != 0){
-								fprintf(stderr, "Nombre trop long:%s\n", buffer);
+								fprintf(stderr, "Nombre trop grand:%s\n", buffer);
 								exit(EXIT_FAILURE);
 							}
 							break;
@@ -600,8 +602,9 @@ struct value *initialisation(char *argv, struct arguments *arg){
 							ld = strtof(buffer, NULL);
 							sprintf(test,"%Lf", ld);
 							zero(test);
+							zero(buffer);
 							if(strcmp(test, buffer) != 0){
-								fprintf(stderr, "Nombre trop long:%s\n", buffer);
+								fprintf(stderr, "Nombre trop grand:%s\n", buffer);
 								exit(EXIT_FAILURE);
 							}
 							break;
