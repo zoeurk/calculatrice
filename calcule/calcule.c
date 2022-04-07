@@ -255,6 +255,9 @@ void zero(char *str, int type){
 	double d;
 	long double ld;
 	char buffer[BUFFER], *pbuf;
+	for(pbuf = &str[strlen(str)-1];str != pbuf && *pbuf == '0'; *pbuf = 0, pbuf--);;
+	if(pbuf == '.')*pbuf = 0;
+	if(*pbuf == 0)*pbuf = '0';
 	switch(type){
 		case FLOAT:
 				f = strtof(str, NULL);
