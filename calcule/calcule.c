@@ -309,12 +309,12 @@ void zero(char *str, int type){
 				sprintf(buffer,"%Lf", ld);
 				if(strchr(buffer,'.') != NULL){
 					//ZERO(pbuf, buffer);
-					/*for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
+					for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
 					if(*pbuf == '.') *pbuf = 0;
 					if(pbuf == buffer && *pbuf == 0){
 						*pbuf = '0';
 						*(pbuf+1) = 0;
-					}*/
+					}
 					//if(*pbuf == 0)*pbuf = '0';
 					if(strcmp(str, buffer) != 0)
 						printf("Nombre trop long:%s::%s\n", str, buffer);
