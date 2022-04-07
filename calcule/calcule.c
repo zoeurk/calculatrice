@@ -264,6 +264,7 @@ void zero(char *str, int type){
 				sprintf(buffer,"%f", f);
 				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
 				if(*pbuf == '.') *pbuf = 0;
+				if(*pbuf == 0)*pbuf = '0';
 				if(strcmp(str, buffer) != 0)
 					printf("Nombre trop long\n");
 				break;
@@ -272,6 +273,7 @@ void zero(char *str, int type){
 				sprintf(buffer,"%lf", d);
 				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
 				if(*pbuf == '.') *pbuf = 0;
+				if(*pbuf == 0)*pbuf = '0';
 				if(strcmp(str, buffer) != 0)
 					printf("Nombre trop long\n");
 				break;
@@ -280,6 +282,7 @@ void zero(char *str, int type){
 				sprintf(buffer,"%Lf", ld);
 				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
 				if(*pbuf == '.') *pbuf = 0;
+				if(*pbuf == 0)*pbuf = '0';
 				if(strcmp(str, buffer) != 0)
 					printf("Nombre trop long\n");
 				break;
