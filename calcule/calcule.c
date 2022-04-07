@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -252,13 +252,15 @@ void *___calloc___(void **ptr, unsigned long int size){
 }
 void zero(char *str){
 	char *pstr = &str[strlen(str)-1];
+	printf("====>%c\n", *pstr);
 	if(strchr(str,'.'))
 		while(*pstr == '0'){
 			*pstr = 0;
 			pstr--;
 		}
-	if(str[strlen(str)-1] == '.')
-		str[strlen(str)-1] = 0;
+	printf("+++>%s\n", pstr);
+	if(*pstr == '.')
+		*pstr = 0;
 	//return str;
 }
 /*A modifier*/
@@ -577,7 +579,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 						exit(EXIT_FAILURE);
 					}
 					strncat(buffer,&argv[i],1);
-					switch(arg->type){
+					/*switch(arg->type){
 						case FLOAT:
 							f = strtof(buffer, NULL);
 							sprintf(test,"%f", f);
@@ -607,7 +609,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 								fprintf(stderr, "Nombre trop grand:%s\n", buffer);
 								exit(EXIT_FAILURE);
 							}
-							break;
+							break;*/
 					}
 					num = 1;
 					wait = 1;
