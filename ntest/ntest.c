@@ -203,13 +203,7 @@ char file[28];
 	offset += (inc+1);\
 	REMOVE_SPACE;\
 	o.var2 = r;\
-	while(((*r >47 && *r < 58) || (signe || (*r == '+' && *r == '-')) || (*r =='.' && dot < 2)) && *r != 0){\
-		if(*r == '.')\
-			dot++;\
-		if((*r >47 && *r <58) || *r == '.')\
-			signe++;\
-		if(signe == 2)\
-			_end_ = 1;\
+	while((((*r >47 && *r < 58) || (*r == '+' && *r == '-')) || (*r =='.' )) && *r != 0){\
 		r++;\
 		offset++;\
 	}\
