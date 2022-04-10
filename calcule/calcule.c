@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -265,7 +265,7 @@ void zero(char *str, int type){
 	char buffer[BUFFER], *pbuf;
 	if(strchr(str,'.') != NULL){
 		for(pbuf = &str[strlen(str)-1];str != pbuf && *pbuf == '0'; *pbuf = 0, pbuf--);;
-		if(pbuf == '.')*pbuf = 0;
+		if(*pbuf == '.')*pbuf = 0;
 		if(pbuf == str && *pbuf == 0){
 			*pbuf = '0';
 			*(pbuf+1) = 0;
@@ -285,7 +285,7 @@ void zero(char *str, int type){
 					}
 					//ZERO(pbuf, buffer);
 					if(strcmp(str, buffer) != 0)
-						printf("WARNING: Nombre trop long pour etre converti dans ce format\n");
+						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);
 					}
 				break;
 		case DOUBLE:
@@ -340,7 +340,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				cont++;
 				continue;
 			case ',':
-				zero(buffer, arg->type);
+				//if(strlen(buffer) && (pv && pv->type&(FLOAT|DOUBLE|LDOUBLE)) != 0)
+					//zero(buffer, pv->type);
 				split = 0;
 				init = 1;
 				if(virgule == 0){
@@ -349,7 +350,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				if(num == 0 && argv[i-1] != ')'){
 					ERROR("Un argument est manquant vers l'offset %i\n", i);
 				}
-				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
+				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);if(strlen(buffer) && (pv && pv->type&(FLOAT|DOUBLE|LDOUBLE)) != 0)
+				//zero(buffer, pv->type);
 				num = 0;
 				wait = 0;
 				BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
@@ -360,7 +362,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				virgule--;
 				break;
 			case '(':
-				zero(buffer, arg->type);
 				if(buffer[0] == '-'){
 					buffer[1] = '1';
 					BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
@@ -460,11 +461,10 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				o_parentheses++;
 				break;
 			case ')':
-				zero(buffer, arg->type);
 				split = 0;
 				cont = 0;
 				init = 0;
-				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
+				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--)printf("*******\n");;
 				if((num == 0 && argv[j] != ')')){
 					ERROR("Un argument est manquant vers l'offset %i\n", i);
 				}
@@ -504,6 +504,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					ERROR("Erreur de syntaxe vers l'offset %i\n", i);
 				}
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
+				/*BUG*/
+				//zero(buffer,arg->type);
 				wait = 0;
 				if(bufset){
 					if(v == NULL)
@@ -522,15 +524,15 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				break;
 			case '+':
 			case '-':
-				//printf("%s;\n", buffer);
-				/*BUG*/
 				point = 0;
 				split = 0;
 				if((!v || pv->type == 4 || pv->type == '+' || pv->type == '-' || pv->type == '*' || pv->type == '/')
 					&& strlen(buffer) == 0){
 					goto number;
 				}
-				zero(buffer, arg->type);
+				if((arg->type&(FLOAT|DOUBLE|LDOUBLE)) != 0)
+					/*BUG*/
+					//zero(buffer, arg->type);
 				if(cont){
 					BUFSET(v, pv,arg->valsize, buffer, end, arg->type);
 					pv->type = argv[i];
@@ -589,10 +591,13 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					}
 					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
 				}
-				zero(buffer, arg->type);
+				//zero(buffer, arg->type);
 				next:
 				wait = 0;
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
+				/*if((arg->type&(FLOAT|DOUBLE|LDOUBLE)) != 0 && *buffer != 0)
+					zero(buffer, arg->type);*/
+				//printf("====>%s\n", buffer);
 				BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
 				pv->type = argv[i];
 				num = 0;
@@ -697,8 +702,10 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				break;
 		}
 	}
-	if(bufset)
-		zero(buffer, arg->type);
+	if(bufset){
+		//if((arg->type&(FLOAT|DOUBLE|LDOUBLE)) != 0)
+			//zero(buffer, arg->type);
+	}
 	if(v){
 		if(c_parentheses > o_parentheses){
 			_ERROR_("Trop de parentheses fermees\n");
@@ -740,9 +747,11 @@ struct value *initialisation(char *argv, struct arguments *arg){
 }
 struct value *calcule(struct value **v, struct function f, unsigned long int *type){
 	struct two_numbers two = {NULL, NULL, NULL};
-	struct value *pv = *v, *ppv, *pnext, *ppnext, *pprev, *preader, *pcur, *pstart, *vdup = NULL, *pvdup;
+	struct value *pv = *v, *ppv, *pnext, *ppnext, *pprev, *preader, *pcur, *pstart, *vdup = NULL, *pvdup,*vdup1, *vdup2;
 	int o_parentheses, count;
+	printf("GRRR\n");
 	while(pv){
+		printf("============================\n");
 		switch(pv->type){
 			case VALUE:
 				break;
@@ -900,26 +909,12 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 						pv = *v;
 						continue;
 					case FABS:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
-						f.fabs(pv->val);
-						pv = *v;
-						continue;
-					case FLOOR:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
-						f.floor(pv->val);
 						pv = *v;
 						continue;
 					case FMOD:
-						MULTIPLE_ARGS(preader, pv, pcur, o_parentheses, pnext, pprev, two.start, two.virgule, two.end, type);
-						f.mod(pprev->val,pnext->val);
-						UPDATE(v, ppv,pprev, pnext, two.start, two.virgule, two.end);
 						pv = *v;
 						continue;
 					case POW:
-						MULTIPLE_ARGS(preader, pv, pcur, o_parentheses, pnext, pprev, two.start, two.virgule, two.end, type);
-						f.power(pprev->val,pnext->val);
-						UPDATE(v, ppv,pprev, pnext, two.start, two.virgule, two.end);
-						pv = *v;
 						continue;
 				}
 
@@ -1018,8 +1013,10 @@ int main(int argc, char **argv){
 		arg.argv = arg.mmap.mmap;
 	if(arg.argv)
 		arg.v = initialisation(arg.argv, &arg);
-	if(arg.v)
+	if(arg.v){
+		//printf("******\n");
 		ptr = calcule(&arg.v, arg.fn, &arg.type);
+	}
 	if(ptr == NULL)
 		calcule_destroy(arg.v, format, NULL);
 	else	calcule_destroy(arg.v, format, arg.print);
