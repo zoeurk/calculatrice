@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "parsearg.h"
+#include "../lib/parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -749,9 +749,7 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 	struct two_numbers two = {NULL, NULL, NULL};
 	struct value *pv = *v, *ppv, *pnext, *ppnext, *pprev, *preader, *pcur, *pstart, *vdup = NULL, *pvdup,*vdup1, *vdup2;
 	int o_parentheses, count;
-	printf("GRRR\n");
 	while(pv){
-		printf("============================\n");
 		switch(pv->type){
 			case VALUE:
 				break;
@@ -909,13 +907,85 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 						pv = *v;
 						continue;
 					case FABS:
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						f.fabs(pv->val);
+						pv = *v;
+						continue;
+					case FLOOR:
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						f.floor(pv->val);
 						pv = *v;
 						continue;
 					case FMOD:
+						MULTIPLE_ARGS(preader, pv, pcur, o_parentheses, pnext, pprev, two.start, two.virgule, two.end, type);
+						f.mod(pprev->val,pnext->val);
+						UPDATE(v, ppv,pprev, pnext, two.start, two.virgule, two.end);
 						pv = *v;
 						continue;
 					case POW:
-						pv = v
+						MULTIPLE_ARGS(preader, pv, pcur, o_parentheses, pnext, pprev, two.start, two.virgule, two.end, type);
+						f.power(pprev->val,pnext->val);
+						UPDATE(v, ppv,pprev, pnext, two.start, two.virgule, two.end);
+						pv = *v;
+						continue;
+							pv = pcur = pv->next;
+							o_parentheses = 0;
+							two.end = NULL;
+							while(two.end == NULL)
+							{	PARENTHESE(pcur, o_parentheses);
+								if(pcur->type == O_PARENTHESE && o_parentheses == 1)
+									two.start = pcur;
+								if(pcur->type == C_PARENTHESE && o_parentheses == 0)
+									two.end = pcur;
+								if(pcur->operator == ',' && o_parentheses == 1)
+									two.virgule = pcur;
+								pcur = pcur->next;
+								//printf("================\n");
+						}
+						pcur = two.virgule->next;
+						DUPLIQUE(pv,preader != two.virgule, 1);
+						vdup1 = calcule(&pvdup, f, type);
+						printf("->%f\n",*((float *)vdup1->val));
+						DUPLIQUE(pv, preader != two.end, 1);
+						vdup2 = calcule(&pvdup, f, type);
+						printf("->%f\n",*((float *)vdup2->val));
+						printf("%f::%f\n",*((float *)vdup1->val), *((float *)vdup2->val));
+						f.power(vdup1->val, vdup2->val);
+						free(vdup2->prev);
+						free(vdup2);
+						if(two.start->prev == *v){
+							printf("==>%f\n",*((float *)vdup1->val));
+							vdup2 = two.start->prev;
+							pprev = two.end->next;
+							while(vdup2 != pprev){
+								pnext = vdup2->next;
+								free(vdup2);
+								vdup2 = pnext;
+							}
+							free(vdup1->prev);
+							vdup1->prev = NULL;
+							*v = vdup1;
+							free((*v)->next);
+							(*v)->next = NULL;
+							(*v)->prev = NULL;
+							free(*v);
+							exit(0);
+							//free(vdup1);
+							//free(vdup);
+							//exit(0);
+						}else{
+						}
+						//printf("%i::%f::%i\n", two.start->type, *((float *)two.virgule->next->val), two.end->type);
+						/*pcur = vdup;
+						while(pcur){
+							if(pcur->type == 1)
+								printf("%f\n", *((float *)pcur->val));
+							else
+								printf("~~~>%i\n", pcur->type);
+							pcur = pcur->next;
+						}*/
+						//exit(0);
+						pv = *v;
 						continue;
 				}
 
