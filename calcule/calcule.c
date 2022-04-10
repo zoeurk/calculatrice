@@ -915,6 +915,7 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 						pv = *v;
 						continue;
 					case POW:
+						pv = v
 						continue;
 				}
 
