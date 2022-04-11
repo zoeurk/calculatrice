@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "parsearg.h"
+#include "../lib/parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -155,10 +155,12 @@ char file[28];
 					*(pbuf+1) = 0;\
 				}\
 				if(o.var1){\
-					if(strcmp(o.var1, buffer) != 0)\
+					if(strcmp(o.var1, buffer) != 0){\
 						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						exit(EXIT_FAILURE);\
 					}\
 				}\
+			}\
 			if(s[1]){\
 				sprintf(buffer,"%f", *((float *)s[1])); \
 				if(strchr(buffer,'.') != NULL){\
@@ -169,12 +171,14 @@ char file[28];
 						*(pbuf+1) = 0;\
 					}\
 					if(o.var2){\
-						if(strcmp(o.var2, buffer) != 0)\
+						if(strcmp(o.var2, buffer) != 0){\
 							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							exit(EXIT_FAILURE);\
 						}\
 					}\
 				}\
-				break;\
+			}\
+			break;\
 		case DOUBLE:\
 			___CONVERT___(double, strtod)\
 			if(o.var1 && o.var2){\
@@ -190,10 +194,12 @@ char file[28];
 					*(pbuf+1) = 0;\
 				}\
 				if(o.var1){\
-					if(strcmp(o.var1, buffer) != 0)\
+					if(strcmp(o.var1, buffer) != 0){\
 						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						exit(EXIT_FAILURE);\
 					}\
 				}\
+			}\
 			if(s[1]){\
 				sprintf(buffer,"%lf", *((double *)s[1])); \
 				if(strchr(buffer,'.') != NULL){\
@@ -204,12 +210,14 @@ char file[28];
 						*(pbuf+1) = 0;\
 					}\
 					if(o.var2){\
-						if(strcmp(o.var2, buffer) != 0)\
+						if(strcmp(o.var2, buffer) != 0){\
 							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							exit(EXIT_FAILURE);\
 						}\
 					}\
 				}\
-				break;\
+			}\
+			break;\
 		case LDOUBLE:\
 			___CONVERT___(long double, strtod)\
 			if(o.var1 && o.var2){\
@@ -225,10 +233,12 @@ char file[28];
 					*(pbuf+1) = 0;\
 				}\
 				if(o.var1){\
-					if(strcmp(o.var1, buffer) != 0)\
+					if(strcmp(o.var1, buffer) != 0){\
 						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						exit(EXIT_FAILURE);\
 					}\
 				}\
+			}\
 			if(s[1]){\
 				sprintf(buffer,"%Lf", *((long double *)s[1])); \
 				if(strchr(buffer,'.') != NULL){\
@@ -239,12 +249,14 @@ char file[28];
 						*(pbuf+1) = 0;\
 					}\
 					if(o.var2){\
-						if(strcmp(o.var2, buffer) != 0)\
+						if(strcmp(o.var2, buffer) != 0){\
 							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							exit(EXIT_FAILURE);\
 						}\
 					}\
 				}\
-				break;\
+			}\
+			break;\
 	}
 
 #define ALLOC\
