@@ -167,7 +167,7 @@ char file[28];
 			if(o.var1)\
 				s = var1;\
 			else s = var2;\
-			sprintf(buffer,"%lf", *((double *)o.var2));\
+			sprintf(buffer,"%lf", *((double *)s));\
 			if(strchr(buffer,'.') != NULL){\
 				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
 				if(*pbuf == '.') *pbuf = 0;\
@@ -189,7 +189,7 @@ char file[28];
 			if(o.var1)\
 				s = var1;\
 			else s = var2;\
-			sprintf(buffer,"%Lf", *((long double *)o.var2));\
+			sprintf(buffer,"%Lf", *((long double *)s));\
 			if(strchr(buffer,'.') != NULL){\
 				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
 				if(*pbuf == '.') *pbuf = 0;\
