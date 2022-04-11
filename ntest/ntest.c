@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "./lib/parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -142,6 +142,7 @@ char file[28];
 	switch(type){\
 		case FLOAT:\
 			___CONVERT___(float, strtof)\
+			sprintf(buffer,"%f", *((float *)o.var2));\
 			if(strchr(buffer,'.') != NULL){\
 				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
 				if(*pbuf == '.') *pbuf = 0;\
@@ -155,6 +156,7 @@ char file[28];
 			break;\
 		case DOUBLE:\
 			___CONVERT___(double, strtod)\
+			sprintf(buffer,"%lf", *((double *)o.var2));\
 			if(strchr(buffer,'.') != NULL){\
 				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
 				if(*pbuf == '.') *pbuf = 0;\
@@ -168,6 +170,7 @@ char file[28];
 			break;\
 		case LDOUBLE:\
 			___CONVERT___(long double, strtold)\
+			sprintf(buffer,"%Lf", *((long double *)o.var2));\
 			if(strchr(buffer,'.') != NULL){\
 				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
 				if(*pbuf == '.') *pbuf = 0;\
