@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "./lib/parsearg.h"
+#include "../lib/parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -151,7 +151,7 @@ char file[28];
 					*(pbuf+1) = 0;\
 				}\
 				if(strcmp(str, buffer) != 0)\
-					printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);\
+					printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
 				}\
 			break;\
 		case DOUBLE:\
@@ -165,7 +165,7 @@ char file[28];
 					*(pbuf+1) = 0;\
 				}\
 				if(strcmp(str, buffer) != 0)\
-					printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);\
+					printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
 				}\
 			break;\
 		case LDOUBLE:\
@@ -179,7 +179,7 @@ char file[28];
 					*(pbuf+1) = 0;\
 				}\
 				if(strcmp(str, buffer) != 0)\
-					printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);\
+					printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
 				}\
 			break;\
 	}
