@@ -142,12 +142,42 @@ char file[28];
 	switch(type){\
 		case FLOAT:\
 			___CONVERT___(float, strtof)\
+			if(strchr(buffer,'.') != NULL){\
+				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
+				if(*pbuf == '.') *pbuf = 0;\
+				if(pbuf == buffer && *pbuf == 0){\
+					*pbuf = '0';\
+					*(pbuf+1) = 0;\
+				}\
+				if(strcmp(str, buffer) != 0)\
+					printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);\
+				}\
 			break;\
 		case DOUBLE:\
-			___CONVERT___(double, strtof)\
+			___CONVERT___(double, strtod)\
+			if(strchr(buffer,'.') != NULL){\
+				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
+				if(*pbuf == '.') *pbuf = 0;\
+				if(pbuf == buffer && *pbuf == 0){\
+					*pbuf = '0';\
+					*(pbuf+1) = 0;\
+				}\
+				if(strcmp(str, buffer) != 0)\
+					printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);\
+				}\
 			break;\
 		case LDOUBLE:\
-			___CONVERT___(long double, strtof)\
+			___CONVERT___(long double, strtold)\
+			if(strchr(buffer,'.') != NULL){\
+				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
+				if(*pbuf == '.') *pbuf = 0;\
+				if(pbuf == buffer && *pbuf == 0){\
+					*pbuf = '0';\
+					*(pbuf+1) = 0;\
+				}\
+				if(strcmp(str, buffer) != 0)\
+					printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);\
+				}\
 			break;\
 	}
 
@@ -445,9 +475,10 @@ struct retour *reader(char *string, unsigned long int type){
 	struct objet o = {0, 0, NULL, NULL};
 	void *var2 = NULL;
 	char *matching[17] = {"==", "!=" ,">=", "<=", ">", "<", "~=", "!~", "-z", "-Z", "-n", "-N", "!", "&&", "||","(",")"};
-	char *r = NULL, *str = NULL, quote = 0, dquote = 0, dot = 0, signe = 0;
+	char *r = NULL, *str = NULL, quote = 0, dquote = 0, dot = 0, signe = 0, buffer[56], *pbuf;
 	unsigned long int size, offset, i, ___quote___ = 0, parentheses = 0, end = 0;
 	int j, _end_;
+	memset(buffer,0,56);
 	switch(type){
 		case FLOAT:
 			f.diff = f_diff;
