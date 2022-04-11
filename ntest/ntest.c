@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -567,6 +567,7 @@ struct retour *reader(char *string, unsigned long int type){
 			f.e_greater = f_e_greater;
 			size = sizeof(float);
 			o.size = size;
+			o.type = FLOAT;
 			var1 = ___calloc___(&var1, 2*size);
 			//var1 = malloc(2*size);
 			var2 = var1+size;
@@ -580,11 +581,13 @@ struct retour *reader(char *string, unsigned long int type){
 			f.e_greater = d_e_greater;
 			size = sizeof(double);
 			o.size = size;
+			o.type = DOUBLE;
 			var1 = ___calloc___(&var1, 2*size);
 			//var1 = calloc(2*size);
 			var2 = var1+size;
 			break;
 		case LDOUBLE:
+			o.type = LDOUBLE;
 			f.diff = ld_diff;
 			f.equal = ld_equal;
 			f.less = ld_less;
