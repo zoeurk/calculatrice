@@ -142,10 +142,11 @@ char file[28];
 	switch(type){\
 		case FLOAT:\
 			___CONVERT___(float, strtof)\
-			if(o.var1)\
-				s = var1;\
-			else s = var2;\
-			sprintf(buffer,"%f", *((float *)s)); \
+			if(o.var1 && o.var2){\
+				s[0] = var1;\
+				s[1] = var2;\
+			}else s[0] = var1;\
+			sprintf(buffer,"%f", *((float *)s[0])); \
 			if(strchr(buffer,'.') != NULL){\
 				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
 				if(*pbuf == '.') *pbuf = 0;\
@@ -156,18 +157,31 @@ char file[28];
 				if(o.var1){\
 					if(strcmp(o.var1, buffer) != 0)\
 						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
-					}else{ \
-						if(strcmp(o.var2, buffer) != 0)\
-							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
 					}\
 				}\
-			break;\
+			if(s[1]){\
+				sprintf(buffer,"%f", *((float *)s[1])); \
+				if(strchr(buffer,'.') != NULL){\
+					for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
+					if(*pbuf == '.') *pbuf = 0;\
+					if(pbuf == buffer && *pbuf == 0){\
+						*pbuf = '0';\
+						*(pbuf+1) = 0;\
+					}\
+					if(o.var2){\
+						if(strcmp(o.var2, buffer) != 0)\
+							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+						}\
+					}\
+				}\
+				break;\
 		case DOUBLE:\
 			___CONVERT___(double, strtod)\
-			if(o.var1)\
-				s = var1;\
-			else s = var2;\
-			sprintf(buffer,"%lf", *((double *)s));\
+			if(o.var1 && o.var2){\
+				s[0] = var1;\
+				s[1] = var2;\
+			}else s[0] = var1;\
+			sprintf(buffer,"%lf", *((double *)s[0])); \
 			if(strchr(buffer,'.') != NULL){\
 				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
 				if(*pbuf == '.') *pbuf = 0;\
@@ -178,18 +192,31 @@ char file[28];
 				if(o.var1){\
 					if(strcmp(o.var1, buffer) != 0)\
 						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
-					}else{ \
-						if(strcmp(o.var2, buffer) != 0)\
-							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
 					}\
 				}\
-			break;\
+			if(s[1]){\
+				sprintf(buffer,"%lf", *((double *)s[1])); \
+				if(strchr(buffer,'.') != NULL){\
+					for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
+					if(*pbuf == '.') *pbuf = 0;\
+					if(pbuf == buffer && *pbuf == 0){\
+						*pbuf = '0';\
+						*(pbuf+1) = 0;\
+					}\
+					if(o.var2){\
+						if(strcmp(o.var2, buffer) != 0)\
+							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+						}\
+					}\
+				}\
+				break;\
 		case LDOUBLE:\
-			___CONVERT___(long double, strtold)\
-			if(o.var1)\
-				s = var1;\
-			else s = var2;\
-			sprintf(buffer,"%Lf", *((long double *)s));\
+			___CONVERT___(long double, strtod)\
+			if(o.var1 && o.var2){\
+				s[0] = var1;\
+				s[1] = var2;\
+			}else s[0] = var1;\
+			sprintf(buffer,"%Lf", *((long double *)s[0])); \
 			if(strchr(buffer,'.') != NULL){\
 				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
 				if(*pbuf == '.') *pbuf = 0;\
@@ -200,12 +227,24 @@ char file[28];
 				if(o.var1){\
 					if(strcmp(o.var1, buffer) != 0)\
 						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
-					}else{ \
-						if(strcmp(o.var2, buffer) != 0)\
-							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
 					}\
 				}\
-			break;\
+			if(s[1]){\
+				sprintf(buffer,"%Lf", *((long double *)s[1])); \
+				if(strchr(buffer,'.') != NULL){\
+					for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
+					if(*pbuf == '.') *pbuf = 0;\
+					if(pbuf == buffer && *pbuf == 0){\
+						*pbuf = '0';\
+						*(pbuf+1) = 0;\
+					}\
+					if(o.var2){\
+						if(strcmp(o.var2, buffer) != 0)\
+							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+						}\
+					}\
+				}\
+				break;\
 	}
 
 #define ALLOC\
@@ -500,7 +539,7 @@ struct retour *reader(char *string, unsigned long int type){
 	struct fn f;
 	struct retour *pret= NULL, *pprev;
 	struct objet o = {0, 0, NULL, NULL};
-	void *var2 = NULL, *s;
+	void *var2 = NULL, *s[2];
 	char *matching[17] = {"==", "!=" ,">=", "<=", ">", "<", "~=", "!~", "-z", "-Z", "-n", "-N", "!", "&&", "||","(",")"};
 	char *r = NULL, *str = NULL, quote = 0, dquote = 0, dot = 0, signe = 0, buffer[56], *pbuf;
 	unsigned long int size, offset, i, ___quote___ = 0, parentheses = 0, end = 0;
