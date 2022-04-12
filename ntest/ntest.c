@@ -443,7 +443,13 @@ char file[28];
 			signe = 0;\
 			str = o.var1;\
 			_end_ = 0;\
+			str+=2;\
 			while(*str != 0){\
+				if((*str < 48 || *str > 57) && *str != '.' && *str != '-' && *str != '+'){\
+					/*printf("%c\n", *str);*/\
+					_end_ = 1;\
+					break;\
+				}\
 				if(*str == '.' && *(str+1) == 0){\
 					_end_ = 1;\
 					break;\
@@ -465,9 +471,9 @@ char file[28];
 				str++;\
 			}\
 			if(!_end_)\
-				pret->ret = ret1;\
+				pret->ret = 1;\
 			else\
-				pret->ret = ret2;\
+				pret->ret = 0;\
 			/*printf("%i\n", pret->ret);*/\
 			break;\
 	}
@@ -688,7 +694,7 @@ struct retour *reader(char *string, unsigned long int type){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
 				STRING_EXIST(1, 0);
-				o.var1+=2;
+				//o.var1+=2;
 				//printf("BUG\n");
 				if(f.strings(o.var1)){
 					NUMERIQUE(1, 0);
@@ -703,10 +709,10 @@ struct retour *reader(char *string, unsigned long int type){
 				if(o.var1){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
-				STRING_EXIST(0, 1);
+				STRING_EXIST(1, 0);
 				pret->ret = f.strings(str);
 				if(f.strings(o.var1)){
-					NUMERIQUE(0, 1);
+					NUMERIQUE(1, 0);
 				}
 				o.var1 = NULL;
 				break;
