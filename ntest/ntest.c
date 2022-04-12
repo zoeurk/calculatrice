@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -125,15 +125,17 @@ char file[28];
 
 #define ___CONVERT___(type, fonction)\
 	if(o.var1){\
+		o.var1+=2;\
 		*((type *)var1) = fonction(o.var1, &str);\
+		str++;\
 		if(str && strlen(str) > 0){\
-			fprintf(stderr, "WARNING: Mauvais caractere detectee: <%s>.\n", str);\
+			fprintf(stderr, "!!WARNING: Mauvais caractere detectee: <%s>.\n", str);\
 		}\
 	}\
 	if(o.var2){\
 		*((type *)var2) = fonction(o.var2, &str);\
 		if(str && strlen(str) > 0){\
-			fprintf(stderr, "WARNING: Mauvais caractere detectee: <%s>.\n", str);\
+			fprintf(stderr, "::WARNING: Mauvais caractere detectee: <%s>.\n", str);\
 		}\
 		*((type *)var2) = fonction(o.var2, &str);\
 	}
@@ -156,8 +158,8 @@ char file[28];
 				}\
 				if(o.var1){\
 					if(strcmp(o.var1, buffer) != 0){\
-						printf("::WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
-						/*exit(2);*/\
+						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						exit(2);\
 					}\
 				}\
 			}\
@@ -466,6 +468,7 @@ char file[28];
 				pret->ret = ret1;\
 			else\
 				pret->ret = ret2;\
+			/*printf("%i\n", pret->ret);*/\
 			break;\
 	}
 
@@ -685,10 +688,15 @@ struct retour *reader(char *string, unsigned long int type){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
 				STRING_EXIST(1, 0);
-				//if(f.strings(o.var1)){
-					NUMERIQUE(1, 0)
-				//}
-				CONVERT(type);
+				o.var1+=2;
+				//printf("BUG\n");
+				if(f.strings(o.var1)){
+					NUMERIQUE(0, 1);
+				}
+				printf("==>%s\n", o.var1);
+				//o.var1 += 2;
+				printf("%s\n", o.var1);
+				//CONVERT(type);
 				o.var1 = NULL;
 				break;
 			case NOT_NUM:/*-N: N'est PAS nombre*/
@@ -697,9 +705,9 @@ struct retour *reader(char *string, unsigned long int type){
 				}
 				STRING_EXIST(0, 1);
 				pret->ret = f.strings(str);
-				//if(f.strings(o.var1)){
-					NUMERIQUE(0, 1);
-				//}
+				if(f.strings(o.var1)){
+					NUMERIQUE(1, 0);
+				}
 				o.var1 = NULL;
 				break;
 			case 12:/*INVERT*/
