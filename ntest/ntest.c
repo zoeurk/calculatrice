@@ -443,12 +443,18 @@ char file[28];
 			signe = 0;\
 			str = o.var1;\
 			_end_ = 0;\
-			str+=2;\
+			str++;\
+			while(*str == '\t' || *str == ' ' || *str == '\n')\
+				str++;\
+			min = 0;\
 			while(*str != 0){\
 				if((*str < 48 || *str > 57) && *str != '.' && *str != '-' && *str != '+'){\
-					/*printf("%c\n", *str);*/\
-					_end_ = 1;\
-					break;\
+					if(*str > 47 || *str < 58)\
+						min = 1;\
+					if(min == 1 && (*str == '-' || *str == '+')){\
+						_end_ = 1;\
+						break;\
+					}\
 				}\
 				if(*str == '.' && *(str+1) == 0){\
 					_end_ = 1;\
@@ -471,9 +477,9 @@ char file[28];
 				str++;\
 			}\
 			if(!_end_)\
-				pret->ret = 1;\
+				pret->ret = ret1;\
 			else\
-				pret->ret = 0;\
+				pret->ret = ret2;\
 			/*printf("%i\n", pret->ret);*/\
 			break;\
 	}
@@ -569,7 +575,7 @@ struct retour *reader(char *string, unsigned long int type){
 	void *var2 = NULL, *s[2];
 	char *matching[17] = {"==", "!=" ,">=", "<=", ">", "<", "~=", "!~", "-z", "-Z", "-n", "-N", "!", "&&", "||","(",")"};
 	char *r = NULL, *str = NULL, quote = 0, dquote = 0, dot = 0, signe = 0, buffer[56], *pbuf;
-	unsigned long int size, offset, i, ___quote___ = 0, parentheses = 0, end = 0;
+	unsigned long int size, offset, i, ___quote___ = 0, parentheses = 0, end = 0, min = 0;
 	int j, _end_;
 	memset(buffer,0,56);
 	switch(type){
@@ -712,7 +718,7 @@ struct retour *reader(char *string, unsigned long int type){
 				STRING_EXIST(1, 0);
 				pret->ret = f.strings(str);
 				if(f.strings(o.var1)){
-					NUMERIQUE(1, 0);
+					NUMERIQUE(0, 1);
 				}
 				o.var1 = NULL;
 				break;
