@@ -792,6 +792,9 @@ struct retour *reader(char *string, unsigned long int type){
 					default:
 						if(o.var1 == NULL){
 							o.var1 = r;
+						}else{
+							fprintf(stderr,"Argument invalide:%c\n", *r);
+							exit(EXIT_FAILURE);
 						}
 						/*if(end == 1){
 							fprintf(stderr, "=>Erreur de syntaxe vers l'offset: %lu.\n", offset);
