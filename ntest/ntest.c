@@ -311,7 +311,7 @@ char file[28];
 	offset += (inc+1);\
 	REMOVE_SPACE;\
 	o.var2 = r;\
-	while((((*r >47 && *r < 58) || (*r == '+' && *r == '-')) || (*r =='.' )) && *r != 0){\
+	while((((*r >47 && *r < 58) || (*r == '+' || *r == '-')) || (*r =='.' )) && *r != 0){\
 		r++;\
 		offset++;\
 	}\
@@ -319,9 +319,9 @@ char file[28];
 		fprintf(stderr, "=>Erreur de syntaxe vers l'offset: %lu\n", offset);\
 		exit(EXIT_FAILURE);\
 	}*/ \
-	if((*r < 48 || *r > 57) && *r!= '-' && *r != ' ' && *r != '\t' && *r != '\n' && *r != ')' && *r !=0 ){\
+	if((*r < 48 || *r > 57) && *r != ' ' && *r != '\t' && *r != '\n' && *r != ')' && *r !=0 ){\
 		*(r+1) = 0;\
-		printf("Numerique attendu chaine de caracter declaree: '%s'.\n", o.var2);\
+		printf("++Numerique attendu chaine de caracter declaree: '%s'.\n", o.var2);\
 		exit(EXIT_FAILURE);\
 	} \
 	if(*r == ')'){\
@@ -345,7 +345,7 @@ char file[28];
 #define STRING_DEF\
 	if(o.type == STRING){\
 		*r = 0;\
-		printf("Numerique attendu chaine de caracter declaree: '%s'\n", o.var1);\
+		printf("+++Numerique attendu chaine de caracter declaree: '%s'\n", o.var1);\
 		exit(EXIT_FAILURE);\
 	}
 
