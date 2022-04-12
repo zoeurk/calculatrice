@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "parsearg.h"
+#include "../lib/parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -792,13 +792,16 @@ struct retour *reader(char *string, unsigned long int type){
 					default:
 						if(o.var1 == NULL){
 							o.var1 = r;
-						}
-						/*if(end == 1){
-							fprintf(stderr, "=>Erreur de syntaxe vers l'offset: %lu.\n", offset);
+							/*if(end == 1){
+								fprintf(stderr, "=>Erreur de syntaxe vers l'offset: %lu.\n", offset);
+								exit(EXIT_FAILURE);
+							}*/
+							if((*r < 48 || *r > 57) && *r != '.' && *r != '-' && *r != '+')
+								o.type = STRING;
+						}else{
+							fprintf(stderr, "Argument invalide:%c\n", *r);
 							exit(EXIT_FAILURE);
-						}*/
-						if((*r < 48 || *r > 57) && *r != '.' && *r != '-' && *r != '+')
-							o.type = STRING;
+						}
 						break;
 				}
 		}
