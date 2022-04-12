@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "parsearg.h"
+#include "../lib/parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -156,8 +156,8 @@ char file[28];
 				}\
 				if(o.var1){\
 					if(strcmp(o.var1, buffer) != 0){\
-						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
-						exit(2);\
+						printf("::WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						/*exit(2);*/\
 					}\
 				}\
 			}\
@@ -172,7 +172,7 @@ char file[28];
 					}\
 					if(o.var2){\
 						if(strcmp(o.var2, buffer) != 0){\
-							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							printf("::WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
 							exit(2);\
 						}\
 					}\
@@ -404,8 +404,8 @@ char file[28];
 	o.type = NUMBER;
 
 #define STRING_EXIST(ret1, ret2)\
-	r += 2;\
-	offset += 2;\
+	r += 1;\
+	offset += 1;\
 	REMOVE_SPACE;\
 	ALLOC;\
 	o.var1 = r;\
@@ -425,9 +425,13 @@ char file[28];
 			str--;\
 		}\
 	}\
-	if(str && *str){\
-		pret->ret = ret1;\
-	}else	pret->ret = ret2; \
+	if((*str == '\'' && *(str+1) == '\'') || (*str == '\"' && *(str+1) == '"'))\
+		pret->ret = 0;\
+	else \
+		pret->ret = 1;\
+	/*if(str && *str){\
+		pret->ret = 1;\
+	}else	pret->ret = 0; \*/\
 
 #define NUMERIQUE(ret1, ret2)\
 	switch(pret->ret){\
@@ -666,10 +670,14 @@ struct retour *reader(char *string, unsigned long int type){
 				if(o.var1){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
+				//printf("%s\n", o.var1);
 				//f.strings(o.var1);
 				STRING_EXIST(0, 1);
 				//CONVERT(type);
-				pret->ret = !f.strings(str);
+				if(*(o.var1+3) == '"' || *(o.var1+3) == '\'')
+					pret->ret = 1;
+				else
+					pret->ret = 0;
 				o.var1 = NULL;
 				break;
 			case NUM:/*-n: est nombre*/
