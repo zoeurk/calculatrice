@@ -323,7 +323,7 @@ char file[28];
 	}*/ \
 	if((*r < 48 || *r > 57) && *r != ' ' && *r != '\t' && *r != '\n' && *r != ')' && *r !=0 ){\
 		*(r+1) = 0;\
-		printf("++Numerique attendu chaine de caracter declaree: '%s'.\n", o.var2);\
+		printf("Numerique attendu chaine de caracter declaree: '%s'.\n", o.var2);\
 		exit(EXIT_FAILURE);\
 	} \
 	if(*r == ')'){\
@@ -347,7 +347,7 @@ char file[28];
 #define STRING_DEF\
 	if(o.type == STRING){\
 		*r = 0;\
-		printf("+++Numerique attendu chaine de caracter declaree: '%s'\n", o.var1);\
+		printf("Numerique attendu chaine de caracter declaree: '%s'\n", o.var1);\
 		exit(EXIT_FAILURE);\
 	}
 
