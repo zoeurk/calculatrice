@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "parsearg.h"
+#include "../lib/parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -319,7 +319,7 @@ char file[28];
 		fprintf(stderr, "=>Erreur de syntaxe vers l'offset: %lu\n", offset);\
 		exit(EXIT_FAILURE);\
 	}*/ \
-	if((*r < 48 || *r > 57) && *r != ' ' && *r != '\t' && *r != '\n' && *r != ')' && *r !=0 ){\
+	if((*r < 48 || *r > 57) && *r!= '-' && *r != ' ' && *r != '\t' && *r != '\n' && *r != ')' && *r !=0 ){\
 		*(r+1) = 0;\
 		printf("Numerique attendu chaine de caracter declaree: '%s'.\n", o.var2);\
 		exit(EXIT_FAILURE);\
