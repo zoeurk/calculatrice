@@ -156,7 +156,7 @@ char file[28];
 				}\
 				if(o.var1){\
 					if(strcmp(o.var1, buffer) != 0){\
-						printf("::WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
 						exit(2);\
 					}\
 				}\
@@ -172,7 +172,7 @@ char file[28];
 					}\
 					if(o.var2){\
 						if(strcmp(o.var2, buffer) != 0){\
-							printf("::WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
 							exit(2);\
 						}\
 					}\
@@ -790,10 +790,6 @@ struct retour *reader(char *string, unsigned long int type){
 						//}
 						break;
 					default:
-						if(ret == NULL && (*r == '=' || *r == '~' || *r == '!')){
-							fprintf(stderr,"Argument invalide: \'%c\'\n", *r);
-							exit(EXIT_FAILURE);
-						}
 						if(o.var1 == NULL){
 							o.var1 = r;
 						}
@@ -816,6 +812,10 @@ struct retour *reader(char *string, unsigned long int type){
 	}
 	if(quote || dquote){
 		fprintf(stderr, "Quote(/Double Quote) non terminee.\n");
+		exit(EXIT_FAILURE);
+	}
+	if(!ret){
+		printf("Ereur de syntaxe\n");
 		exit(EXIT_FAILURE);
 	}
 	return ret;
