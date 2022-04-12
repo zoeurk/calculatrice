@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -668,7 +668,7 @@ struct retour *reader(char *string, unsigned long int type){
 				}
 				//f.strings(o.var1);
 				STRING_EXIST(0, 1);
-				CONVERT(type);
+				//CONVERT(type);
 				pret->ret = !f.strings(str);
 				o.var1 = NULL;
 				break;
@@ -812,10 +812,6 @@ struct retour *reader(char *string, unsigned long int type){
 	}
 	if(quote || dquote){
 		fprintf(stderr, "Quote(/Double Quote) non terminee.\n");
-		exit(EXIT_FAILURE);
-	}
-	if(!ret){
-		printf("Ereur de syntaxe\n");
 		exit(EXIT_FAILURE);
 	}
 	return ret;
