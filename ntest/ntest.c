@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "parsearg.h"
+#include "../lib/parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -691,11 +691,11 @@ struct retour *reader(char *string, unsigned long int type){
 				o.var1+=2;
 				//printf("BUG\n");
 				if(f.strings(o.var1)){
-					NUMERIQUE(0, 1);
+					NUMERIQUE(1, 0);
 				}
-				printf("==>%s\n", o.var1);
+				//printf("==>%s\n", o.var1);
 				//o.var1 += 2;
-				printf("%s\n", o.var1);
+				//printf("%s\n", o.var1);
 				//CONVERT(type);
 				o.var1 = NULL;
 				break;
@@ -706,7 +706,7 @@ struct retour *reader(char *string, unsigned long int type){
 				STRING_EXIST(0, 1);
 				pret->ret = f.strings(str);
 				if(f.strings(o.var1)){
-					NUMERIQUE(1, 0);
+					NUMERIQUE(0, 1);
 				}
 				o.var1 = NULL;
 				break;
