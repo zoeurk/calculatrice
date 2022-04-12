@@ -792,16 +792,9 @@ struct retour *reader(char *string, unsigned long int type){
 					default:
 						if(o.var1 == NULL){
 							o.var1 = r;
-							/*if(end == 1){
-								fprintf(stderr, "=>Erreur de syntaxe vers l'offset: %lu.\n", offset);
-								exit(EXIT_FAILURE);
-							}*/
-							if((*r < 48 || *r > 57) && *r != '.' && *r != '-' && *r != '+')
-								o.type = STRING;
-						}else{
-							fprintf(stderr, "Argument invalide:%c\n", *r);
-							exit(EXIT_FAILURE);
 						}
+						if((*r < 48 || *r > 57) && *r != '.' && *r != '-' && *r != '+')
+							o.type = STRING;
 						break;
 				}
 		}
