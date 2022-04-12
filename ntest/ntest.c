@@ -790,15 +790,15 @@ struct retour *reader(char *string, unsigned long int type){
 						//}
 						break;
 					default:
+						if(ret == NULL && (*r == '=' || *r == '~' || *r == '!')){
+							fprintf(stderr,"Argument invalide: \'%c\'\n", *r);
+							exit(EXIT_FAILURE);
+						}
 						if(o.var1 == NULL){
 							o.var1 = r;
 						}
 						if((*r < 48 || *r > 57) && *r != '.' && *r != '-' && *r != '+')
 							o.type = STRING;
-						/*if(ret == NULL){
-							fprintf(stderr,"Argument invalide: \'%c\'\n", *r);
-							exit(EXIT_FAILURE);
-						}*/
 						break;
 				}
 		}
