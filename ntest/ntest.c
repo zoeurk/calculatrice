@@ -410,7 +410,9 @@ char file[28];
 	offset += 1;\
 	REMOVE_SPACE;\
 	ALLOC;\
-	o.var1 = r;\
+	o.var1 = r+1;\
+	while(*o.var1 == ' ' || *o.var1 == '\t' || *o.var1 == '\r')\
+		o.var1++;\
 	str = NULL;\
 	if(*r == ')' || *r == '&' || *r == '|'){\
 		r--;\
@@ -428,9 +430,9 @@ char file[28];
 		}\
 	}\
 	if((*str == '\'' && *(str+1) == '\'') || (*str == '\"' && *(str+1) == '"'))\
-		pret->ret = 0;\
+		pret->ret = ret1;\
 	else \
-		pret->ret = 1;\
+		pret->ret = ret2;\
 	/*if(str && *str){\
 		pret->ret = 1;\
 	}else	pret->ret = 0; \*/\
@@ -676,38 +678,39 @@ struct retour *reader(char *string, unsigned long int type){
 				if(o.var1){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
-				//f.strings(o.var1);
+				f.strings(o.var1);
 				STRING_EXIST(1, 0);
-				pret->ret = f.strings(str);
+				printf("%s\n", o.var1);
+				pret->ret = f.strings(o.var1);
 				o.var1 = NULL;
 				break;
 			case NOT_STR:/*la chaine de caractere N'exist PAS*/
 				if(o.var1){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
-				//printf("%s\n", o.var1);
-				//f.strings(o.var1);
 				STRING_EXIST(0, 1);
+				printf("%s\n",str);
+				pret->ret = !f.strings(str);
 				//CONVERT(type);
-				if(*(o.var1+3) == '"' || *(o.var1+3) == '\'')
+				/*if(*(o.var1+3) == '"' || *(o.var1+3) == '\'')
 					pret->ret = 1;
 				else
-					pret->ret = 0;
+					pret->ret = 0;*/
 				o.var1 = NULL;
 				break;
 			case NUM:/*-n: est nombre*/
 				if(o.var1){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
-				STRING_EXIST(1, 0);
+				STRING_EXIST(0, 1);
 				//o.var1+=2;
 				//printf("BUG\n");
 				if(f.strings(o.var1)){
-					NUMERIQUE(1, 0);
+					NUMERIQUE(0, 1);
 				}
 				//printf("==>%s\n", o.var1);
 				//o.var1 += 2;
-				//printf("%s\n", o.var1);
+				//printf("=>%s\n", o.var1+2);
 				//CONVERT(type);
 				o.var1 = NULL;
 				break;
@@ -718,7 +721,7 @@ struct retour *reader(char *string, unsigned long int type){
 				STRING_EXIST(1, 0);
 				pret->ret = f.strings(str);
 				if(f.strings(o.var1)){
-					NUMERIQUE(0, 1);
+					NUMERIQUE(1, 0);
 				}
 				o.var1 = NULL;
 				break;
