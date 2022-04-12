@@ -156,7 +156,7 @@ char file[28];
 				}\
 				if(o.var1){\
 					if(strcmp(o.var1, buffer) != 0){\
-						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						printf("::WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
 						exit(2);\
 					}\
 				}\
@@ -172,7 +172,7 @@ char file[28];
 					}\
 					if(o.var2){\
 						if(strcmp(o.var2, buffer) != 0){\
-							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							printf("::WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
 							exit(2);\
 						}\
 					}\
@@ -306,6 +306,8 @@ char file[28];
 #define NUMBERS(inc, fn)\
 	ALLOC;\
 	REMOVE_SPACE;\
+	/*printf("%s\n", (char *)(o.var1--));*/\
+	while(*(o.var1-1) == '+' || *(o.var1-1) == '-')o.var1--; \
 	for(j = 0,r = r; *r = 0, j < inc; j++, r++);;\
 	r++;\
 	offset += (inc+1);\
