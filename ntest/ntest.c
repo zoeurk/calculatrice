@@ -128,13 +128,13 @@ char file[28];
 		*((type *)var1) = fonction(o.var1, &str);\
 		str++;\
 		if(str && strlen(str) > 0){\
-			fprintf(stderr, "!!WARNING: Mauvais caractere detectee: <%s>.\n", str);\
+			fprintf(stderr, "WARNING: Mauvais caractere detectee: <%s>.\n", str);\
 		}\
 	}\
 	if(o.var2){\
 		*((type *)var2) = fonction(o.var2, &str);\
 		if(str && strlen(str) > 0){\
-			fprintf(stderr, "::WARNING: Mauvais caractere detectee: <%s>.\n", str);\
+			fprintf(stderr, "WARNING: Mauvais caractere detectee: <%s>.\n", str);\
 		}\
 		*((type *)var2) = fonction(o.var2, &str);\
 	}
@@ -158,7 +158,7 @@ char file[28];
 				}\
 				if(o.var1){\
 					if(strcmp(o.var1, buffer) != 0){\
-						fprintf(stderr, "::WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
 						exit(2);\
 					}\
 				}\
@@ -174,7 +174,7 @@ char file[28];
 					}\
 					if(o.var2){\
 						if(strcmp(o.var2, buffer) != 0){\
-							fprintf(stderr, "WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
 							exit(2);\
 						}\
 					}\
@@ -197,7 +197,7 @@ char file[28];
 				}\
 				if(o.var1){\
 					if(strcmp(o.var1, buffer) != 0){\
-						fprintf(stderr, "WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
 						exit(2);\
 					}\
 				}\
@@ -213,7 +213,7 @@ char file[28];
 					}\
 					if(o.var2){\
 						if(strcmp(o.var2, buffer) != 0){\
-							fprintf(stderr,"WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
 							exit(2);\
 						}\
 					}\
@@ -236,7 +236,7 @@ char file[28];
 				}\
 				if(o.var1){\
 					if(strcmp(o.var1, buffer) != 0){\
-						fprintf(stderr,"WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
 						exit(2);\
 					}\
 				}\
@@ -252,7 +252,7 @@ char file[28];
 					}\
 					if(o.var2){\
 						if(strcmp(o.var2, buffer) != 0){\
-							fprintf(stderr, "WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
 							exit(2);\
 						}\
 					}\
