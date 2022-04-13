@@ -431,13 +431,17 @@ char file[28];
 			str--;\
 		}\
 	}\
-	/*if((*str == '\'' && *(str+1) == '\'') || (*str == '\"' && *(str+1) == '"'))\
-		pret->ret = ret1;\
+	if(*(str -1) == '-')\
+		str++;\
+	printf("==><%s>\n", str);\
+	if(str && strlen(str) > 0)\
+		pret->ret = ret2;\
 	else \
-		pret->ret = ret2;*/\
-	if(str && *str){\
-		pret->ret = 1;\
-	}else	pret->ret = 0; \
+		pret->ret = ret1;\
+	printf("%i\n",pret->ret);
+	/*if(str && *str){\
+		pret->ret = ret2;\
+	}else	pret->ret = ret1;*/
 
 #define NUMERIQUE(ret1, ret2)\
 	switch(pret->ret){\
@@ -683,20 +687,22 @@ struct retour *reader(char *string, unsigned long int type){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
 				//f.strings(o.var1);
-				STRING_EXIST(1, 0);
+				STRING_EXIST(0, 1);
 				//printf("%s\n", o.var1);
 				//printf("%i\n", f.strings(str+1));
-				pret->ret = f.strings(o.var1);
+				printf("%i\n", pret->ret);
+				//pret->ret = f.strings(o.var1);
 				o.var1 = NULL;
 				break;
 			case NOT_STR:/*la chaine de caractere N'exist PAS*/
 				if(o.var1){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
-				STRING_EXIST(0, 1);
+				STRING_EXIST(1, 0);
+				printf("%i\n", pret->ret);
 				//printf("===>%s\n",o.var1);
 				//printf("%i\n", f.strings(str+1));
-				pret->ret = !f.strings(str);
+				//pret->ret = f.strings(str);
 				//CONVERT(type);
 				/*if(*(o.var1+3) == '"' || *(o.var1+3) == '\'')
 					pret->ret = 1;
