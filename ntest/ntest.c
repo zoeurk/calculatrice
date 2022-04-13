@@ -862,10 +862,20 @@ struct retour *comput(struct retour **r){
 			case 0: 
 				break;
 			case AND:
-				CALCULE( pret->prev->ret &= pret->next->ret, 0);
+				if(pret->next){
+					CALCULE( pret->prev->ret &= pret->next->ret, 0);
+				}else{
+					fprintf(stderr, "Erreur de syntaxe\n");
+					exit(EXIT_FAILURE);
+				}
 				continue;
 			case OR:
-				CALCULE( pret->prev->ret |= pret->next->ret, 1);
+				if(pret->next){
+					CALCULE( pret->prev->ret |= pret->next->ret, 1);
+				}else{
+					fprintf(stderr,"Erreur de syntaxe\n");
+					exit(EXIT_FAILURE);
+				}
 				continue;
 			case INVERT:
 				pprev = pret->prev;
