@@ -125,7 +125,6 @@ char file[28];
 
 #define ___CONVERT___(type, fonction)\
 	if(o.var1){\
-		o.var1+=2;\
 		*((type *)var1) = fonction(o.var1, &str);\
 		str++;\
 		if(str && strlen(str) > 0){\
@@ -158,8 +157,8 @@ char file[28];
 					*(pbuf+1) = 0;\
 				}\
 				if(o.var1){\
-					if(strcmp(o.var1-1, buffer) != 0){\
-						fprintf(stderr, "WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1-1, buffer);\
+					if(strcmp(o.var1, buffer) != 0){\
+						fprintf(stderr, "::WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
 						exit(2);\
 					}\
 				}\
