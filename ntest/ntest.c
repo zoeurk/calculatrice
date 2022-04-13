@@ -431,13 +431,13 @@ char file[28];
 			str--;\
 		}\
 	}\
-	if((*str == '\'' && *(str+1) == '\'') || (*str == '\"' && *(str+1) == '"'))\
+	/*if((*str == '\'' && *(str+1) == '\'') || (*str == '\"' && *(str+1) == '"'))\
 		pret->ret = ret1;\
 	else \
-		pret->ret = ret2;\
-	/*if(str && *str){\
+		pret->ret = ret2;*/\
+	if(str && *str){\
 		pret->ret = 1;\
-	}else	pret->ret = 0; \*/\
+	}else	pret->ret = 0; \
 
 #define NUMERIQUE(ret1, ret2)\
 	switch(pret->ret){\
@@ -682,9 +682,10 @@ struct retour *reader(char *string, unsigned long int type){
 				if(o.var1){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
-				f.strings(o.var1);
+				//f.strings(o.var1);
 				STRING_EXIST(1, 0);
 				//printf("%s\n", o.var1);
+				//printf("%i\n", f.strings(str+1));
 				pret->ret = f.strings(o.var1);
 				o.var1 = NULL;
 				break;
@@ -693,7 +694,8 @@ struct retour *reader(char *string, unsigned long int type){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
 				STRING_EXIST(0, 1);
-				//printf("%s\n",str);
+				//printf("===>%s\n",o.var1);
+				//printf("%i\n", f.strings(str+1));
 				pret->ret = !f.strings(str);
 				//CONVERT(type);
 				/*if(*(o.var1+3) == '"' || *(o.var1+3) == '\'')
