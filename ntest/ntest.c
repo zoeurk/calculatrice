@@ -433,12 +433,12 @@ char file[28];
 	}\
 	if(*(str -1) == '-')\
 		str++;\
-	printf("==><%s>\n", str);\
+	/*printf("==><%s>\n", str);*/\
 	if(str && strlen(str) > 0)\
 		pret->ret = ret2;\
 	else \
 		pret->ret = ret1;\
-	printf("%i\n",pret->ret);
+	/*printf("%i\n",pret->ret);*/
 	/*if(str && *str){\
 		pret->ret = ret2;\
 	}else	pret->ret = ret1;*/
@@ -690,7 +690,7 @@ struct retour *reader(char *string, unsigned long int type){
 				STRING_EXIST(0, 1);
 				//printf("%s\n", o.var1);
 				//printf("%i\n", f.strings(str+1));
-				printf("%i\n", pret->ret);
+				//printf("%i\n", pret->ret);
 				//pret->ret = f.strings(o.var1);
 				o.var1 = NULL;
 				break;
@@ -699,7 +699,7 @@ struct retour *reader(char *string, unsigned long int type){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
 				STRING_EXIST(1, 0);
-				printf("%i\n", pret->ret);
+				//printf("%i\n", pret->ret);
 				//printf("===>%s\n",o.var1);
 				//printf("%i\n", f.strings(str+1));
 				//pret->ret = f.strings(str);
