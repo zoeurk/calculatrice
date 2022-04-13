@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -148,6 +148,7 @@ char file[28];
 				s[0] = var1;\
 				s[1] = var2;\
 			}else s[0] = var1;\
+			/*printf("<%f>\n", *((float *)var1));*/\
 			sprintf(buffer,"%f", *((float *)s[0])); \
 			if(strchr(buffer,'.') != NULL){\
 				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
@@ -157,8 +158,8 @@ char file[28];
 					*(pbuf+1) = 0;\
 				}\
 				if(o.var1){\
-					if(strcmp(o.var1, buffer) != 0){\
-						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+					if(strcmp(o.var1-1, buffer) != 0){\
+						fprintf(stderr, "WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1-1, buffer);\
 						exit(2);\
 					}\
 				}\
@@ -174,7 +175,7 @@ char file[28];
 					}\
 					if(o.var2){\
 						if(strcmp(o.var2, buffer) != 0){\
-							printf("::WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							fprintf(stderr, "WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
 							exit(2);\
 						}\
 					}\
@@ -197,7 +198,7 @@ char file[28];
 				}\
 				if(o.var1){\
 					if(strcmp(o.var1, buffer) != 0){\
-						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						fprintf(stderr, "WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
 						exit(2);\
 					}\
 				}\
@@ -213,7 +214,7 @@ char file[28];
 					}\
 					if(o.var2){\
 						if(strcmp(o.var2, buffer) != 0){\
-							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							fprintf(stderr,"WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
 							exit(2);\
 						}\
 					}\
@@ -236,7 +237,7 @@ char file[28];
 				}\
 				if(o.var1){\
 					if(strcmp(o.var1, buffer) != 0){\
-						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						fprintf(stderr,"WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
 						exit(2);\
 					}\
 				}\
@@ -252,7 +253,7 @@ char file[28];
 					}\
 					if(o.var2){\
 						if(strcmp(o.var2, buffer) != 0){\
-							printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							fprintf(stderr, "WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
 							exit(2);\
 						}\
 					}\
@@ -293,7 +294,7 @@ char file[28];
 		if(*r == ch)\
 			q = !q;\
 		if(q){\
-			printf("Quote(/Double quote nom fermee vers l'offset: %lu\n", ___quote___);\
+			fprintf(stderr,"Quote(/Double quote nom fermee vers l'offset: %lu\n", ___quote___);\
 			exit(EXIT_FAILURE);\
 		}\
 		*r = 0;\
@@ -325,7 +326,7 @@ char file[28];
 	}*/ \
 	if((*r < 48 || *r > 57) && *r != ' ' && *r != '\t' && *r != '\n' && *r != ')' && *r !=0 ){\
 		*(r+1) = 0;\
-		printf("Numerique attendu chaine de caracter declaree: '%s'.\n", o.var2);\
+		fprintf(stderr,"Numerique attendu chaine de caracter declaree: '%s'.\n", o.var2);\
 		exit(EXIT_FAILURE);\
 	} \
 	if(*r == ')'){\
@@ -336,20 +337,22 @@ char file[28];
 	}\
 	/*printf("%s,%s\n",o.var1, o.var2);*/\
 	*r = 0; \
+	/*printf("<%s>\n", o.var2);\*/\
 	if(o.var1 != NULL && strlen(o.var1) > 0 && o.var2 != NULL && strlen(o.var2) > 0){\
+		/*o.var2;\*/\
 		CONVERT(type);\
 	/*};*/\
 		pret->ret = fn(var1,var2);\
 	}else{\
 		pret->ret = 0;\
-	}\
-	o.var1 = o.var2 = NULL;\
-	o.type = 0;
+	}
+	/*o.var1 = o.var2 = NULL;*/\
+	/*o.type = 0;*/
 
 #define STRING_DEF\
 	if(o.type == STRING){\
 		*r = 0;\
-		printf("Numerique attendu chaine de caracter declaree: '%s'\n", o.var1);\
+		fprintf(stderr,"Numerique attendu chaine de caracter declaree: '%s'\n", o.var1);\
 		exit(EXIT_FAILURE);\
 	}
 
@@ -631,6 +634,7 @@ struct retour *reader(char *string, unsigned long int type){
 			if(strncmp(r,matching[i], strlen(matching[i])) == 0)
 				break;
 		}
+		//printf("%lu\n", i);
 		/*if(o.var1 && i == 17)
 			exit(EXIT_FAILURE);*/
 		switch(i){
@@ -638,6 +642,7 @@ struct retour *reader(char *string, unsigned long int type){
 				end = 0;
 				STRING_DEF;
 				NUMBERS(1, f.equal);
+				//printf("<%s>\n", r);
 				break;
 			case DIFF:
 				STRING_DEF;
@@ -680,7 +685,7 @@ struct retour *reader(char *string, unsigned long int type){
 				}
 				f.strings(o.var1);
 				STRING_EXIST(1, 0);
-				printf("%s\n", o.var1);
+				//printf("%s\n", o.var1);
 				pret->ret = f.strings(o.var1);
 				o.var1 = NULL;
 				break;
@@ -689,7 +694,7 @@ struct retour *reader(char *string, unsigned long int type){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
 				STRING_EXIST(0, 1);
-				printf("%s\n",str);
+				//printf("%s\n",str);
 				pret->ret = !f.strings(str);
 				//CONVERT(type);
 				/*if(*(o.var1+3) == '"' || *(o.var1+3) == '\'')
