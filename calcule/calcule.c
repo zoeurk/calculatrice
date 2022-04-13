@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "../lib/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -284,9 +284,11 @@ void zero(char *str, int type){
 						*(pbuf+1) = 0;
 					}
 					//ZERO(pbuf, buffer);
-					if(strcmp(str, buffer) != 0)
-						printf("WARNING: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);
+					if(strcmp(str, buffer) != 0){
+						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);
+						exit(2);
 					}
+				}
 				break;
 		case DOUBLE:
 				d = strtod(str, NULL);
@@ -300,9 +302,11 @@ void zero(char *str, int type){
 					}
 					//ZERO(pbuf, buffer);
 					//if(*pbuf == 0)*pbuf = '0';
-					if(strcmp(str, buffer) != 0)
-						printf("WARNING: Nombre trop long pour etre converti dans ce format\n");
+					if(strcmp(str, buffer) != 0){
+						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format\n");
+						exit(2);
 					}
+				}
 				break;
 		case LDOUBLE:
 				ld = strtold(str, NULL);
@@ -316,8 +320,10 @@ void zero(char *str, int type){
 						*(pbuf+1) = 0;
 					}
 					//if(*pbuf == 0)*pbuf = '0';
-					if(strcmp(str, buffer) != 0)
-						printf("WARNING: Nombre trop long pour etre converti dans ce format\n");
+					if(strcmp(str, buffer) != 0){
+						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format\n");
+						exit(2);
+					}
 				}
 				break;
 	}
@@ -341,7 +347,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				continue;
 			case ',':
 				//if(strlen(buffer) && (pv && pv->type&(FLOAT|DOUBLE|LDOUBLE)) != 0)
-					//zero(buffer, pv->type);
+					zero(buffer, pv->type);
 				split = 0;
 				init = 1;
 				if(virgule == 0){
@@ -351,7 +357,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					ERROR("Un argument est manquant vers l'offset %i\n", i);
 				}
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);if(strlen(buffer) && (pv && pv->type&(FLOAT|DOUBLE|LDOUBLE)) != 0)
-				//zero(buffer, pv->type);
+				zero(buffer, pv->type);
 				num = 0;
 				wait = 0;
 				BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
@@ -505,7 +511,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				}
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
 				/*BUG*/
-				//zero(buffer,arg->type);
+				zero(buffer,arg->type);
 				wait = 0;
 				if(bufset){
 					if(v == NULL)
@@ -532,7 +538,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				}
 				if((arg->type&(FLOAT|DOUBLE|LDOUBLE)) != 0)
 					/*BUG*/
-					//zero(buffer, arg->type);
+					zero(buffer, arg->type);
 				if(cont){
 					BUFSET(v, pv,arg->valsize, buffer, end, arg->type);
 					pv->type = argv[i];
@@ -591,12 +597,12 @@ struct value *initialisation(char *argv, struct arguments *arg){
 					}
 					ERROR("Erreur de syntaxe vers l'offset %i\n",i);
 				}
-				//zero(buffer, arg->type);
+				zero(buffer, arg->type);
 				next:
 				wait = 0;
 				PI_INTEGRATION(trigo[0], buffer, i-1, arg->pi);
-				/*if((arg->type&(FLOAT|DOUBLE|LDOUBLE)) != 0 && *buffer != 0)
-					zero(buffer, arg->type);*/
+				if((arg->type&(FLOAT|DOUBLE|LDOUBLE)) != 0 && *buffer != 0)
+					zero(buffer, arg->type);
 				//printf("====>%s\n", buffer);
 				BUFSET(v, pv, arg->valsize, buffer, end, arg->type);
 				pv->type = argv[i];
@@ -683,6 +689,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 						parenthese = 1;
 						buffer[len] = trigo[j-1][len];
 						len++;
+						//printf("%s\n", buffer);
 						if(len == (int)strlen(trigo[j-1]) && ((argv[i+1] == '(' || argv[i+1] == ' ' || argv[i+1] == '\n' || argv[i+1] == '\t')
 							|| strcmp(buffer,trigo[0]) == 0)
 						){
@@ -703,8 +710,8 @@ struct value *initialisation(char *argv, struct arguments *arg){
 		}
 	}
 	if(bufset){
-		//if((arg->type&(FLOAT|DOUBLE|LDOUBLE)) != 0)
-			//zero(buffer, arg->type);
+		if((arg->type&(FLOAT|DOUBLE|LDOUBLE)) != 0)
+			zero(buffer, arg->type);
 	}
 	if(v){
 		if(c_parentheses > o_parentheses){
