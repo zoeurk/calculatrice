@@ -1,1 +1,1 @@
-SUBDIRS=lib calcule ntest scripts
+SUBDIRS=parsearg operation calcule ntest scripts

@@ -28,7 +28,8 @@ AC_FUNC_STRTOD
 AC_CHECK_FUNCS([atexit floor memset sqrt strchr])
 
 AC_CONFIG_FILES([Makefile
-                 lib/Makefile
+		 operation/Makefile
+                 parsearg/Makefile
                  calcule/Makefile
 		 ntest/Makefile])
 AC_OUTPUT

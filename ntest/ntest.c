@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../lib/parsearg.h"
+#include "../parsearg/parsearg.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
