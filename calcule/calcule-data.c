@@ -35,7 +35,7 @@ const unsigned long int BUFFER = 28;
 			if((temp = strchr(resultat, '.')))\
 			temp[8] = 0;\
 		/**((float *)val1) *= *((float *)val2);*/\
-		;\
+		op_final;\
 		sprintf(valeur3, string_type, n1);\
 		if(equal(valeur3, resultat) != 0){\
 			fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format\n");\
