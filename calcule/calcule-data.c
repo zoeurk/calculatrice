@@ -33,7 +33,7 @@ const unsigned long int BUFFER = 28;
 		sprintf(valeur2, string_type, n2);\
 		resultat = op(valeur1, valeur2);\
 			if((temp = strchr(resultat, '.')) && strlen(temp) > 7)\
-			temp[8] = 0;\
+				temp[8] = 0;\
 		/**((float *)val1) *= *((float *)val2);*/\
 		op_final;\
 		sprintf(valeur3, string_type, n1);\
@@ -50,7 +50,7 @@ const unsigned long int BUFFER = 28;
 		sprintf(valeur1, string_type, n1);\
 		sprintf(valeur2, string_type, n2);\
 		resultat = division(valeur1, valeur2, 6, 0);\
-		if((temp = strchr(resultat, '.')) && strlen(temp) > 7)\
+		if((temp = strchr(resultat, '.')) && strlen(temp) > 7)
 			temp[8] = 0;\
 		/**((float *)val1) *= *((float *)val2);*/\
 		op_final;\
@@ -130,12 +130,12 @@ void fdivision(void *val1, void *val2){
 	//*((float *)val1) /= *((float *)val2);
 }
 void ddivision(void *val1, void *val2){
-	//CHECK_AND_COMPUT_DIVISION(*((double *)val1) /= *((double *)val2),"%lf", *((double *)val1), *((double *)val2), 6);
-	*((double *)val1) /= *((double *) val2);
+	CHECK_AND_COMPUT_DIVISION(*((double *)val1) /= *((double *)val2),"%lf", *((double *)val1), *((double *)val2));
+	//*((double *)val1) /= *((double *) val2);
 }
 void lddivision(void *val1, void *val2){
-	//CHECK_AND_COMPUT_DIVISION(*((long double *)val1) /= *((long double *)val2),"%Lf", *((long double *)val1), *((long double *)val2), 6);
-	*((long double *)val1) /= *((long double *)val2);
+	CHECK_AND_COMPUT_DIVISION(*((long double *)val1) /= *((long double *)val2),"%Lf", *((long double *)val1), *((long double *)val2));
+	//*((long double *)val1) /= *((long double *)val2);
 }
 
 void fcosinus(void *val){
