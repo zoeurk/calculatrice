@@ -4,7 +4,7 @@
 #include <string.h>
 /*#include <math.h>*/
 #include "calcule-data.h"
-#include "../operation/operation.h"
+#include "operation.h"
 #ifdef __USE_ISOC99
 /* IEEE positive infinity.  */
 # if __GNUC_PREREQ (3, 3)
@@ -38,7 +38,7 @@ const unsigned long int BUFFER = 28;
 		op_final;\
 		sprintf(valeur3, string_type, n1);\
 		if(equal(valeur3, resultat) != 0){\
-			fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s::%s\n", valeur3, resultat);\
+			fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
 			free(resultat);\
 			exit(2);\
 		}\
@@ -56,7 +56,7 @@ const unsigned long int BUFFER = 28;
 		op_final;\
 		sprintf(valeur3, string_type, n1);\
 		if(equal(valeur3, resultat) != 0){\
-			fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s::%s\n", valeur3, resultat);\
+			fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
 			free(resultat);\
 			exit(2);\
 		}\
