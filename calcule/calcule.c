@@ -8,6 +8,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+
+#include <float.h>
 #include <unistd.h>
 
 #include "calcule-data.h"
@@ -284,7 +286,7 @@ void zero(char *str, int type){
 						*(pbuf+1) = 0;
 					}
 					//ZERO(pbuf, buffer);
-					if(strcmp(str, buffer) != 0){
+					if(strcmp(str, buffer) != 0 && strcmp(str,"PI") != 0){
 						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);
 						exit(2);
 					}
@@ -302,7 +304,7 @@ void zero(char *str, int type){
 					}
 					//ZERO(pbuf, buffer);
 					//if(*pbuf == 0)*pbuf = '0';
-					if(strcmp(str, buffer) != 0){
+					if(strcmp(str, buffer) != 0 && strcmp("PI", str) != 0){
 						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", str, buffer);
 						exit(2);
 					}
@@ -320,7 +322,7 @@ void zero(char *str, int type){
 						*(pbuf+1) = 0;
 					}
 					//if(*pbuf == 0)*pbuf = '0';
-					if(strcmp(str, buffer) != 0){
+					if(strcmp(str, buffer) != 0 && strcmp("PI",str) != 0){
 						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format: %s != %s\n", str, buffer);
 						exit(2);
 					}
