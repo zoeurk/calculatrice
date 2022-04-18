@@ -4,7 +4,7 @@
 #include <string.h>
 /*#include <math.h>*/
 #include "calcule-data.h"
-#include "operation.h"
+#include "../operation/operation.h"
 #ifdef __USE_ISOC99
 /* IEEE positive infinity.  */
 # if __GNUC_PREREQ (3, 3)
@@ -44,14 +44,12 @@ const unsigned long int BUFFER = 28;
 		}\
 		free(resultat);\
 	}else op_final;
-#define CHECK_AND_COMPUT_DIVISION(op_final,string_type, n1, n2)\
-	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat, *temp;\
+#define CHECK_AND_COMPUT_DIVISION(op_final,string_type, n1, n2, len)\
+	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat;\
 	if(n1 != INFINITY && n1 != NAN && n2 != INFINITY && n2 != NAN){\
 		sprintf(valeur1, string_type, n1);\
 		sprintf(valeur2, string_type, n2);\
-		resultat = division(valeur1, valeur2, 6, 0);\
-		if((temp = strchr(resultat, '.')) && strlen(temp) > 6)\
-			temp[7] = 0;\
+		resultat = division(valeur1, valeur2, len, 0);\
 		/**((float *)val1) *= *((float *)val2);*/\
 		op_final;\
 		sprintf(valeur3, string_type, n1);\
@@ -126,15 +124,15 @@ void ldmultiplication(void *val1, void *val2){
 }
 
 void fdivision(void *val1, void *val2){
-	CHECK_AND_COMPUT_DIVISION(*((float *)val1) /= *((float *)val2),"%f", *((float *)val1), *((float *)val2));
+	CHECK_AND_COMPUT_DIVISION(*((float *)val1) /= *((float *)val2),"%f", *((float *)val1), *((float *)val2), 6);
 	//*((float *)val1) /= *((float *)val2);
 }
 void ddivision(void *val1, void *val2){
-	CHECK_AND_COMPUT_DIVISION(*((double *)val1) /= *((double *)val2),"%lf", *((double *)val1), *((double *)val2));
+	CHECK_AND_COMPUT_DIVISION(*((double *)val1) /= *((double *)val2),"%lf", *((double *)val1), *((double *)val2), 6);
 	//*((double *)val1) /= *((double *) val2);
 }
 void lddivision(void *val1, void *val2){
-	CHECK_AND_COMPUT_DIVISION(*((long double *)val1) /= *((long double *)val2),"%Lf", *((long double *)val1), *((long double *)val2));
+	CHECK_AND_COMPUT_DIVISION(*((long double *)val1) /= *((long double *)val2),"%Lf", *((long double *)val1), *((long double *)val2), 6);
 	//*((long double *)val1) /= *((long double *)val2);
 }
 
