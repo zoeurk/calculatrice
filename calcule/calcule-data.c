@@ -28,7 +28,7 @@ const unsigned long int BUFFER = 28;
 
 #define CHECK_AND_COMPUT(op_final,string_type, n1, n2, op)\
 	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat, *temp;\
-	if(n1 != INFINITY && n1 != NAN && n2 != INFINITY && n2 != NAN){\
+	if(n1 != INFINITY && n1 != NAN && n1 != -NAN && n2 != INFINITY && n2 != NAN && n2 != -NAN){\
 		sprintf(valeur1, string_type, n1);\
 		sprintf(valeur2, string_type, n2);\
 		resultat = op(valeur1, valeur2);\
@@ -37,27 +37,27 @@ const unsigned long int BUFFER = 28;
 		/**((float *)val1) *= *((float *)val2);*/\
 		op_final;\
 		sprintf(valeur3, string_type, n1);\
-		if(equal(valeur3, resultat) != 0){\
-			fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
-			free(resultat);\
-			exit(2);\
+		if(equal(valeur3, resultat) != 0 && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3, "inf") != 0 && strcmp(valeur3, "-inf") != 0){\
+				fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
+				free(resultat);\
+				exit(2);\
 		}\
 		free(resultat);\
 	}else op_final;
 #define CHECK_AND_COMPUT_DIVISION(op_final,string_type, n1, n2, len)\
 	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat;\
-	if(n1 != INFINITY && n1 != NAN && n2 != INFINITY && n2 != NAN){\
+	if(n1 != INFINITY && n1 != NAN && n1 != -NAN && n2 != INFINITY && n2 != NAN && n2 != -NAN){\
 		sprintf(valeur1, string_type, n1);\
 		sprintf(valeur2, string_type, n2);\
 		resultat = division(valeur1, valeur2, len, 0);\
 		/**((float *)val1) *= *((float *)val2);*/\
 		op_final;\
 		sprintf(valeur3, string_type, n1);\
-		if(equal(valeur3, resultat) != 0){\
-			fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
-			free(resultat);\
-			exit(2);\
-		}\
+		if(equal(valeur3, resultat) != 0 && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3,"inf") != 0 && strcmp(valeur3, "-inf") != 0){\
+				fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
+				free(resultat);\
+				exit(2);\
+			}\
 		free(resultat);\
 	}else op_final;
 
