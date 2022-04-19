@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "parsearg.h"
+#include "../parsearg/parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
