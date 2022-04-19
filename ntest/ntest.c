@@ -126,6 +126,7 @@ char file[28];
 #define ___CONVERT___(type, fonction)\
 	if(o.var1){\
 		*((type *)var1) = fonction(o.var1, &str);\
+		str++;\
 		if(str && strlen(str) > 0){\
 			fprintf(stderr, "WARNING: Mauvais caractere detectee: <%s>.\n", str);\
 		}\
@@ -142,12 +143,121 @@ char file[28];
 	switch(type){\
 		case FLOAT:\
 			___CONVERT___(float, strtof)\
+			if(o.var1 && o.var2){\
+				s[0] = var1;\
+				s[1] = var2;\
+			}else s[0] = var1;\
+			/*printf("<%f>\n", *((float *)var1));*/\
+			sprintf(buffer,"%f", *((float *)s[0])); \
+			if(strchr(buffer,'.') != NULL){\
+				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
+				if(*pbuf == '.') *pbuf = 0;\
+				if(pbuf == buffer && *pbuf == 0){\
+					*pbuf = '0';\
+					*(pbuf+1) = 0;\
+				}\
+				if(o.var1){\
+					if(strcmp(o.var1, buffer) != 0){\
+						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						exit(2);\
+					}\
+				}\
+			}\
+			if(s[1]){\
+				sprintf(buffer,"%f", *((float *)s[1])); \
+				if(strchr(buffer,'.') != NULL){\
+					for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
+					if(*pbuf == '.') *pbuf = 0;\
+					if(pbuf == buffer && *pbuf == 0){\
+						*pbuf = '0';\
+						*(pbuf+1) = 0;\
+					}\
+					if(o.var2){\
+						if(strcmp(o.var2, buffer) != 0){\
+							fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							exit(2);\
+						}\
+					}\
+				}\
+			}\
 			break;\
 		case DOUBLE:\
-			___CONVERT___(double, strtof)\
+			___CONVERT___(double, strtod)\
+			if(o.var1 && o.var2){\
+				s[0] = var1;\
+				s[1] = var2;\
+			}else s[0] = var1;\
+			sprintf(buffer,"%lf", *((double *)s[0])); \
+			if(strchr(buffer,'.') != NULL){\
+				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
+				if(*pbuf == '.') *pbuf = 0;\
+				if(pbuf == buffer && *pbuf == 0){\
+					*pbuf = '0';\
+					*(pbuf+1) = 0;\
+				}\
+				if(o.var1){\
+					if(strcmp(o.var1, buffer) != 0){\
+						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						exit(2);\
+					}\
+				}\
+			}\
+			if(s[1]){\
+				sprintf(buffer,"%lf", *((double *)s[1])); \
+				if(strchr(buffer,'.') != NULL){\
+					for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
+					if(*pbuf == '.') *pbuf = 0;\
+					if(pbuf == buffer && *pbuf == 0){\
+						*pbuf = '0';\
+						*(pbuf+1) = 0;\
+					}\
+					if(o.var2){\
+						if(strcmp(o.var2, buffer) != 0){\
+							fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							exit(2);\
+						}\
+					}\
+				}\
+			}\
 			break;\
 		case LDOUBLE:\
-			___CONVERT___(long double, strtof)\
+			___CONVERT___(long double, strtod)\
+			if(o.var1 && o.var2){\
+				s[0] = var1;\
+				s[1] = var2;\
+			}else s[0] = var1;\
+			sprintf(buffer,"%Lf", *((long double *)s[0])); \
+			if(strchr(buffer,'.') != NULL){\
+				for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
+				if(*pbuf == '.') *pbuf = 0;\
+				if(pbuf == buffer && *pbuf == 0){\
+					*pbuf = '0';\
+					*(pbuf+1) = 0;\
+				}\
+				if(o.var1){\
+					if(strcmp(o.var1, buffer) != 0){\
+						fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var1, buffer);\
+						exit(2);\
+					}\
+				}\
+			}\
+			if(s[1]){\
+				sprintf(buffer,"%Lf", *((long double *)s[1])); \
+				if(strchr(buffer,'.') != NULL){\
+					for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;\
+					if(*pbuf == '.') *pbuf = 0;\
+					if(pbuf == buffer && *pbuf == 0){\
+						*pbuf = '0';\
+						*(pbuf+1) = 0;\
+					}\
+					if(o.var2){\
+						if(strcmp(o.var2, buffer) != 0){\
+							fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", o.var2, buffer);\
+							exit(2);\
+						}\
+					}\
+				}\
+			}\
 			break;\
 	}
 
@@ -183,7 +293,7 @@ char file[28];
 		if(*r == ch)\
 			q = !q;\
 		if(q){\
-			printf("Quote(/Double quote nom fermee vers l'offset: %lu\n", ___quote___);\
+			fprintf(stderr,"Quote(/Double quote nom fermee vers l'offset: %lu\n", ___quote___);\
 			exit(EXIT_FAILURE);\
 		}\
 		*r = 0;\
@@ -198,12 +308,14 @@ char file[28];
 #define NUMBERS(inc, fn)\
 	ALLOC;\
 	REMOVE_SPACE;\
+	/*printf("%s\n", (char *)(o.var1--));*/\
+	while(*(o.var1-1) == '+' || *(o.var1-1) == '-')o.var1--; \
 	for(j = 0,r = r; *r = 0, j < inc; j++, r++);;\
 	r++;\
 	offset += (inc+1);\
 	REMOVE_SPACE;\
 	o.var2 = r;\
-	while(((*r >47 && *r < 58) || *r == '-' || *r =='.') && *r != 0){\
+	while((((*r >47 && *r < 58) || (*r == '+' || *r == '-')) || (*r =='.' )) && *r != 0){\
 		r++;\
 		offset++;\
 	}\
@@ -213,7 +325,7 @@ char file[28];
 	}*/ \
 	if((*r < 48 || *r > 57) && *r != ' ' && *r != '\t' && *r != '\n' && *r != ')' && *r !=0 ){\
 		*(r+1) = 0;\
-		printf("Numerique attendu chaine de caracter declaree: '%s'.\n", o.var2);\
+		fprintf(stderr,"Numerique attendu chaine de caracter declaree: '%s'.\n", o.var2);\
 		exit(EXIT_FAILURE);\
 	} \
 	if(*r == ')'){\
@@ -224,20 +336,22 @@ char file[28];
 	}\
 	/*printf("%s,%s\n",o.var1, o.var2);*/\
 	*r = 0; \
+	/*printf("<%s>\n", o.var2);\*/\
 	if(o.var1 != NULL && strlen(o.var1) > 0 && o.var2 != NULL && strlen(o.var2) > 0){\
+		/*o.var2;\*/\
 		CONVERT(type);\
 	/*};*/\
 		pret->ret = fn(var1,var2);\
 	}else{\
 		pret->ret = 0;\
-	}\
-	o.var1 = o.var2 = NULL;\
-	o.type = 0;
+	}
+	/*o.var1 = o.var2 = NULL;*/\
+	/*o.type = 0;*/
 
 #define STRING_DEF\
 	if(o.type == STRING){\
 		*r = 0;\
-		printf("Numerique attendu chaine de caracter declaree: '%s'\n", o.var1);\
+		fprintf(stderr,"Numerique attendu chaine de caracter declaree: '%s'\n", o.var1);\
 		exit(EXIT_FAILURE);\
 	}
 
@@ -294,11 +408,13 @@ char file[28];
 	o.type = NUMBER;
 
 #define STRING_EXIST(ret1, ret2)\
-	r += 2;\
-	offset += 2;\
+	r += 1;\
+	offset += 1;\
 	REMOVE_SPACE;\
 	ALLOC;\
-	o.var1 = r;\
+	o.var1 = r+1;\
+	while(*o.var1 == ' ' || *o.var1 == '\t' || *o.var1 == '\r')\
+		o.var1++;\
 	str = NULL;\
 	if(*r == ')' || *r == '&' || *r == '|'){\
 		r--;\
@@ -315,28 +431,64 @@ char file[28];
 			str--;\
 		}\
 	}\
-	if(str && *str){\
+	if(*(str -1) == '-')\
+		str++;\
+	/*printf("==><%s>\n", str);*/\
+	if(str && strlen(str) > 0)\
+		pret->ret = ret2;\
+	else \
 		pret->ret = ret1;\
-	}else	pret->ret = ret2; \
+	/*printf("%i\n",pret->ret);*/
+	/*if(str && *str){\
+		pret->ret = ret2;\
+	}else	pret->ret = ret1;*/
 
 #define NUMERIQUE(ret1, ret2)\
 	switch(pret->ret){\
 		case 0:\
 			break;\
 		case 1:\
+			signe = 0;\
 			str = o.var1;\
 			_end_ = 0;\
+			str++;\
+			while(*str == '\t' || *str == ' ' || *str == '\n')\
+				str++;\
+			min = 0;\
 			while(*str != 0){\
-				if((*str < 48 || *str > 57) && *str != '.' && *str != '-' && *str != 0){\
+				if((*str < 48 || *str > 57) && *str != '.' && *str != '-' && *str != '+'){\
+					if(*str > 47 || *str < 58)\
+						min = 1;\
+					if(min == 1 && (*str == '-' || *str == '+')){\
+						_end_ = 1;\
+						break;\
+					}\
+				}\
+				if(*str == '.' && *(str+1) == 0){\
 					_end_ = 1;\
 					break;\
 				}\
+				if(*str == '.'){\
+					dot++;\
+					if(dot == 2){\
+						_end_ = 1;\
+						break;\
+					}\
+				}\
+				if(signe == 1 && (*str == '-' || *str == '+')){\
+					_end_ = 1;\
+					break;\
+				}\
+				if((signe == 0 && *str > 47 && *str < 58) || *str == '.')\
+					signe = 1;\
+				/*printf("%i::%i\n", dot, signe);*/\
 				str++;\
 			}\
 			if(!_end_)\
 				pret->ret = ret1;\
 			else\
 				pret->ret = ret2;\
+			/*printf("%i\n", pret->ret);*/\
 			break;\
 	}
 
@@ -426,13 +578,14 @@ int test_numerique(char *buffer){
 }
 struct retour *reader(char *string, unsigned long int type){
 	struct fn f;
-	struct retour *pret= NULL, *pprev;
+	struct retour *pret= NULL;
 	struct objet o = {0, 0, NULL, NULL};
-	void *var2 = NULL;
+	void *var2 = NULL, *s[2];
 	char *matching[17] = {"==", "!=" ,">=", "<=", ">", "<", "~=", "!~", "-z", "-Z", "-n", "-N", "!", "&&", "||","(",")"};
-	char *r = NULL, *str = NULL, quote = 0, dquote = 0;
-	unsigned long int size, offset, i, ___quote___ = 0, parentheses = 0, end = 0;
+	char *r = NULL, *str = NULL, quote = 0, dquote = 0, dot = 0, signe = 0, buffer[56], *pbuf;
+	unsigned long int size, offset, i, ___quote___ = 0, parentheses = 0, end = 0, min = 0;
 	int j, _end_;
+	memset(buffer,0,56);
 	switch(type){
 		case FLOAT:
 			f.diff = f_diff;
@@ -443,6 +596,7 @@ struct retour *reader(char *string, unsigned long int type){
 			f.e_greater = f_e_greater;
 			size = sizeof(float);
 			o.size = size;
+			o.type = FLOAT;
 			var1 = ___calloc___(&var1, 2*size);
 			//var1 = malloc(2*size);
 			var2 = var1+size;
@@ -456,11 +610,13 @@ struct retour *reader(char *string, unsigned long int type){
 			f.e_greater = d_e_greater;
 			size = sizeof(double);
 			o.size = size;
+			o.type = DOUBLE;
 			var1 = ___calloc___(&var1, 2*size);
 			//var1 = calloc(2*size);
 			var2 = var1+size;
 			break;
 		case LDOUBLE:
+			o.type = LDOUBLE;
 			f.diff = ld_diff;
 			f.equal = ld_equal;
 			f.less = ld_less;
@@ -481,6 +637,7 @@ struct retour *reader(char *string, unsigned long int type){
 			if(strncmp(r,matching[i], strlen(matching[i])) == 0)
 				break;
 		}
+		//printf("%lu\n", i);
 		/*if(o.var1 && i == 17)
 			exit(EXIT_FAILURE);*/
 		switch(i){
@@ -488,6 +645,7 @@ struct retour *reader(char *string, unsigned long int type){
 				end = 0;
 				STRING_DEF;
 				NUMBERS(1, f.equal);
+				//printf("<%s>\n", r);
 				break;
 			case DIFF:
 				STRING_DEF;
@@ -529,38 +687,54 @@ struct retour *reader(char *string, unsigned long int type){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
 				//f.strings(o.var1);
-				STRING_EXIST(1, 0);
-				pret->ret = f.strings(str);
+				STRING_EXIST(0, 1);
+				//printf("%s\n", o.var1);
+				//printf("%i\n", f.strings(str+1));
+				//printf("%i\n", pret->ret);
+				//pret->ret = f.strings(o.var1);
 				o.var1 = NULL;
 				break;
 			case NOT_STR:/*la chaine de caractere N'exist PAS*/
 				if(o.var1){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
-				//f.strings(o.var1);
-				STRING_EXIST(0, 1);
-				pret->ret = !f.strings(str);
+				STRING_EXIST(1, 0);
+				//printf("%i\n", pret->ret);
+				//printf("===>%s\n",o.var1);
+				//printf("%i\n", f.strings(str+1));
+				//pret->ret = f.strings(str);
+				//CONVERT(type);
+				/*if(*(o.var1+3) == '"' || *(o.var1+3) == '\'')
+					pret->ret = 1;
+				else
+					pret->ret = 0;*/
 				o.var1 = NULL;
 				break;
 			case NUM:/*-n: est nombre*/
 				if(o.var1){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
-				STRING_EXIST(1, 0);
-				//if(f.strings(o.var1)){
-					NUMERIQUE(1, 0)
-				//}
+				STRING_EXIST(0, 1);
+				//o.var1+=2;
+				//printf("BUG\n");
+				if(f.strings(o.var1)){
+					NUMERIQUE(0, 1);
+				}
+				//printf("==>%s\n", o.var1);
+				//o.var1 += 2;
+				//printf("=>%s\n", o.var1+2);
+				//CONVERT(type);
 				o.var1 = NULL;
 				break;
 			case NOT_NUM:/*-N: N'est PAS nombre*/
 				if(o.var1){
 					ERROR("Erreur vers l'offset: %lu\n", offset);
 				}
-				STRING_EXIST(0, 1);
+				STRING_EXIST(1, 0);
 				pret->ret = f.strings(str);
-				//if(f.strings(o.var1)){
-					NUMERIQUE(0, 1);
-				//}
+				if(f.strings(o.var1)){
+					NUMERIQUE(1, 0);
+				}
 				o.var1 = NULL;
 				break;
 			case 12:/*INVERT*/
@@ -662,18 +836,14 @@ struct retour *reader(char *string, unsigned long int type){
 						if(o.var1 == NULL){
 							o.var1 = r;
 						}
-						/*if(end == 1){
-							fprintf(stderr, "=>Erreur de syntaxe vers l'offset: %lu.\n", offset);
-							exit(EXIT_FAILURE);
-						}*/
-						if((*r < 48 || *r > 57) && *r != '.' && *r != '-')
+						if((*r < 48 || *r > 57) && *r != '.' && *r != '-' && *r != '+')
 							o.type = STRING;
 						break;
 				}
 		}
 
 	}
-	pprev = pret = ret;
+	ret = ret;
 	_end_ = 0;
 	if(pret && (pret->operator == AND || pret->operator == OR)){
 		fprintf(stderr,"Erreur de syntaxe.\n");
@@ -699,10 +869,20 @@ struct retour *comput(struct retour **r){
 			case 0: 
 				break;
 			case AND:
-				CALCULE( pret->prev->ret &= pret->next->ret, 0);
+				if(pret->next){
+					CALCULE( pret->prev->ret &= pret->next->ret, 0);
+				}else{
+					fprintf(stderr, "Erreur de syntaxe\n");
+					exit(EXIT_FAILURE);
+				}
 				continue;
 			case OR:
-				CALCULE( pret->prev->ret |= pret->next->ret, 1);
+				if(pret->next){
+					CALCULE( pret->prev->ret |= pret->next->ret, 1);
+				}else{
+					fprintf(stderr,"Erreur de syntaxe\n");
+					exit(EXIT_FAILURE);
+				}
 				continue;
 			case INVERT:
 				pprev = pret->prev;
@@ -794,10 +974,7 @@ void arguments(int key, char *arg, struct parser_state *state){
 				break;
 			}while(1);
 			while((w = read(fd,buffer,1024))){
-				if(write(a->fd,buffer,w) < 0){
-					perror("write()");
-					exit(EXIT_FAILURE);
-				}
+				write(a->fd,buffer,w);
 			}
 			close(fd);
 			if((a->mmap = mmap(NULL,s.st_size,PROT_READ | PROT_WRITE, MAP_SHARED, a->fd, 0)) == NULL){
@@ -857,8 +1034,6 @@ int main(int argc, char **argv){
 	}
 	if(!ret)
 		return -1;
-	if(ret->ret != 0)
-		printf("ERROR\n");
 	i_ret = !ret->ret;
 	return i_ret;
 }

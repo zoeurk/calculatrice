@@ -28,7 +28,7 @@ const unsigned long int BUFFER = 28;
 
 #define CHECK_AND_COMPUT(op_final,string_type, n1, n2, op)\
 	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat, *temp;\
-	if(n1 != INFINITY && n1 != NAN && n1 != -NAN && n2 != INFINITY && n2 != NAN && n2 != -NAN){\
+	if(n1 != INFINITY && n1 != -INFINITY && n1 != NAN && n1 != -NAN && n2 != INFINITY && n2 != -INFINITY && n2 != NAN && n2 != -NAN){\
 		sprintf(valeur1, string_type, n1);\
 		sprintf(valeur2, string_type, n2);\
 		resultat = op(valeur1, valeur2);\
