@@ -24,7 +24,7 @@ if(len == -1 && strcmp(pi, buffer) == 0 && _pi_ == NULL){\
 			sprintf(buffer,"%f", M_PI);\
 			break;\
 		case DOUBLE:\
-			sprintf(buffer,"%lf", M_PI);\
+			sprintf(buffer,"%lf", (double)M_PI);\
 			break;\
 		case LDOUBLE:\
 			sprintf(buffer,"%Lf", (long double)M_PI);\
@@ -35,8 +35,8 @@ if(len == -1 && strcmp(pi, buffer) == 0 && _pi_ == NULL){\
 	if(len == -1){\
 		switch(arg->type){\
 			case FLOAT:\
-					sprintf(buffer,"%f", *((float *)_pi_));\
-			break;\
+				sprintf(buffer,"%f", *((float *)_pi_));\
+				break;\
 			case DOUBLE:\
 				sprintf(buffer,"%lf", *((double *)_pi_));\
 				break;\

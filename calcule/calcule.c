@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "../parsearg/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -14,7 +14,7 @@
 
 #include "calcule-data.h"
 
-#define BUFFER 128
+#define BUFFER 56
 
 struct value{
 	int value;
@@ -971,7 +971,7 @@ int main(int argc, char **argv){
 	double dpi = (double) M_PI;
 	float fpi = (float) M_PI;
 	/*Modifier ici*/
-	struct arguments arg = {NULL, FLOAT, 0, sizeof(float), &print_float, "%f", &fpi, NULL, {{NULL,0}},
+	struct arguments arg = {NULL, FLOAT, 0, sizeof(float), &print_float, "%f", NULL, NULL, {{NULL,0}},
 		/*Ajouter fonction*/
 		{&faddition,&fsoustraction,&fmultiplication, &fdivision, &fcosinus,&facosinus, &fsinus, &fasinus, &ftangente, &fatangente,
 		&fsqrt, &fexp, &fceil, &flog, &flog10, &ffabs, &ffloor,
