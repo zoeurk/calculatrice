@@ -341,7 +341,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 		bufset = 0, count = 0, len = 0, virgule = 0, num = 0, init = 0, cont = 0;
 	memset(buffer, 0, BUFFER);
 	for(i = 0; argv[i] != 0; i++){
-		printf("%c\n", argv[i]);
+		//printf("%c\n", argv[i]);
 		switch(argv[i])
 		{	
 			case ' ': case '\t':case '\n':
@@ -714,7 +714,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 		if((arg->type&(FLOAT|DOUBLE|LDOUBLE)) != 0)
 			zero(buffer, arg->type);
 	}
-	printf("%s\n", buffer);
+	//printf("%s\n", buffer);
 	if(v){
 		if(c_parentheses > o_parentheses){
 			_ERROR_("Trop de parentheses fermees\n");
