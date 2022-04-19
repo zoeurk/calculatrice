@@ -14,7 +14,7 @@
 
 #include "calcule-data.h"
 
-#define BUFFER 56
+#define BUFFER 128
 
 struct value{
 	int value;
