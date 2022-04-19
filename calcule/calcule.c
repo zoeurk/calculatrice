@@ -264,7 +264,7 @@ void zero(char *str, int type){
 	float f;
 	double d;
 	long double ld;
-	char buffer[BUFFER], *pbuf;
+	char buffer[BUFFER], *pbuf = NULL;
 	if(strchr(str,'.') != NULL){
 		for(pbuf = &str[strlen(str)-1];str != pbuf && *pbuf == '0'; *pbuf = 0, pbuf--);;
 		if(*pbuf == '.')*pbuf = 0;
@@ -294,8 +294,8 @@ void zero(char *str, int type){
 				break;
 		case DOUBLE:
 				d = strtod(str, NULL);
-				sprintf(buffer,"%lf", d);
-				if(strchr(buffer,'.') != NULL){
+				sprintf(buffer,"%lf", d );
+				if(strchr(buffer,'.') != NULL && strcmp("PI",str) != 0){
 					for(pbuf = &buffer[strlen(buffer)-1];pbuf != buffer && *pbuf == '0';*pbuf = 0, pbuf--);;
 					if(*pbuf == '.') *pbuf = 0;
 					if(pbuf == buffer && *pbuf == 0){
@@ -303,9 +303,8 @@ void zero(char *str, int type){
 						*(pbuf+1) = 0;
 					}
 					//ZERO(pbuf, buffer);
-					//if(*pbuf == 0)*pbuf = '0';
-					if(strcmp(str, buffer) != 0 && strcmp("PI", str) != 0){
-						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", str, buffer);
+					if(strcmp(str, buffer) != 0){
+						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);
 						exit(2);
 					}
 				}
@@ -323,7 +322,7 @@ void zero(char *str, int type){
 					}
 					//if(*pbuf == 0)*pbuf = '0';
 					if(strcmp(str, buffer) != 0 && strcmp("PI",str) != 0){
-						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format: %s != %s\n", str, buffer);
+						fprintf(stderr, "==>ERROR: Nombre trop long pour etre converti dans ce format: %s != %s\n", str, buffer);
 						exit(2);
 					}
 				}
@@ -342,6 +341,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 		bufset = 0, count = 0, len = 0, virgule = 0, num = 0, init = 0, cont = 0;
 	memset(buffer, 0, BUFFER);
 	for(i = 0; argv[i] != 0; i++){
+		printf("%c\n", argv[i]);
 		switch(argv[i])
 		{	
 			case ' ': case '\t':case '\n':
@@ -472,7 +472,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 				split = 0;
 				cont = 0;
 				init = 0;
-				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--)printf("*******\n");;
+				for(j = i-1; j > 0 && (argv[j] == ' '|| argv[j] == '\t' || argv[j] == '\n'); j--);;
 				if((num == 0 && argv[j] != ')')){
 					ERROR("Un argument est manquant vers l'offset %i\n", i);
 				}
@@ -691,7 +691,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 						parenthese = 1;
 						buffer[len] = trigo[j-1][len];
 						len++;
-						//printf("%s\n", buffer);
 						if(len == (int)strlen(trigo[j-1]) && ((argv[i+1] == '(' || argv[i+1] == ' ' || argv[i+1] == '\n' || argv[i+1] == '\t')
 							|| strcmp(buffer,trigo[0]) == 0)
 						){
@@ -715,6 +714,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 		if((arg->type&(FLOAT|DOUBLE|LDOUBLE)) != 0)
 			zero(buffer, arg->type);
 	}
+	printf("%s\n", buffer);
 	if(v){
 		if(c_parentheses > o_parentheses){
 			_ERROR_("Trop de parentheses fermees\n");
@@ -731,7 +731,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 		if(parenthese){
 			_ERROR_("Erreur de syntax\n");
 		}
-		if(bufset == 1){
+		if(bufset == 1 ){
 			MAILLON(pv,sizeof(struct value) + arg->valsize);
 			PI_INTEGRATION(trigo[0],buffer,i-1, arg->pi);
 			INIT_BUFSET(pv,buffer,end, arg->type);
