@@ -310,7 +310,7 @@ void zero(char *str, int type){
 					}
 					//ZERO(pbuf, buffer);
 					if(strcmp(str, buffer) != 0 && strcmp(str,"PI") != 0 && *str != 0){
-						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);
+						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format: %s != %s\n", str, buffer);
 						exit(2);
 					}
 				}
@@ -327,7 +327,7 @@ void zero(char *str, int type){
 					}
 					//ZERO(pbuf, buffer);
 					if(strcmp(str, buffer) != 0 && pbuf != 0 && *str != 0){
-						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);
+						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format: %s != %s\n", str, buffer);
 						exit(2);
 					}
 				}

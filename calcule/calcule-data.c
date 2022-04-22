@@ -43,7 +43,7 @@ const unsigned long int BUFFER = 28;
 		/*exit(0);*/\
 		if(strtype(valeur3) || equal(pmin, resultat) > 0 || equal(pmax, resultat) < 0){\
 		if(equal(valeur3,resultat) != 0 && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3, "inf") != 0 && strcmp(valeur3, "-inf") != 0){\
-			fprintf(stderr,"ERROR: ==>Nombre trop long pour etre converti dans ce format:%s != %s=\n", valeur3, resultat);\
+			fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format: %s != %s\n", valeur3, resultat);\
 			free(resultat);\
 			exit(2);\
 		}\
@@ -67,7 +67,7 @@ const unsigned long int BUFFER = 28;
 		pmax = addition(valeur3, m);\
 		if(strtype(valeur3) || equal(pmin, resultat) > 0 || equal(pmax, resultat) < 0){\
 			if(strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3, "inf") != 0 && strcmp(valeur3, "-inf") != 0){\
-			fprintf(stderr,"-->ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
+			fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format: %s != %s\n", valeur3, resultat);\
 			free(resultat);\
 			exit(2);\
 		}\
