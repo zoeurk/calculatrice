@@ -4,7 +4,7 @@
 #include <string.h>
 /*#include <math.h>*/
 #include "calcule-data.h"
-#include "../operation/operation.h"
+#include "operation.h"
 #ifdef __USE_ISOC99
 /* IEEE positive infinity.  */
 # if __GNUC_PREREQ (3, 3)
@@ -26,8 +26,9 @@
 
 const unsigned long int BUFFER = 28;
 
-#define CHECK_AND_COMPUT(op_final,string_type, n1, n2, op)\
-	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat, *temp;\
+#define CHECK_AND_COMPUT(op_final,string_type, n1, n2, op, type)\
+	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat, *temp, m[56], *pmin, *pmax;\
+	sprintf(m, string_type, *((type *)arrondi));\
 	if(n1 != INFINITY && n1 != -INFINITY && n1 != NAN && n1 != -NAN && n2 != INFINITY && n2 != -INFINITY && n2 != NAN && n2 != -NAN){\
 		sprintf(valeur1, string_type, n1);\
 		sprintf(valeur2, string_type, n2);\
@@ -37,15 +38,21 @@ const unsigned long int BUFFER = 28;
 		/**((float *)val1) *= *((float *)val2);*/\
 		op_final;\
 		sprintf(valeur3, string_type, n1);\
-		if(strlen(valeur3) > 0 && equal(valeur3, resultat) != 0 && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3, "inf") != 0 && strcmp(valeur3, "-inf") != 0){\
-				fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
-				free(resultat);\
-				exit(2);\
+		pmin = soustraction(valeur3, m);\
+		pmax = addition(valeur3, m);\
+		if((equal(valeur3, pmin) < 0 || equal(valeur3, pmax) > 0) && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3, "inf") != 0 && strcmp(valeur3, "-inf") != 0){\
+			fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
+			free(resultat);\
+			exit(2);\
 		}\
+		free(pmin);\
+		free(pmax);\
 		free(resultat);\
 	}else op_final;
-#define CHECK_AND_COMPUT_DIVISION(op_final,string_type, n1, n2, len)\
-	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat;\
+	
+#define CHECK_AND_COMPUT_DIVISION(op_final,string_type, n1, n2, len, type)\
+	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat, m[56], *pmin, *pmax;\
+	sprintf(m, string_type, *((type *)arrondi)); \
 	if(n1 != INFINITY && n1 != NAN && n1 != -NAN && n2 != INFINITY && n2 != NAN && n2 != -NAN){\
 		sprintf(valeur1, string_type, n1);\
 		sprintf(valeur2, string_type, n2);\
@@ -53,11 +60,15 @@ const unsigned long int BUFFER = 28;
 		/**((float *)val1) *= *((float *)val2);*/\
 		op_final;\
 		sprintf(valeur3, string_type, n1);\
-		if(strlen(valeur3) > 0 && equal(valeur3, resultat) != 0 && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3,"inf") != 0 && strcmp(valeur3, "-inf") != 0){\
-				fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
-				free(resultat);\
-				exit(2);\
-			}\
+		pmin = soustraction(valeur3, m);\
+		pmax = addition(valeur3, m);\
+		if((equal(valeur3, pmin) < 0 || equal(valeur3, pmax) > 0) && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3, "inf") != 0 && strcmp(valeur3, "-inf") != 0){\
+			fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
+			free(resultat);\
+			exit(2);\
+		}\
+		free(pmin);\
+		free(pmax);\
 		free(resultat);\
 	}else op_final;
 
@@ -71,68 +82,54 @@ void print_ldouble(void *val, char *format){
 	printf(format, *((long double *)val));
 }
 
-void faddition(void *val1, void *val2){
-	CHECK_AND_COMPUT(*((float *)val1) += *((float *)val2),"%f", *((float *)val1), *((float *)val2),addition);
+void faddition(void *val1, void *val2,void *arrondi){
+	CHECK_AND_COMPUT(*((float *)val1) += *((float *)val2),"%f", *((float *)val1), *((float *)val2),addition, float);
 	//*((float *)val1) += *((float *) val2);
 }
-void daddition(void *val1, void *val2){
-	CHECK_AND_COMPUT(*((double *)val1) += *((double*)val2),"%lf", *((double *)val1), *((double *)val2),addition);
+void daddition(void *val1, void *val2, void *arrondi){
+	CHECK_AND_COMPUT(*((double *)val1) += *((double*)val2),"%lf", *((double *)val1), *((double *)val2),addition, double);
 	//*((double *)val1) += *((double *) val2);
 }
-void ldaddition(void *val1, void *val2){
-	CHECK_AND_COMPUT(*((long double *)val1) += *((long double *)val2),"%Lf", *((long double *)val1), *((long double *)val2),addition);
+void ldaddition(void *val1, void *val2, void *arrondi){
+	CHECK_AND_COMPUT(*((long double *)val1) += *((long double *)val2),"%Lf", *((long double *)val1), *((long double *)val2),addition, long double);
 	//*((long double *)val1) += *((long double *) val2);
 }
 
-void fsoustraction(void *val1, void *val2){
-	CHECK_AND_COMPUT(*((float *)val1) -= *((float *)val2),"%f", *((float *)val1), *((float *)val2),soustraction);
+void fsoustraction(void *val1, void *val2, void *arrondi){
+	CHECK_AND_COMPUT(*((float *)val1) -= *((float *)val2),"%f", *((float *)val1), *((float *)val2),soustraction, float);
 	//*((float *)val1) -= *((float *) val2);
 }
-void dsoustraction(void *val1, void *val2){
-	CHECK_AND_COMPUT(*((double *)val1) -= *((double *)val2),"%lf", *((double *)val1), *((double *)val2),soustraction);
+void dsoustraction(void *val1, void *val2, void *arrondi){
+	CHECK_AND_COMPUT(*((double *)val1) -= *((double *)val2),"%lf", *((double *)val1), *((double *)val2),soustraction, double);
 	//*((double *)val1) -= *((double *) val2);
 }
-void ldsoustraction(void *val1, void *val2){
-	CHECK_AND_COMPUT(*((long double *)val1) -= *((long double *)val2),"%Lf", *((long double *)val1), *((long double *)val2),soustraction);
+void ldsoustraction(void *val1, void *val2, void *arrondi){
+	CHECK_AND_COMPUT(*((long double *)val1) -= *((long double *)val2),"%Lf", *((long double *)val1), *((long double *)val2),soustraction, long double);
 	//*((long double *)val1) -= *((long double *) val2);
 }
 
-void fmultiplication(void *val1, void *val2){
-	CHECK_AND_COMPUT(*((float *)val1) *= *((float *)val2),"%f", *((float *)val1), *((float *)val2),multiplication);
-	/*char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat, *temp;
-	sprintf(valeur1, "%f", *((float *)val1));
-	sprintf(valeur2, "%f", *((float *)val2));
-	resultat = multiplication(valeur1, valeur2);
-	if((temp = strchr(resultat, '.')))
-		temp[8] = 0;
-	*((float *)val1) *= *((float *)val2);
-	sprintf(valeur3, "%f", *((float *)val1));
-	if(equal(valeur3, resultat) != 0){
-		printf("ARGHHHH\n");
-		free(resultat);
-		exit(2);
-	}
-	free(resultat);*/
+void fmultiplication(void *val1, void *val2, void *arrondi){
+	CHECK_AND_COMPUT(*((float *)val1) *= *((float *)val2),"%f", *((float *)val1), *((float *)val2),multiplication, float);
 }
-void dmultiplication(void *val1, void *val2){
-	CHECK_AND_COMPUT(*((double *)val1) *= *((double *)val2),"%lf", *((double *)val1), *((double *)val2),multiplication);
+void dmultiplication(void *val1, void *val2, void *arrondi){
+	CHECK_AND_COMPUT(*((double *)val1) *= *((double *)val2),"%lf", *((double *)val1), *((double *)val2),multiplication, double);
 	//*((double *)val1) *= *((double *) val2);
 }
-void ldmultiplication(void *val1, void *val2){
-	CHECK_AND_COMPUT(*((long double *)val1) *= *((long double *)val2),"%Lf", *((long double *)val1), *((long double *)val2),multiplication);
+void ldmultiplication(void *val1, void *val2, void *arrondi){
+	CHECK_AND_COMPUT(*((long double *)val1) *= *((long double *)val2),"%Lf", *((long double *)val1), *((long double *)val2),multiplication, long double);
 	//*((long double *)val1) *= *((long double *)val2);
 }
 
-void fdivision(void *val1, void *val2){
-	CHECK_AND_COMPUT_DIVISION(*((float *)val1) /= *((float *)val2),"%f", *((float *)val1), *((float *)val2), 6);
+void fdivision(void *val1, void *val2, void *arrondi){
+	CHECK_AND_COMPUT_DIVISION(*((float *)val1) /= *((float *)val2),"%f", *((float *)val1), *((float *)val2), 6, float);
 	//*((float *)val1) /= *((float *)val2);
 }
-void ddivision(void *val1, void *val2){
-	CHECK_AND_COMPUT_DIVISION(*((double *)val1) /= *((double *)val2),"%lf", *((double *)val1), *((double *)val2), 6);
+void ddivision(void *val1, void *val2, void *arrondi){
+	CHECK_AND_COMPUT_DIVISION(*((double *)val1) /= *((double *)val2),"%lf", *((double *)val1), *((double *)val2), 6, double);
 	//*((double *)val1) /= *((double *) val2);
 }
-void lddivision(void *val1, void *val2){
-	CHECK_AND_COMPUT_DIVISION(*((long double *)val1) /= *((long double *)val2),"%Lf", *((long double *)val1), *((long double *)val2), 6);
+void lddivision(void *val1, void *val2, void *arrondi){
+	CHECK_AND_COMPUT_DIVISION(*((long double *)val1) /= *((long double *)val2),"%Lf", *((long double *)val1), *((long double *)val2), 6, long double);
 	//*((long double *)val1) /= *((long double *)val2);
 }
 

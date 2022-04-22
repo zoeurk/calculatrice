@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
-#include "../parsearg/parsearg.h"
+#include "parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -74,10 +74,10 @@ enum TYPE{
 };
 /*Ajouter fonction*/
 struct function{
-	void (*addition)(void *, void *);
-	void (*soustraction)(void *, void *);
-	void (*multiplication)(void *, void *);
-	void (*division)(void *, void *);
+	void (*addition)(void *, void *, void *arrondi);
+	void (*soustraction)(void *, void *, void *arrondi);
+	void (*multiplication)(void *, void *, void *arrondi);
+	void (*division)(void *, void *, void *arrondi);
 	void (*cosinus)(void *);
 	void (*acosinus)(void *);
 	void (*sinus)(void *);
@@ -96,6 +96,7 @@ struct function{
 };
 struct arguments{
 	struct value *v;
+	void *arrondi;
 	unsigned long  int type;
 	unsigned long int options;
 	unsigned long int valsize;
@@ -117,10 +118,17 @@ struct arguments{
 };
 
 void arguments(int key, char *arg, struct parser_state *state){
+	static float f = 0.000001;
+	static double d = 0.000001;
+	static long double ld = 0.000001;
 	struct arguments *a = state->input;
 	struct stat stat;
 	unsigned long int i;
 	switch(key){
+		case 'a':f = strtof(arg, NULL);
+				 d = strtod(arg, NULL);
+				 ld = strtold(arg, NULL);
+				 break;
 		case 'O':
 			for(i = 0; i < strlen(arg); i++){
 				if(arg[i] < 48 || arg[i] > 57){
@@ -135,6 +143,7 @@ void arguments(int key, char *arg, struct parser_state *state){
 		case 'f':
 			a->print = print_float;
 			a->valsize = sizeof(float);
+			a->arrondi = &f;
 			a->fn.addition = &faddition;
 			a->fn.soustraction = &fsoustraction;
 			a->fn.multiplication = &fmultiplication;
@@ -159,6 +168,7 @@ void arguments(int key, char *arg, struct parser_state *state){
 		case 'l':
 			a->print = print_double;
 			a->valsize = sizeof(double);
+			a->arrondi = &d;
 			a->fn.addition = daddition;
 			a->fn.soustraction = &dsoustraction;
 			a->fn.multiplication = &dmultiplication;
@@ -183,6 +193,7 @@ void arguments(int key, char *arg, struct parser_state *state){
 		case 'L':
 			a->print = print_ldouble;
 			a->valsize = sizeof(long double);
+			a->arrondi = &ld;
 			a->fn.addition = &ldaddition;
 			a->fn.soustraction = &ldsoustraction;
 			a->fn.multiplication = &ldmultiplication;
@@ -237,6 +248,7 @@ struct parser_option options[] =	{
 					{ "float", 'f', 0, NULL, "Utiliser le type float"},
 					{ "double", 'l', 0 , NULL, "Utiliser le type double"},
 					{ "ldouble", 'L', 0, NULL, "Utiliser le type long double"},
+					{ "arrondi", 'a', 0, "arrondi", "arrondir"},
 					{ "format", 'O', 0, "FORMAT", "Nombre de chiffre apres la virgule"},
 					{ "file", 'F', 0, "FILE", "lire le fichier"},
 					{ "set-pi", 'p', 0, "PI", "Initialiser pi a la valeur de PI"},
@@ -649,7 +661,7 @@ struct value *initialisation(char *argv, struct arguments *arg){
 						split = 1;
 						/*ICI*/
 					if(strlen(buffer)+2 > BUFFER){
-						fprintf(stderr, "buffer trop court: >56 octets.\n");
+						fprintf(stderr, "buffer trop court.\n");
 						exit(EXIT_FAILURE);
 					}
 					strncat(buffer,&argv[i],1);
@@ -754,11 +766,12 @@ struct value *initialisation(char *argv, struct arguments *arg){
 	}
 	return v;
 }
-struct value *calcule(struct value **v, struct function f, unsigned long int *type){
+struct value *calcule(struct value **v, struct function f, unsigned long int *type, void *arrondi){
 	struct two_numbers two = {NULL, NULL, NULL};
 	struct value *pv = *v, *ppv, *pnext, *ppnext, *pprev, *preader, *pcur, *pstart, *vdup = NULL, *pvdup;
 	int o_parentheses, count;
 	while(pv){
+	//exit(0);
 		switch(pv->type){
 			case VALUE:
 				break;
@@ -782,10 +795,10 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 				}
 				switch(pv->type){
 					case '+':
-						f.addition(pv->prev->val, pv->next->val);
+						f.addition(pv->prev->val, pv->next->val, arrondi);
 						break;
 					case '-':
-						f.soustraction(pv->prev->val, pv->next->val);
+						f.soustraction(pv->prev->val, pv->next->val, arrondi);
 						break;
 				}
 				pprev = pv->prev;
@@ -817,7 +830,9 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 				}
 				switch(pv->type){
 					case '*':
-						f.multiplication(pv->prev->val, pv->next->val);
+						//printf("%f\n", *((float *)arrondi));
+						//exit(0);
+						f.multiplication(pv->prev->val, pv->next->val, arrondi);
 						break;
 					case '/':
 						switch(*type){
@@ -840,7 +855,7 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 								}
 								break;
 						}
-						f.division(pv->prev->val, pv->next->val);
+						f.division(pv->prev->val, pv->next->val, arrondi);
 						break;
 				}
 				pprev = pv->prev;
@@ -853,7 +868,7 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 				pv = *v;
 				continue;
 			case O_PARENTHESE:
-				SINGLE_ARG(pv,o_parentheses != 0, type);
+				SINGLE_ARG(pv,o_parentheses != 0, type, arrondi);
 				pv = *v;
 				continue;
 			case C_PARENTHESE:
@@ -861,78 +876,78 @@ struct value *calcule(struct value **v, struct function f, unsigned long int *ty
 			default:/*Ajouter une entree*/
 				switch(pv->operator){
 					case COS:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type, arrondi);
 						f.cosinus(pv->val);
 						pv = *v;
 						continue;
 					case ACOS:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type, arrondi);
 						f.acosinus(pv->val);
 						pv = *v;
 						continue;
 					case SIN:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type, arrondi);
 						f.sinus(pv->val);
 						pv = *v;
 						continue;
 					case ASIN:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type, arrondi);
 						f.asinus(pv->val);
 						pv = *v;
 						continue;
 					case TAN:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type, arrondi);
 						f.tangente(pv->val);
 						pv = *v;
 						continue;
 					case ATAN:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type, arrondi);
 						f.atangente(pv->val);
 						pv = *v;
 						continue;
 					case SQRT:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type, arrondi);
 						f.sqrt(pv->val);
 						pv = *v;
 						continue;
 					case EXP:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type, arrondi);
 						f.exp(pv->val);
 						pv = *v;
 						continue;
 					case CEIL:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type, arrondi);
 						f.ceil(pv->val);
 						pv = *v;
 						continue;
 					case LOG:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type, arrondi);
 						f.log(pv->val);
 						pv = *v;
 						continue;
 					case LOG10:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type, arrondi);
 						f.log10(pv->val);
 						pv = *v;
 						continue;
 					case FABS:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type, arrondi);
 						f.fabs(pv->val);
 						pv = *v;
 						continue;
 					case FLOOR:
-						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type);
+						TRIGO(o_parentheses != 0,preader, pv, o_parentheses, pnext, pprev, type, arrondi);
 						f.floor(pv->val);
 						pv = *v;
 						continue;
 					case FMOD:
-						MULTIPLE_ARGS(preader, pv, pcur, o_parentheses, pnext, pprev, two.start, two.virgule, two.end, type);
+						MULTIPLE_ARGS(preader, pv, pcur, o_parentheses, pnext, pprev, two.start, two.virgule, two.end, type, arrondi);
 						f.mod(pprev->val,pnext->val);
 						UPDATE(v, ppv,pprev, pnext, two.start, two.virgule, two.end);
 						pv = *v;
 						continue;
 					case POW:
-						MULTIPLE_ARGS(preader, pv, pcur, o_parentheses, pnext, pprev, two.start, two.virgule, two.end, type);
+						MULTIPLE_ARGS(preader, pv, pcur, o_parentheses, pnext, pprev, two.start, two.virgule, two.end, type, arrondi);
 						f.power(pprev->val,pnext->val);
 						UPDATE(v, ppv,pprev, pnext, two.start, two.virgule, two.end);
 						pv = *v;
@@ -970,8 +985,9 @@ int main(int argc, char **argv){
 	long double ldpi = (long double) M_PI;
 	double dpi = (double) M_PI;
 	float fpi = (float) M_PI;
+	float f = 0.000001;
 	/*Modifier ici*/
-	struct arguments arg = {NULL, FLOAT, 0, sizeof(float), &print_float, "%f", NULL, NULL, {{NULL,0}},
+	struct arguments arg = {NULL, NULL,FLOAT, 0, sizeof(float), &print_float, "%f", NULL, NULL, {{NULL,0}},
 		/*Ajouter fonction*/
 		{&faddition,&fsoustraction,&fmultiplication, &fdivision, &fcosinus,&facosinus, &fsinus, &fasinus, &ftangente, &fatangente,
 		&fsqrt, &fexp, &fceil, &flog, &flog10, &ffabs, &ffloor,
@@ -1035,8 +1051,10 @@ int main(int argc, char **argv){
 	if(arg.argv)
 		arg.v = initialisation(arg.argv, &arg);
 	if(arg.v){
-		//printf("******\n");
-		ptr = calcule(&arg.v, arg.fn, &arg.type);
+		arg.arrondi = &f;
+		//printf("******%f\n", *((float *)arg.arrondi));
+		//exit(0);
+		ptr = calcule(&arg.v, arg.fn, &arg.type, &f);
 	}
 	if(ptr == NULL)
 		calcule_destroy(arg.v, format, NULL);

@@ -96,7 +96,7 @@ do{	pstart = ptr->next;\
 	ptr = pstart;\
 }while(eval);
 
-#define DUPLIQUE(pv,eval, init)\
+#define DUPLIQUE(pv,eval, init, arrondi)\
 for(preader = pv->next, o_parentheses = init; eval; preader = (preader->next != NULL) ? preader->next : preader){\
 	PARENTHESE(preader, o_parentheses);\
 	if(o_parentheses != 0){\
@@ -112,9 +112,9 @@ for(preader = pv->next, o_parentheses = init; eval; preader = (preader->next != 
 	}\
 }
 
-#define SINGLE_ARG(pv,eval,type)\
-DUPLIQUE(pv,eval,1)\
-vdup = calcule(&vdup, f, type);\
+#define SINGLE_ARG(pv,eval,type, arrondi)\
+DUPLIQUE(pv,eval,1, arrondi)\
+vdup = calcule(&vdup, f, type, arrondi);\
 preader = pv; \
 o_parentheses = 0;\
 do{	pstart = preader->next;\
@@ -143,7 +143,7 @@ if(pnext){\
 free(vdup);\
 vdup = NULL;
 
-#define TRIGO(eval, preader, pv, o_parentheses, pnext, pprev, type)\
+#define TRIGO(eval, preader, pv, o_parentheses, pnext, pprev, type, arrondi)\
 if(pv->prev == NULL){\
 	preader = pv->next->next;\
 	for(preader = preader->next, o_parentheses = 1,count = 0;\
@@ -170,7 +170,7 @@ if(pv->prev == NULL){\
 		free((*v)->prev);\
 		(*v)->prev = NULL;\
 		pv = *v;\
-		SINGLE_ARG(pv,eval, type);\
+		SINGLE_ARG(pv,eval, type, arrondi);\
 	}\
 }else{\
 	preader = pv->next->next->next;\
@@ -181,7 +181,7 @@ if(pv->prev == NULL){\
 		PARENTHESE(preader, o_parentheses);\
 	}\
 	if(count > 1){\
-		SINGLE_ARG(pv->next,eval, type);\
+		SINGLE_ARG(pv->next,eval, type, arrondi);\
 		pprev = pv->prev;\
 		pnext = pv->next;\
 		pprev->next = pnext;\
@@ -208,7 +208,7 @@ if(pv->prev == NULL){\
 	}\
 }
 
-#define MULTIPLE_ARGS(preader, pv, pcur, o_parentheses, pnext, pprev, start, virgule, end, type)\
+#define MULTIPLE_ARGS(preader, pv, pcur, o_parentheses, pnext, pprev, start, virgule, end, type, arrondi)\
 	pv = pcur = pv->next;\
 	o_parentheses = 0;\
 	end = NULL;\
@@ -222,15 +222,15 @@ if(pv->prev == NULL){\
 			virgule = pcur;\
 		pcur = pcur->next;\
 	}\
-	DUPLIQUE(start, preader != virgule,1);\
-	vdup = calcule(&vdup, f, type);\
+	DUPLIQUE(start, preader != virgule,1, arrondi);\
+	vdup = calcule(&vdup, f, type, arrondi);\
 	preader = start->next;\
 	o_parentheses = 1;\
 	SEARCH(virgule != preader, preader, preader, pstart, pcur);\
 	free(vdup);\
 	vdup = NULL;\
-	DUPLIQUE(virgule, preader != end, 1);\
-	vdup = calcule(&vdup, f, type);\
+	DUPLIQUE(virgule, preader != end, 1, arrondi);\
+	vdup = calcule(&vdup, f, type, arrondi);\
 	preader = virgule->next;\
 	SEARCH(preader != end, preader, preader, pstart, pcur);\
 	pnext = pcur;\
@@ -295,21 +295,21 @@ if(pv->prev == NULL){\
 		free(start->prev);\
 		free(start);\
 	}
-void faddition(void *val1, void *val2);
-void daddition(void *val1, void *val2);
-void ldaddition(void *val1, void *val2);
+void faddition(void *val1, void *val2, void *arrondi);
+void daddition(void *val1, void *val2, void *arrondi);
+void ldaddition(void *val1, void *val2, void *arrondi);
 
-void fsoustraction(void *val1, void *val2);
-void dsoustraction(void *val1, void *val2);
-void ldsoustraction(void *val1, void *val2);
+void fsoustraction(void *val1, void *val2, void *arrondi);
+void dsoustraction(void *val1, void *val2, void *arrondi);
+void ldsoustraction(void *val1, void *val2, void *arrondi);
 
-void fmultiplication(void *val1, void *val2);
-void dmultiplication(void *val1, void *val2);
-void ldmultiplication(void *val1, void *val2);
+void fmultiplication(void *val1, void *val2, void *arrondi);
+void dmultiplication(void *val1, void *val2, void *arrondi);
+void ldmultiplication(void *val1, void *val2, void *arrondi);
 
-void fdivision(void *val1, void *val2);
-void ddivision(void *val1, void *val2);
-void lddivision(void *val1, void *val2);
+void fdivision(void *val1, void *val2, void *arrondi);
+void ddivision(void *val1, void *val2, void *arrondi);
+void lddivision(void *val1, void *val2, void *arrondi);
 
 void print_float(void *val,char *format);
 void print_double(void *val, char *format);
