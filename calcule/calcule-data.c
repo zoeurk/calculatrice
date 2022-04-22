@@ -37,7 +37,7 @@ const unsigned long int BUFFER = 28;
 		/**((float *)val1) *= *((float *)val2);*/\
 		op_final;\
 		sprintf(valeur3, string_type, n1);\
-		if(equal(valeur3, resultat) != 0 && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3, "inf") != 0 && strcmp(valeur3, "-inf") != 0){\
+		if(strlen(valeur3) > 0 && equal(valeur3, resultat) != 0 && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3, "inf") != 0 && strcmp(valeur3, "-inf") != 0){\
 				fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
 				free(resultat);\
 				exit(2);\
@@ -53,7 +53,7 @@ const unsigned long int BUFFER = 28;
 		/**((float *)val1) *= *((float *)val2);*/\
 		op_final;\
 		sprintf(valeur3, string_type, n1);\
-		if(equal(valeur3, resultat) != 0 && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3,"inf") != 0 && strcmp(valeur3, "-inf") != 0){\
+		if(strlen(valeur3) > 0 && equal(valeur3, resultat) != 0 && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3,"inf") != 0 && strcmp(valeur3, "-inf") != 0){\
 				fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
 				free(resultat);\
 				exit(2);\
