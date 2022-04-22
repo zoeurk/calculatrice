@@ -40,11 +40,14 @@ const unsigned long int BUFFER = 28;
 		sprintf(valeur3, string_type, n1);\
 		pmin = soustraction(valeur3, m);\
 		pmax = addition(valeur3, m);\
-		if((equal(valeur3, pmin) < 0 || equal(valeur3, pmax) > 0) && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3, "inf") != 0 && strcmp(valeur3, "-inf") != 0){\
-			fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
+		/*exit(0);*/\
+		if(strtype(valeur3) || equal(pmin, resultat) > 0 || equal(pmax, resultat) < 0){\
+		if(equal(valeur3,resultat) != 0 && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3, "inf") != 0 && strcmp(valeur3, "-inf") != 0){\
+			fprintf(stderr,"ERROR: ==>Nombre trop long pour etre converti dans ce format:%s != %s=\n", valeur3, resultat);\
 			free(resultat);\
 			exit(2);\
 		}\
+	}\
 		free(pmin);\
 		free(pmax);\
 		free(resultat);\
@@ -62,11 +65,13 @@ const unsigned long int BUFFER = 28;
 		sprintf(valeur3, string_type, n1);\
 		pmin = soustraction(valeur3, m);\
 		pmax = addition(valeur3, m);\
-		if((equal(valeur3, pmin) < 0 || equal(valeur3, pmax) > 0) && strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3, "inf") != 0 && strcmp(valeur3, "-inf") != 0){\
-			fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
+		if(strtype(valeur3) || equal(pmin, resultat) > 0 || equal(pmax, resultat) < 0){\
+			if(strcmp(valeur3,"nan")!=0 && strcmp(valeur3, "-nan") != 0 && strcmp(valeur3, "inf") != 0 && strcmp(valeur3, "-inf") != 0){\
+			fprintf(stderr,"-->ERROR: Nombre trop long pour etre converti dans ce format:%s != %s\n", valeur3, resultat);\
 			free(resultat);\
 			exit(2);\
 		}\
+	}\
 		free(pmin);\
 		free(pmax);\
 		free(resultat);\

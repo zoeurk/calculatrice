@@ -118,9 +118,9 @@ struct arguments{
 };
 
 void arguments(int key, char *arg, struct parser_state *state){
-	static float f = 0.000001;
-	static double d = 0.000001;
-	static long double ld = 0.000001;
+	static float f = 0;
+	static double d = 0;
+	static long double ld = 0;
 	struct arguments *a = state->input;
 	struct stat stat;
 	unsigned long int i;
@@ -242,6 +242,17 @@ void arguments(int key, char *arg, struct parser_state *state){
 			}
 			break;
 	}
+	switch(a->type){
+		case FLOAT:
+			a->arrondi = &f;
+			break;
+		case DOUBLE:
+			a->arrondi = &d;
+			break;
+		case LDOUBLE:
+			a->arrondi = &ld;
+			break;
+	}
 }
 struct info program = {"version: 1.0","zoeurk@gmail.com"};
 struct parser_option options[] =	{
@@ -315,7 +326,7 @@ void zero(char *str, int type){
 						*(pbuf+1) = 0;
 					}
 					//ZERO(pbuf, buffer);
-					if(strcmp(str, buffer) != 0 && pbuf != 0){
+					if(strcmp(str, buffer) != 0 && pbuf != 0 && *str != 0){
 						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format:%s,%s\n", str, buffer);
 						exit(2);
 					}
@@ -333,7 +344,7 @@ void zero(char *str, int type){
 						*(pbuf+1) = 0;
 					}
 					//if(*pbuf == 0)*pbuf = '0';
-					if(strcmp(str, buffer) != 0 && strcmp("PI",str) != 0 && *pbuf != 0){
+					if(strcmp(str, buffer) != 0 && strcmp("PI",str) != 0 && *pbuf != 0 && *str != 0){
 						fprintf(stderr, "ERROR: Nombre trop long pour etre converti dans ce format: %s != %s\n", str, buffer);
 						exit(2);
 					}
@@ -982,10 +993,10 @@ void calcule_destroy(struct value *v, char *format, void (*print)(void *, char*)
 	}*/
 }
 int main(int argc, char **argv){
-	long double ldpi = (long double) M_PI;
-	double dpi = (double) M_PI;
+	long double ldpi = (long double) M_PI, ld = 0;
+	double dpi = (double) M_PI, d = 0;
 	float fpi = (float) M_PI;
-	float f = 0.000001;
+	float f = 0;
 	/*Modifier ici*/
 	struct arguments arg = {NULL, NULL,FLOAT, 0, sizeof(float), &print_float, "%f", NULL, NULL, {{NULL,0}},
 		/*Ajouter fonction*/
@@ -1051,10 +1062,22 @@ int main(int argc, char **argv){
 	if(arg.argv)
 		arg.v = initialisation(arg.argv, &arg);
 	if(arg.v){
-		arg.arrondi = &f;
+		if(arg.arrondi == NULL){
+			switch(arg.type){
+				case FLOAT:
+					arg.arrondi = &f;
+					break;
+				case DOUBLE:
+					arg.arrondi = &d;
+					break;
+				case LDOUBLE:
+					arg.arrondi = &ld;
+					break;
+			}
+		}
 		//printf("******%f\n", *((float *)arg.arrondi));
-		//exit(0);
-		ptr = calcule(&arg.v, arg.fn, &arg.type, &f);
+		//exit(0)
+		ptr = calcule(&arg.v, arg.fn, &arg.type, arg.arrondi);
 	}
 	if(ptr == NULL)
 		calcule_destroy(arg.v, format, NULL);
