@@ -1,0 +1,1 @@
+export LD_LIBRARY_PATH=~/git/calculatrice/exemple:$LD_LIBRARY_PATH

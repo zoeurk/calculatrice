@@ -1,0 +1,53 @@
+.\Manpage pour calcule.
+.\Contact zoeurk.gmail.com
+.TH man 1 "22 avril 2021" "1.0" "calcule man page"
+.SH NAME
+calcule \- Petite calculatrice en ligne de commande
+.SH SYNOPSIS
+calcule [options] ["calcule"]
+.SH DESCRIPTION
+Petite calculatrice en ligne de commande
+.SH OPTIONS
+.TP
+.BR \-a , " \-\-arrondi " \fInumerique\fR
+utiliser une approximation \fInumerique\fR de 6 chiffres apres la virgule
+.TP
+.BR \-f , " \-\-float
+Utiliser le type \fIfloat\fR.
+.TP
+.BR \-l , " \-\-double"
+Utiliser le type \fIdouble\fR.
+.TP
+.BR \-L , " \-\-ldouble"
+Utiliser le type \fIlong double\fR.
+.TP
+.BR \-O , " \-\-format " \fIFORMAT\fR
+Afficher nombre de chiffre apres la virgule
+.TP
+.BR \-F , " \-\-file " \fIFILE\fR
+Utiliser le fichier qui contient le calcule
+.TP
+.BR \-p , " \-\-set-pi " \fIPI\fR
+Initialiser PI à la valeur \fIPI\fR
+.TP
+.BR \-P , " \-\-view-pi"
+Afficher la valeur de PI par default et quitter
+.TP
+Liste des fonctions connues:
+.BR
+cos, acos(x), sin(x), asin(x), tan(x), atan(x), sqrt(x), exp(x), ceil(x), log(x), log10(x), fabs(x), floor(x), mod(x,y), pow(x, y)
+.BR
+.TP
+Le resultat des fonction trigonometrique sont exprimé en radian.
+.TP
+.BR
+\fIexample:\fR calcule -p 3.14 -O 2 "cos(PI)*2+4.5"
+.TP
+.BR
+\fIexample:\fR calcule "\\-1-1"
+.SH BUGS
+Je sais pas
+.SH AUTHORS
+ZoeurK (zoeurk@gmail.com)
+.SH SEE ALSO
+mcompare(1) cos(3) acos(3) sin(3) asin(3) tan(3) atan(3) sqrt(3) exp(3) ceil(3) log(3) log10(3) fabs(3) floor(3) fmod(3) pow(3)

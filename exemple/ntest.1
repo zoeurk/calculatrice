@@ -1,0 +1,84 @@
+.\Manpage pour ntest.
+.\Contact zoeurk.gmail.com
+.TH man 1 "22 avril 2021" "1.0" "ntest man page"
+.SH NAME
+ntest \- Petite outil de comparaison
+.SH SYNOPSIS
+ntest [options] ["test"]
+.SH DESCRIPTION
+Outil de comparaison
+.SH OPTIONS
+.TP
+.BR \-f , " \-\-float
+Utiliser le type \fIfloat\fR.
+.TP
+.BR \-l , " \-\-double"
+Utiliser le type \fIdouble\fR.
+.TP
+.BR \-L , " \-\-ldouble"
+Utiliser le type \fIlong double\fR.
+.TP
+.BR \-F , " \-\-file " \fIFILE\fR
+Utiliser le fichier qui contient le calcule
+.TP
+Liste des operateur connues:
+.TP
+.BR
+\fINUM1 == NUM2\fR
+NUM1 egale à NUM2
+.TP
+.BR
+\fINUM1 != NUM2\fR
+NUM1 different de NUM2
+.TP
+.BR
+\fINUM1 >= NUM2\fR
+NUM1 superieur ou egale à NUM2
+.TP
+.BR
+\fINUM1 > NUM2\fR
+NUM1 superieur à NUM2
+.TP
+.BR
+\fINUM1 <= NUM2\fR
+NUM1 inferieur ou egale à NUM2
+.TP
+.BR
+\fINUM1 < NUM2\fR
+NUM1 inferieur à NUM2
+.TP
+.BR
+\fI'STR1' ~= 'STR2'\fR
+STR1 est egale à STR2
+.TP
+.BR
+\fI'STR1' !~ 'STR2'\fR
+STR1 et STR2 sont différentes
+.TP
+.BR
+\fI-z 'STR1'\fR
+la chaine STR1 exist
+.TP
+.BR
+\fI-Z 'STR1'\fR
+la chaine STR1 n'exist pas
+.TP
+.BR
+\fI-n 'STR1' \fR
+la chaine STR1 est numerique
+.TP
+.BR
+\fI-N 'STR1'\fR
+la chaine STR1 n'est pas numerique
+.TP
+.BR
+\fI! ( expression )\fR
+inverser le resultat
+.TP
+.BR
+.SH BUGS
+Je sais pas
+.SH AUTHORS
+ZoeurK (zoeurk@gmail.com)
+.SH SEE ALSO
+calcule(1)
