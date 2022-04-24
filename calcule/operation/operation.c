@@ -3,7 +3,7 @@
 #include <string.h>
 #include "operation.h"
 int strtype(void *str){
-	unsigned char *_str_ = (unsigned char *)str, dot = 0, signe = 0;
+	unsigned char *_str_ = (unsigned char *)str, dot = 0;
 	unsigned short int i;
 	if(_str_[0] == 0)
 		return 1;
