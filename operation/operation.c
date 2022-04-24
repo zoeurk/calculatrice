@@ -3,34 +3,20 @@
 #include <string.h>
 #include "operation.h"
 int strtype(void *str){
-	unsigned char *_str_, dot = 0, signe = 0;
+	unsigned char *_str_ = (unsigned char *)str, dot = 0, signe = 0;
 	unsigned short int i;
-	if(*((char *)str) == '.')
+	if(_str_[0] == 0)
+		return 1;
+	if(_str_[0] == '.')
 		dot = 2;
-	for(_str_ = str;(((*_str_ > 47 && *_str_ < 58) || (*_str_ == '.' && dot < 2)) || (signe < 3 && (*_str_ == '+' || *_str_ == '-'))) && *_str_ != 0; _str_++){
+	if(*_str_ == '-' || *_str_ == '+')
+		_str_++;
+	for(_str_ = _str_;((*_str_ > 47 && *_str_ < 58) || (*_str_ == '.' && dot < 2)) && *_str_ != 0; _str_++){
 		if(*_str_ == '.' && dot == 0)
 			dot = 1;
 		else
 			if(dot == 1 && *_str_ == '.')
 				dot = 2;
-		if(signe == 0 && (*_str_ == '+' || *_str_ == '-')){
-			signe = 1;
-		}else{
-			if(signe == 1 && (*_str_ != '+' || *_str_ != '-')){
-				if(*_str_ != '+' && *_str_ != '-'){
-					signe = 2;
-					continue;
-				}
-			}else{
-				if(signe == 1 && (*_str_ == '+' || *_str_ == '-')){
-					continue;
-				}
-				else{	if(signe == 2 && (*_str_ == '+' || *_str_ == '-')){
-							break;
-						}
-				}
-			}
-		}
 	}
 	if(*_str_ == 0 && dot < 2)
 		return 0;
@@ -39,6 +25,7 @@ int strtype(void *str){
 		return 1;
 	return 2;
 }
+
 void *allocation(void **ptr, unsigned long int members, unsigned long int size){
 	if(members == (unsigned long int)~0){
 		fprintf(stderr,"Taille de la chaine trop longue pour le systeme.\n");
