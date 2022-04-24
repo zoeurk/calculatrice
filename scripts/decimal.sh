@@ -113,7 +113,7 @@ hexadecimal(){
 if test -z "$3"
 then
 	printf "USAGE:\n"
-	printf "$0 ENCODE|DECODE [VIRGULE] \"value\" base\n";
+	printf "$0 ENCODE|DECODE [VIRGULE] value base\n";
 	exit
 fi
 if test -n "$4"
@@ -155,7 +155,7 @@ fi
 case $1
 in
 ENCODE)
-	if ntest "\-N $VAL"
+	if mcompare "\-N $VAL"
 	then printf "Bad value:'$VAL'\n"
 		exit
 	fi
@@ -176,10 +176,10 @@ ENCODE)
 	for V in $ENTIER $SUB
 	do
 		VAR=$V
-		while ntest "( $VAR != 0)"
+		while mcompare "( $VAR != 0)"
 		do
 			VALUE=$V
-			if ntest "\-N $VAR"
+			if mcompare "\-N $VAR"
 			then
 				printf "Caractere invalid dans: $VAR\n"
 				exit
@@ -200,7 +200,7 @@ ENCODE)
 				VALUE=`calcule "$VAR*$TO"`
 				ENTIER=`calcule -O 0 "floor($VALUE)"`
 				VAR=`calcule "( $VALUE - $ENTIER )"`
-				ntest "$ENTIER > 10 && $ENTIER <= 16" &&\
+				mcompare "$ENTIER > 10 && $ENTIER <= 16" &&\
 					RESULT=${RESULT}`hexadecimal $ENTIER` ||\
 					RESULT=${RESULT}$ENTIER
 				LAST=$RESULT
@@ -213,7 +213,7 @@ ENCODE)
 				fi
 			fi
 		done
-		if ntest "$VIRGULE == 0 && 0 < $SUB"
+		if mcompare "$VIRGULE == 0 && 0 < $SUB"
 		then
 			VIRGULE=1
 			RESULT="${RESULT}."
@@ -231,7 +231,7 @@ ENCODE)
 ;;
 DECODE)
 	I=0
-	if ! printf "$VAR" | grep -e "[\t\n ]" >/dev/null
+	if ! printf "$VAR" | grep -e "[\t\n ]"
 	then
 		VAR=`printf "$VAL" | sed -e 's/\(.\)/\1 /g' -e 's/ *$//g'`
 	fi
@@ -282,5 +282,5 @@ DECODE)
 ;;
 *)
 	printf "USAGE:\n"
-	printf "$0 ENCODE|DECODE [VIRGULE] \"value\" base\n";
+	printf "$0 ENCODE|DECODE [VIRGULE] base value\n";
 esac

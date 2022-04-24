@@ -1,7 +1,5 @@
 all:
 
-clean:
-
 install:
 	cp *.sh /usr/sbin/
 	chmod 755 /usr/sbin/dec2bin.sh

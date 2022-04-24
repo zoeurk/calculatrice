@@ -4,11 +4,9 @@
 #ifndef PARSEARG
 #define PARSEARG
 
-/*
-#define ERROR(stream, msg, arguments)\
+/*#define ___ERRORMESSAGE___(stream, msg, arguments)\
 fprintf(stream, msg, arguments);\
-exit(EXIT_FAILURE);
-*/
+exit(EXIT_FAILURE);*/
 
 /*extern char *program_version;
 extern char *program_bug_address;*/
