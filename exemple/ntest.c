@@ -974,7 +974,10 @@ void arguments(int key, char *arg, struct parser_state *state){
 				break;
 			}while(1);
 			while((w = read(fd,buffer,1024))){
-				write(a->fd,buffer,w);
+				if(write(a->fd,buffer,w) < 0){
+					perror("write()");
+					exit(EXIT_FAILURE);
+				}
 			}
 			close(fd);
 			if((a->mmap = mmap(NULL,s.st_size,PROT_READ | PROT_WRITE, MAP_SHARED, a->fd, 0)) == NULL){
