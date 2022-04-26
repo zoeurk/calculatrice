@@ -869,7 +869,7 @@ struct retour *comput(struct retour **r){
 			case 0: 
 				break;
 			case AND:
-				if(pret->next){
+				if(pret->next && pret->prev){
 					CALCULE( pret->prev->ret &= pret->next->ret, 0);
 				}else{
 					fprintf(stderr, "Erreur de syntaxe\n");
@@ -877,7 +877,7 @@ struct retour *comput(struct retour **r){
 				}
 				continue;
 			case OR:
-				if(pret->next){
+				if(pret->next && pret->prev){
 					CALCULE( pret->prev->ret |= pret->next->ret, 1);
 				}else{
 					fprintf(stderr,"Erreur de syntaxe\n");
