@@ -24,10 +24,10 @@
 # endif
 #endif /* __USE_ISOC99 */
 
-const unsigned long int BUFFER = 28;
+const unsigned long int BUFFER = 65535;
 
 #define CHECK_AND_COMPUT(op_final,string_type, n1, n2, op, type)\
-	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat, *temp, m[56], *pmin, *pmax;\
+	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat, *temp, m[BUFFER], *pmin, *pmax;\
 	sprintf(m, string_type, *((type *)arrondi));\
 	if(n1 != INFINITY && n1 != -INFINITY && n1 != NAN && n1 != -NAN && n2 != INFINITY && n2 != -INFINITY && n2 != NAN && n2 != -NAN){\
 		sprintf(valeur1, string_type, n1);\
@@ -54,7 +54,7 @@ const unsigned long int BUFFER = 28;
 	}else op_final;
 	
 #define CHECK_AND_COMPUT_DIVISION(op_final,string_type, n1, n2, len, type)\
-	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat, m[56], *pmin, *pmax;\
+	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat, m[BUFFER], *pmin, *pmax;\
 	sprintf(m, string_type, *((type *)arrondi)); \
 	if(n1 != INFINITY && n1 != NAN && n1 != -NAN && n2 != INFINITY && n2 != NAN && n2 != -NAN){\
 		sprintf(valeur1, string_type, n1);\
@@ -75,7 +75,8 @@ const unsigned long int BUFFER = 28;
 		free(pmin);\
 		free(pmax);\
 		free(resultat);\
-	}else op_final;
+	}else\
+		op_final;\
 
 void print_float(void *val, char *format){
 	printf(format, *((float *)val));
@@ -96,6 +97,8 @@ void daddition(void *val1, void *val2, void *arrondi){
 	//*((double *)val1) += *((double *) val2);
 }
 void ldaddition(void *val1, void *val2, void *arrondi){
+	//printf("%Lf::%Lf\n", *((long double *)val1), *((long double *)val2));
+	//exit(0);
 	CHECK_AND_COMPUT(*((long double *)val1) += *((long double *)val2),"%Lf", *((long double *)val1), *((long double *)val2),addition, long double);
 	//*((long double *)val1) += *((long double *) val2);
 }
@@ -282,8 +285,8 @@ void fpower(void *val1, void *val2){
 	*((float *)val1) = powf(*((float *)val1),*((float *)val2));
 }
 void dpower(void *val1, void *val2){
-	*((double *)val1) = powf(*((double *)val1),*((double *)val2));
+	*((double *)val1) = pow(*((double *)val1),*((double *)val2));
 }
 void ldpower(void *val1, void *val2){
-	*((long double *)val1) = powf(*((long double *)val1),*((long double *)val2));
+	*((long double *)val1) = powl(*((long double *)val1),*((long double *)val2));
 }
