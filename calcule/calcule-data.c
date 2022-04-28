@@ -4,7 +4,7 @@
 #include <string.h>
 /*#include <math.h>*/
 #include "calcule-data.h"
-#include "../operation/operation.h"
+#include "operation.h"
 #ifdef __USE_ISOC99
 /* IEEE positive infinity.  */
 # if __GNUC_PREREQ (3, 3)
@@ -282,8 +282,8 @@ void fpower(void *val1, void *val2){
 	*((float *)val1) = powf(*((float *)val1),*((float *)val2));
 }
 void dpower(void *val1, void *val2){
-	*((double *)val1) = powf(*((double *)val1),*((double *)val2));
+	*((double *)val1) = pow(*((double *)val1),*((double *)val2));
 }
 void ldpower(void *val1, void *val2){
-	*((long double *)val1) = powf(*((long double *)val1),*((long double *)val2));
+	*((long double *)val1) = powl(*((long double *)val1),*((long double *)val2));
 }
