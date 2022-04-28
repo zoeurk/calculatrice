@@ -264,17 +264,26 @@ void ldfmod(void *val1, void *val2){
 }
 
 void fpower(void *val1, void *val2){
+	float val = *((float *)val1);
 	*((float *)val1) = powf(*((float *)val1),*((float *)val2));
-	if(fmod(*((float *)val1),*((float *)val2)) != 0)
-		*((float *)val1) = 1.0/0.0;
+	if(fmodf(*((float *)val1),val) != 0){
+		if(*((float *)val1) > 0)
+			*((float *)val1) = 1.0/0.0;
+		else *((float *)val1) = -1.0/0.0;
+	}
 }
 void dpower(void *val1, void *val2){
+	double val = *((double *)val1);
 	*((double *)val1) = pow(*((double *)val1),*((double *)val2));
-	if(fmod(*((double *)val1),*((double *)val2)) != 0)
-		*((double *)val1) = (double)1.0/0.0;
+	if(fmod(*((double *)val1),val) != 0){
+		if(*((double *)val1) > 0)
+			*((double *)val1) = (double)1.0/0.0;
+		else *((double *)val1) = (double)-1.0/0.0;
+	}
 }
 void ldpower(void *val1, void *val2){
+	long double val = *((long double *)val1);
 	*((long double *)val1) = powl(*((long double *)val1),*((long double *)val2));
-	if(fmod(*((long double *)val1),*((long double *)val2)) != 0)
+	if(fmodl(*((long double *)val1),val) != 0)
 		*((long double *)val1) = (long double)NAN;
 }
