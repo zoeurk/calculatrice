@@ -265,7 +265,7 @@ void ldfmod(void *val1, void *val2){
 
 void fpower(void *val1, void *val2){
 	*((float *)val1) = powf(*((float *)val1),*((float *)val2));
-	if(fmod(*((float *)val1),*((float *)val2)) != 0)
+	if(fmodf(*((float *)val1),*((float *)val2)) != 0)
 		*((float *)val1) = 1.0/0.0;
 }
 void dpower(void *val1, void *val2){
@@ -275,6 +275,6 @@ void dpower(void *val1, void *val2){
 }
 void ldpower(void *val1, void *val2){
 	*((long double *)val1) = powl(*((long double *)val1),*((long double *)val2));
-	if(fmod(*((long double *)val1),*((long double *)val2)) != 0)
+	if(fmodl(*((long double *)val1),*((long double *)val2)) != 0)
 		*((long double *)val1) = (long double)NAN;
 }
