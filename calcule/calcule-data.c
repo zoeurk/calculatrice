@@ -5,24 +5,6 @@
 /*#include <math.h>*/
 #include "calcule-data.h"
 #include "../operation/operation.h"
-#ifdef __USE_ISOC99
-/* IEEE positive infinity.  */
-# if __GNUC_PREREQ (3, 3)
-#  define INFINITY (__builtin_inff ())
-# else
-#  define INFINITY HUGE_VALF
-# endif
-
-/* IEEE Not A Number.  */
-# if __GNUC_PREREQ (3, 3)
-#  define NAN (__builtin_nanf (""))
-# else
-/* This will raise an "invalid" exception outside static initializers,
-   but is the best that can be done in ISO C while remaining a
-   constant expression.  */
-#  define NAN (0.0f / 0.0f)
-# endif
-#endif /* __USE_ISOC99 */
 
 const unsigned long int BUFFER = 65535;
 
@@ -283,10 +265,16 @@ void ldfmod(void *val1, void *val2){
 
 void fpower(void *val1, void *val2){
 	*((float *)val1) = powf(*((float *)val1),*((float *)val2));
+	if(fmod(*((float *)val1),*((float *)val2)) != 0)
+		*((float *)val1) = 1.0/0.0;
 }
 void dpower(void *val1, void *val2){
 	*((double *)val1) = pow(*((double *)val1),*((double *)val2));
+	if(fmod(*((double *)val1),*((double *)val2)) != 0)
+		*((double *)val1) = (double)1.0/0.0;
 }
 void ldpower(void *val1, void *val2){
 	*((long double *)val1) = powl(*((long double *)val1),*((long double *)val2));
+	if(fmod(*((long double *)val1),*((long double *)val2)) != 0)
+		*((long double *)val1) = (long double)NAN;
 }
