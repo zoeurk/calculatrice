@@ -283,8 +283,9 @@ void fpower(void *val1, void *val2){
 		//printf("%f::%f\n",*((float *)val1), test);
 		*((float *)val1) = powf(*((float *)val1), *((float *)val2));
 	}else{
+		test = *((float *)val1);
 		*((float *)val1)  = powf(*((float *)val1), *((float *)val2));
-		if(fmodf(*((float *)val1),*((float *)val1)) != 0){
+		if(fmodf(*((float *)val1),test) != 0){
 			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
 			exit(EXIT_FAILURE);
 		}
@@ -303,26 +304,33 @@ void dpower(void *val1, void *val2){
 	sprintf(buf, "%lf", *((double *)val2));
 	if((pbuf = strchr(buf,'.')) && equal(pbuf+1,"0") != 0){
 		*pbuf = 0;
-		test = strtof(buf,NULL);
+		test = strtod(buf,NULL);
 		result = pow(*((double *)val1),test);
-		if(fmod(result, *((double *)val1)) != 0){
+		if(fmodf(result, *((double *)val1)) != 0){
 			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
 			exit(EXIT_FAILURE);
 		}
 		//*((float *)val1) = result;
 		*pbuf = '.';
 		*(pbuf-1) = '0';
-		test = strtod(pbuf-1, NULL);
+		test = strtof(pbuf-1, NULL);
 		//printf("%f::%f\n",*((float *)val1), test);
 		*((double *)val1) = pow(*((double *)val1), *((double *)val2));
 	}else{
+		test = *((double *)val1);
 		*((double *)val1)  = pow(*((double *)val1), *((double *)val2));
-		if(fmod(*((double *)val1),*((double *)val1)) != 0){
+		if(fmodf(*((double *)val1),test) != 0){
 			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
 			exit(EXIT_FAILURE);
 		}
 		//powf(*((float *)val1), *((float *)val2)
 	}
+	//*((float *)val1) = powf(*((float *)val1),*((float *)val2));
+	/*if(fmodf(*((float *)val1),val) != 0){
+		if(*((float *)val1) > 0)
+			*((float *)val1) = 1.0/0.0;
+		else *((float *)val1) = -1.0/0.0;
+	}*/
 	//double val = *((double *)val1);
 	//*((double *)val1) = pow(*((double *)val1),*((double *)val2));
 	/*if(fmod(*((double *)val1),val) != 0){
@@ -337,7 +345,7 @@ void ldpower(void *val1, void *val2){
 	sprintf(buf, "%Lf", *((long double *)val2));
 	if((pbuf = strchr(buf,'.')) && equal(pbuf+1,"0") != 0){
 		*pbuf = 0;
-		test = strtold(buf,NULL);
+		test = strtod(buf,NULL);
 		result = powl(*((long double *)val1),test);
 		if(fmodl(result, *((long double *)val1)) != 0){
 			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
@@ -350,8 +358,9 @@ void ldpower(void *val1, void *val2){
 		//printf("%f::%f\n",*((float *)val1), test);
 		*((long double *)val1) = powl(*((long double *)val1), *((long double *)val2));
 	}else{
-		*((long double *)val1)  = powl(*((long double *)val1), *((long double *)val2));
-		if(fmod(*((long double *)val1),*((long double *)val1)) != 0){
+		test = *((long double *)val1);
+		*((long double *)val1)  = pow(*((long double *)val1), *((long double *)val2));
+		if(fmodl(*((long double *)val1),test) != 0){
 			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
 			exit(EXIT_FAILURE);
 		}
