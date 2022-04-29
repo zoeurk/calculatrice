@@ -124,132 +124,172 @@ void lddivision(void *val1, void *val2, void *arrondi){
 }
 
 void fcosinus(void *val){
+	___SINGLE_ARG___(float, "%f", strtof);
 	*((float *)val) = cosf(*((float *)val));
 }
 void dcosinus(void *val){
+	//SINGLE_ARG(type, "%lf", strtod);
+	___SINGLE_ARG___(double, "%lf", strtod);
 	*((double *)val) = cos(*((double *)val));
 }
 void ldcosinus(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
+	//SINGLE_ARG(type, "%Lf", strtold);
 	*((long double *)val) = cosl(*((long double *)val));
 }
 
 void facosinus(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((float *)val) = acosf(*((float *)val));
 }
 void dacosinus(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((double *)val) = acos(*((double *)val));
 }
 void ldacosinus(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((long double *)val) = acosl(*((long double *)val));
 }
 
 void fsinus(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((float *)val) = sinf(*((float *)val));
 }
 void dsinus(void *val){
 	*((double *)val) = sin(*((double *)val));
 }
 void ldsinus(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((long double *)val) = sinl(*((long double *)val));
 }
 
 void fasinus(void *val){
+	___SINGLE_ARG___(float, "%f", strtof);
 	*((float *)val) = asinf(*((float *)val));
 }
 void dasinus(void *val){
+	___SINGLE_ARG___(double, "%lf", strtod);
 	*((double *)val) = asin(*((double *)val));
 }
 void ldasinus(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((long double *)val) = asinl(*((long double *)val));
 }
 
 void ftangente(void *val){
+	___SINGLE_ARG___(float, "%f", strtof);
 	*((float *)val) = tanf(*((float *)val));
 }
 void dtangente(void *val){
+	___SINGLE_ARG___(double, "%lf", strtof);
 	*((double *)val) = tan(*((double *)val));
 }
 void ldtangente(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((long double *)val) = tanl(*((long double *)val));
 }
 
 void fatangente(void *val){
+	___SINGLE_ARG___(float, "%f", strtof);
 	*((float *)val) = atanf(*((float *)val));
 }
 void datangente(void *val){
+	___SINGLE_ARG___(double, "%lf", strtold);
 	*((double *)val) = atan(*((double *)val));
 }
 void ldatangente(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((long double *)val) = atanl(*((long double *)val));
 }
 
 void fsqrt(void *val){
+	___SINGLE_ARG___(float, "%f", strtof);
 	*((float *)val) = sqrtf(*((float *)val));
 }
 void dsqrt(void *val){
+	___SINGLE_ARG___(double, "%lf", strtod);
 	*((double *)val) = sqrt(*((double *)val));
 }
 void ldsqrt(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((long double *)val) = sqrtl(*((long double *)val));
 }
 
 void fexp(void *val){
+	___SINGLE_ARG___(float, "%f", strtof);
 	*((float *)val) = expf(*((float *)val));
 }
 void dexp(void *val){
+	___SINGLE_ARG___(double, "%lf", strtod);
 	*((double *)val) = exp(*((double *)val));
 }
 void _ldexp_(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((long double *)val) = expl(*((long double *)val));
 }
 
 void fceil(void *val){
+	___SINGLE_ARG___(float, "%f", strtof);
 	*((float *)val) = ceilf(*((float *)val));
 }
 void dceil(void *val){
+	___SINGLE_ARG___(double, "%lf", strtod);
 	*((double *)val) = ceil(*((double *)val));
 }
 void ldceil(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((long double *)val) = ceill(*((long double *)val));
 }
 
 void flog(void *val){
+	___SINGLE_ARG___(float, "%f", strtof);
 	*((float *)val) = logf(*((float *)val));
 }
 void dlog(void *val){
+	___SINGLE_ARG___(double, "%lf", strtod);
 	*((double *)val) = log(*((double *)val));
 }
 void ldlog(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((long double *)val) = logl(*((long double *)val));
 }
 
 void flog10(void *val){
+	___SINGLE_ARG___(float, "%f", strtof);
 	*((float *)val) = log10f(*((float *)val));
 }
 void dlog10(void *val){
+	___SINGLE_ARG___(double, "%lf", strtod);
 	*((double *)val) = log10(*((double *)val));
 }
 void ldlog10(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((long double *)val) = log10l(*((long double *)val));
 }
 
 void ffabs(void *val){
+	___SINGLE_ARG___(float, "%f", strtof);
 	*((float *)val) = fabsf(*((float *)val));
 }
 void dfabs(void *val){
+	___SINGLE_ARG___(double, "%lf", strtod);
 	*((double *)val) = fabs(*((double *)val));
 }
 void ldfabs(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((long double *)val) = fabsl(*((long double *)val));
 }
 
 void ffloor(void *val){
+	___SINGLE_ARG___(float, "%f", strtof);
 	*((float *)val) = floorf(*((float *)val));
 }
 void dfloor(void *val){
+	___SINGLE_ARG___(double, "%lf", strtod);
 	*((double *)val) = floor(*((double *)val));
 }
 void ldfloor(void *val){
+	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((long double *)val) = floorl(*((long double *)val));
 }
 

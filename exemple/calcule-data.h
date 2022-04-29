@@ -295,7 +295,16 @@ if(pv->prev == NULL){\
 		free(start->prev);\
 		free(start);\
 	}
-
+#define ___SINGLE_ARG___(type,format, function)\
+	char buf[65535];\
+	type test;\
+	sprintf(buf, format, *((type *)val));\
+	test = function(buf,NULL);\
+	if(test != *((type *)val)){\
+		fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");\
+		exit(EXIT_FAILURE);\
+	}
+ 
 #define DOUBLE_ARG(type, function, format)\
 	char buf[65535];\
 	type test;\
@@ -311,6 +320,7 @@ if(pv->prev == NULL){\
 		fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");\
 		exit(EXIT_FAILURE);\
 	}
+
 void faddition(void *val1, void *val2, void *arrondi);
 void daddition(void *val1, void *val2, void *arrondi);
 void ldaddition(void *val1, void *val2, void *arrondi);
