@@ -4,7 +4,7 @@
 #include <string.h>
 /*#include <math.h>*/
 #include "calcule-data.h"
-#include "operation/operation.h"
+#include "../operation/operation.h"
 
 const unsigned long int BUFFER = 65535;
 
@@ -265,7 +265,32 @@ void ldfmod(void *val1, void *val2){
 
 void fpower(void *val1, void *val2){
 	//float val = *((float *)val1);
-	*((float *)val1) = powf(*((float *)val1),*((float *)val2));
+	char buf[BUFFER], *pbuf;
+	float test, result;
+	sprintf(buf, "%f", *((float *)val2));
+	if((pbuf = strchr(buf,'.')) && equal(pbuf+1,"0") != 0){
+		*pbuf = 0;
+		test = strtof(buf,NULL);
+		result = powf(*((float *)val1),test);
+		if(fmodf(result, *((float *)val1)) != 0){
+			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
+			exit(EXIT_FAILURE);
+		}
+		//*((float *)val1) = result;
+		*pbuf = '.';
+		*(pbuf-1) = '0';
+		test = strtof(pbuf-1, NULL);
+		//printf("%f::%f\n",*((float *)val1), test);
+		*((float *)val1) = powf(*((float *)val1), *((float *)val2));
+	}else{
+		*((float *)val1)  = powf(*((float *)val1), *((float *)val2));
+		if(fmodf(*((float *)val1),*((float *)val1)) != 0){
+			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
+			exit(EXIT_FAILURE);
+		}
+		//powf(*((float *)val1), *((float *)val2)
+	}
+	//*((float *)val1) = powf(*((float *)val1),*((float *)val2));
 	/*if(fmodf(*((float *)val1),val) != 0){
 		if(*((float *)val1) > 0)
 			*((float *)val1) = 1.0/0.0;
@@ -273,8 +298,33 @@ void fpower(void *val1, void *val2){
 	}*/
 }
 void dpower(void *val1, void *val2){
+	char buf[BUFFER], *pbuf;
+	double test, result;
+	sprintf(buf, "%lf", *((double *)val2));
+	if((pbuf = strchr(buf,'.')) && equal(pbuf+1,"0") != 0){
+		*pbuf = 0;
+		test = strtof(buf,NULL);
+		result = pow(*((double *)val1),test);
+		if(fmod(result, *((double *)val1)) != 0){
+			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
+			exit(EXIT_FAILURE);
+		}
+		//*((float *)val1) = result;
+		*pbuf = '.';
+		*(pbuf-1) = '0';
+		test = strtod(pbuf-1, NULL);
+		//printf("%f::%f\n",*((float *)val1), test);
+		*((double *)val1) = pow(*((double *)val1), *((double *)val2));
+	}else{
+		*((double *)val1)  = pow(*((double *)val1), *((double *)val2));
+		if(fmod(*((double *)val1),*((double *)val1)) != 0){
+			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
+			exit(EXIT_FAILURE);
+		}
+		//powf(*((float *)val1), *((float *)val2)
+	}
 	//double val = *((double *)val1);
-	*((double *)val1) = pow(*((double *)val1),*((double *)val2));
+	//*((double *)val1) = pow(*((double *)val1),*((double *)val2));
 	/*if(fmod(*((double *)val1),val) != 0){
 		if(*((double *)val1) > 0)
 			*((double *)val1) = (double)1.0/0.0;
@@ -282,8 +332,33 @@ void dpower(void *val1, void *val2){
 	}*/
 }
 void ldpower(void *val1, void *val2){
+	char buf[BUFFER], *pbuf;
+	long double test, result;
+	sprintf(buf, "%Lf", *((long double *)val2));
+	if((pbuf = strchr(buf,'.')) && equal(pbuf+1,"0") != 0){
+		*pbuf = 0;
+		test = strtold(buf,NULL);
+		result = powl(*((long double *)val1),test);
+		if(fmodl(result, *((long double *)val1)) != 0){
+			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
+			exit(EXIT_FAILURE);
+		}
+		//*((float *)val1) = result;
+		*pbuf = '.';
+		*(pbuf-1) = '0';
+		test = strtold(pbuf-1, NULL);
+		//printf("%f::%f\n",*((float *)val1), test);
+		*((long double *)val1) = powl(*((long double *)val1), *((long double *)val2));
+	}else{
+		*((long double *)val1)  = powl(*((long double *)val1), *((long double *)val2));
+		if(fmod(*((long double *)val1),*((long double *)val1)) != 0){
+			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
+			exit(EXIT_FAILURE);
+		}
+		//powf(*((float *)val1), *((float *)val2)
+	}
 	//long double val = *((long double *)val1);
-	*((long double *)val1) = powl(*((long double *)val1),*((long double *)val2));
+	//*((long double *)val1) = powl(*((long double *)val1),*((long double *)val2));
 	/*if(fmodl(*((long double *)val1),val) != 0)
 		*((long double *)val1) = (long double)NAN;
 	*/
