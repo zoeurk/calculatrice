@@ -254,12 +254,29 @@ void ldfloor(void *val){
 }
 
 void ffmod(void *val1, void *val2){
+	DOUBLE_ARG(double, strtod, "%f");
 	*((float *)val1) = fmodf(*((float *)val1),*((float *)val2));
 }
 void dfmod(void *val1, void *val2){
+	DOUBLE_ARG(double, strtod, "%lf");
 	*((double *)val1) = fmod(*((double *)val1),*((double *)val2));
 }
 void ldfmod(void *val1, void *val2){
+	DOUBLE_ARG(long double, strtold, "%Lf");
+	/*char buf[BUFFER];
+	long double test;
+	sprintf(buf, "%Ld", *((long double *)val1));
+	test = strtold(buf,NULL);
+	if(test != *((long double *)val1)){
+		fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
+		exit(EXIT_FAILURE);
+	}
+	sprintf(buf, "%Ld", *((long double *)val2));
+	test = strtold(buf,NULL);
+	if(test != *((long double *)val2)){
+		fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
+		exit(EXIT_FAILURE);
+	}*/
 	*((long double *)val1) = fmodl(*((long double *)val1),*((long double *)val2));
 }
 
