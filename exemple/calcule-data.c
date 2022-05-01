@@ -6,7 +6,7 @@
 #include "calcule-data.h"
 #include "operation.h"
 
-const unsigned long int BUFFER = 65535;
+const unsigned long int BUFFER = 26;
 
 #define CHECK_AND_COMPUT(op_final,string_type, n1, n2, op, type)\
 	char valeur1[BUFFER], valeur2[BUFFER], valeur3[BUFFER], *resultat, *temp, m[BUFFER], *pmin, *pmax;\
@@ -203,16 +203,31 @@ void ldatangente(void *val){
 }
 
 void fsqrt(void *val){
+	float f = *((float *)val);
 	___SINGLE_ARG___(float, "%f", strtof);
 	*((float *)val) = sqrtf(*((float *)val));
+	if(*((float *)val)**((float *)val)!= f){
+		fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format.\n");
+		exit(2);
+	}
 }
 void dsqrt(void *val){
+	double d = *((double *)val);
 	___SINGLE_ARG___(double, "%lf", strtod);
 	*((double *)val) = sqrt(*((double *)val));
+	if(*((double *)val)**((double *)val)!= d){
+		fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format.\n");
+		exit(2);
+	}
 }
 void ldsqrt(void *val){
+	long double ld = *((long double *)val);
 	___SINGLE_ARG___(long double, "%Lf", strtold);
 	*((long double *)val) = sqrtl(*((long double *)val));
+	if(*((long double *)val)**((long double *)val)!= ld){
+		fprintf(stderr,"ERROR: Nombre trop long pour etre converti dans ce format.\n");
+		exit(2);
+	}
 }
 
 void fexp(void *val){
