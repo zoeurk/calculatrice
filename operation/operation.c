@@ -18,9 +18,9 @@
 
 #define NEG \
 	for(n1 = n1; *n1 == '-' || *n1 == '+'; n1++) \
-		neg1 = !neg1; \
+		if(*n1 == '-')neg1 = !neg1; \
 	for(n2 = n2; *n2 == '-' || *n2 == '+'; n2++) \
-		neg2 = !neg2;
+		if(*n2 == '-')neg2 = !neg2;
 
 #define NEG_TEST \
 	if(neg1 != neg2)\
