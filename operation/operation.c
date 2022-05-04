@@ -1187,8 +1187,9 @@ void *modulo(void *num1, void *num2, unsigned long int virgule){
 		strcpy(temp, n1);
 		reste = temp;
 		/*ICI*/
-		if(virgule){
+		if(virgule)
 			dix = multiplication("1","1");
+		if(virgule){
 			diviseur = n2;
 			do{
 				pdix = multiplication(dix,"10");
