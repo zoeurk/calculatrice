@@ -27,9 +27,9 @@
 		neg = 1;
 
 #define ZERO \
-while(*n1 == '0' && *(n1+1) != '.') \
+while(*n1 == '0' && *(n1+1) != '.' && *(n1+1) != 0) \
 	n1++;\
-while(*n2 == '0' && *(n2+1) != '.') \
+while(*n2 == '0' && *(n2+1) != '.' && *(n2+1) != 0) \
 	n2++;
 
 #define VALEUR_NEGATIVE(buffer, pbuf, ii) \
@@ -1183,7 +1183,7 @@ void *modulo(void *num1, void *num2, unsigned long int virgule){
 		return temp;
 	}
 	if(equal(n1, n2) < 0){
-		temp = allocation((void **)&temp, (strlen(n1) == 0) ? 1 : strlen(n1), sizeof(char));
+		temp = allocation((void **)&temp, strlen(n1)+1, sizeof(char));
 		strcpy(temp, n1);
 		reste = temp;
 		/*ICI*/
