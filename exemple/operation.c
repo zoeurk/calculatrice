@@ -1183,9 +1183,9 @@ void *modulo(void *num1, void *num2, unsigned long int virgule){
 		return temp;
 	}
 	if(equal(n1, n2) < 0){
-		temp = allocation((void **)&temp, strlen(n1)+1, sizeof(char));
-		strcpy(temp, n1);
-		reste = temp;
+		//temp = allocation((void **)&temp, strlen(n1)+1, sizeof(char));
+		//strcpy(temp, n1);
+		reste = multiplication(n1,"1");
 		/*ICI*/
 		if(virgule)
 			dix = multiplication("1","1");
