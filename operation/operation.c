@@ -1233,10 +1233,13 @@ void *modulo(void *num1, void *num2, unsigned long int virgule){
 		*quotient = '0';
 		return quotient;
 	}
-	diviseur = allocation((void **)&diviseur, strlen(n2), sizeof(char));
+	//printf("==>%s::%s\n", n1, n2);
+	/*diviseur = allocation((void **)&diviseur, strlen(n2), sizeof(char));
 	dividende = allocation((void **)&dividende, strlen(n1), sizeof(char));
 	memcpy(diviseur, n2, strlen(n2));
-	memcpy(dividende, n1, strlen(n1));
+	memcpy(dividende, n1, strlen(n1));*/
+	diviseur = multiplication(n2, "1");
+	dividende = multiplication(n1, "1");
 	do{
 		if((n2 = strchr(diviseur,'.')) == NULL  && (n1 = strchr(dividende, '.')) == NULL)
 				break;
