@@ -1376,3 +1376,127 @@ void *modulo(void *num1, void *num2, unsigned long int virgule){
 	free(diviseur);
 	return reste;
 }
+char *racine_carree(void *num1, unsigned long int virgule, int approximation){
+	unsigned long int len, v = virgule+1;
+	/*last pour eviter une boucle plus bas*/
+	char *num1_ = NULL, *pnum1_,*dix = NULL, *pdix, buffer[32], *buf, *pbuf, *result, *presult, *check = NULL, *test/*, *last = NULL*/;
+	if(equal(num1, "0") < 0){
+		fprintf(stderr, "Erreur:racine_carre: %s < 0\n", (char *)num1);
+		return NULL;
+	}
+	if(equal(num1, "0") == 0){
+		num1_ = multiplication("0","0");
+		return num1_;
+	}
+	num1_ = multiplication(num1, "1");
+	while(strchr(num1_,'.') != NULL){
+		pnum1_ = multiplication(num1_,"100");
+		free(num1_);
+		num1_ = pnum1_;
+		if(dix == NULL)
+			dix = multiplication("1", "10");
+		else{
+			pdix = multiplication(dix, "10");
+			free(dix);
+			dix = pdix;
+		}
+	}
+	len = strlen(num1_);
+	if((test = strchr(num1_,'.')) != NULL){
+		test++;
+		if(virgule < strlen(test)){
+			v = strlen(test)+1;
+		}
+	}
+	sprintf(buffer,"%lu", len);
+	buf = multiplication(buffer,"100");
+	pbuf = division(num1_, buf,virgule, 0);
+	result = addition(buf, pbuf);
+	free(buf);
+	presult = multiplication(result,"0.5");
+	do{
+		free(pbuf);
+		free(result);
+		test = strchr(presult,'.');
+		pbuf = division(num1_, presult, v, 0);
+		result = addition(presult, pbuf);
+		free(presult);
+		presult = multiplication(result,"0.5");
+		if(check)
+			free(check);
+		if((test = strchr(presult,'.')) != NULL && *presult != '0'){
+			if(strlen(test+1)>=v)
+				*(test+1+v) = 0; 
+		}
+		check = multiplication(presult, presult);
+		/*Possible boucle infinie*/
+		/*if(last == NULL){
+			last = allocation((void **)&last,strlen(check)+1, sizeof(char));
+			strcpy(last, check);
+		}else{
+			if(equal(last, check) == 0){
+				free(last);
+				last = NULL;
+				break;
+			}
+			free(last);
+			last = allocation((void **)&last,strlen(check)+1, sizeof(char));
+			strcpy(last, check);
+		}*/
+	}while(equal(num1_, check) < 0);
+	free(num1_);
+	/*if(last)
+		free(last);*/
+	free(pbuf);
+	free(result);
+	free(check);
+	if((result = strchr(presult, '.'))){
+		if(!approximation)
+			result[virgule+1] = 0;
+		else{
+			if(presult[strlen(presult)-1] >= '5'){
+				test = allocation((void **)&test, 3, sizeof(char));
+				strcpy(test,"0.");
+				if(v == 1){
+					check = reallocation((void **)&test,4);
+					strcat(test, "1");
+					check = addition(presult, test);
+					free(presult);
+					presult = check;
+				}else{
+					while(strlen(test) +1 <= v){
+						check = reallocation((void **)&test,strlen(test)+2);
+						strcat(test, "0");
+						check = addition(presult, test);
+						free(presult);
+						presult = check;
+					}
+					check = reallocation((void **)&test,strlen(test)+2);
+					test[strlen(test)] = '1';
+					check = addition(presult, test);
+					free(presult);
+					presult = check;
+					if(strlen(presult) > virgule+1)
+						presult[strlen(presult) - 1] = 0;
+					else
+						presult[strlen(presult)-1] = 0;
+				}
+				free(test);
+			}else presult[strlen(presult)-1] = 0;
+			for(result = &presult[strlen(presult)-1]; *result == '0'; *result = 0, result--);;
+		}
+	}
+	if(dix){
+		result = division(presult, dix,virgule, approximation);
+		free(presult);
+		presult = result;
+		free(dix);
+	}
+	if((result = strchr(presult,'.')) && strlen(result) > virgule){
+		result[virgule+1] = 0;
+		for(result = &presult[strlen(presult)-1]; *result == '0'; *result = 0, result--);;
+	}
+	if(presult[strlen(presult)-1] == '.')
+		presult[strlen(presult)-1] = 0;
+	return presult;
+}

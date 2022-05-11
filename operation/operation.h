@@ -11,4 +11,5 @@ void *soustraction(void *num1, void *num2);
 void *multiplication(void *num1, void *num2);
 void *division(void *num1, void *num2, unsigned long int virgule, int approximation);
 void *modulo(void *num1, void *num2, unsigned long int virgule);
+char *racine_carree(void *num1, unsigned long int virgule, int approximation);
 #endif
