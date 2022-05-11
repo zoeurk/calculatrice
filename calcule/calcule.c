@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
+#include "../parsearg/parsearg.h"
 
 #include <sys/mman.h>
 #include <sys/types.h>
@@ -12,8 +13,6 @@
 #include <unistd.h>
 
 #include "calcule-data.h"
-#include "../parsearg/parsearg.h"
-#include "../operation/operation.h"
 
 #define BUFFER 56
 
@@ -357,7 +356,7 @@ void zero(char *str, int type){
 #define ENTRY 16
 struct value *initialisation(char *argv, struct arguments *arg){
 	struct value *v = NULL, *pv = NULL;
-	char buffer[BUFFER], buf[BUFFER], *end,
+	char buffer[BUFFER], *end,
 		/*Ajouter entree*/
 		*trigo[ENTRY] = {"PI", "cos", "acos", "sin", "asin", "tan", "atan", "sqrt", "exp", "ceil", "log", "log10", "fabs", "floor", "mod", "pow"};
 	int i, j = 0, point = 0, wait = 0,
@@ -677,30 +676,6 @@ struct value *initialisation(char *argv, struct arguments *arg){
 						exit(EXIT_FAILURE);
 					}
 					strncat(buffer,&argv[i],1);
-					if(pv){
-						switch(pv->type){
-							case FLOAT:
-								sprintf(buf,"%f", strtof(buffer,NULL));
-								if(equal(buf, buffer)){
-									fprintf(stderr, "Nombre trop long pour ce format:%s != %s\n", buffer, buf);
-									exit(EXIT_FAILURE);
-								}
-								break;
-							case DOUBLE:
-								sprintf(buf,"%lf", strtod(buffer,NULL));
-								if(equal(buf, buffer)){
-									fprintf(stderr, "Nombre trop long pour ce format: %s != %s\n", buffer, buf);
-									exit(EXIT_FAILURE);
-								}
-								break;
-							case LDOUBLE:
-								sprintf(buf,"%Lf", strtold(buffer,NULL));
-								if(equal(buf, buffer)){
-									fprintf(stderr, "Nombre trop long pour ce format: %s != %s\n", buffer, buf);
-									exit(EXIT_FAILURE);
-								}
-						}
-					}
 					num = 1;
 					wait = 1;
 					cont = 0;

@@ -344,7 +344,7 @@ void fpower(void *val1, void *val2){
 		*pbuf = 0;
 		test = strtof(buf,NULL);
 		result = powf(*((float *)val1),test);
-		if(fmodf(result, *((float *)val1)) != 0){
+		if(fmodf(result, *((float *)val1)) != 0 && result != INFINITY){
 			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
 			exit(EXIT_FAILURE);
 		}
@@ -357,7 +357,7 @@ void fpower(void *val1, void *val2){
 	}else{
 		test = *((float *)val1);
 		*((float *)val1)  = powf(*((float *)val1), *((float *)val2));
-		if(fmodf(*((float *)val1),test) != 0){
+		if(fmodf(*((float *)val1),test) != 0 && *((float *)val1) != INFINITY){
 			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
 			exit(EXIT_FAILURE);
 		}
@@ -378,7 +378,7 @@ void dpower(void *val1, void *val2){
 		*pbuf = 0;
 		test = strtod(buf,NULL);
 		result = pow(*((double *)val1),test);
-		if(fmodf(result, *((double *)val1)) != 0){
+		if(fmodf(result, *((double *)val1)) != 0 && result != INFINITY){
 			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
 			exit(EXIT_FAILURE);
 		}
@@ -391,7 +391,7 @@ void dpower(void *val1, void *val2){
 	}else{
 		test = *((double *)val1);
 		*((double *)val1)  = pow(*((double *)val1), *((double *)val2));
-		if(fmodf(*((double *)val1),test) != 0){
+		if(fmodf(*((double *)val1),test) != 0 && *((float *)val1) != INFINITY){
 			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
 			exit(EXIT_FAILURE);
 		}
@@ -419,7 +419,7 @@ void ldpower(void *val1, void *val2){
 		*pbuf = 0;
 		test = strtod(buf,NULL);
 		result = powl(*((long double *)val1),test);
-		if(fmodl(result, *((long double *)val1)) != 0){
+		if(fmodl(result, *((long double *)val1)) != 0 && result != INFINITY){
 			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
 			exit(EXIT_FAILURE);
 		}
@@ -432,7 +432,7 @@ void ldpower(void *val1, void *val2){
 	}else{
 		test = *((long double *)val1);
 		*((long double *)val1)  = pow(*((long double *)val1), *((long double *)val2));
-		if(fmodl(*((long double *)val1),test) != 0){
+		if(fmodl(*((long double *)val1),test) != 0 && *((float *)val1) != INFINITY){
 			fprintf(stderr,"ERROR: Nombre trop long pour etre calcule dans ce format.\n");
 			exit(EXIT_FAILURE);
 		}
